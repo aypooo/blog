@@ -19,21 +19,20 @@ const PostCreateForm: React.FC = () => {
     }
     try {
       const postId = await writeNewPost(user.uid, user.email,  title, content);
-      //작동안함, 네트워크에 아무 반응 없음
       console.log(postId)
       // Recoil 상태 업데이트
-      // setPosts((prevPosts) => [
-      //   ...prevPosts,
-      //   {
-      //     uid: user.uid,
-      //     postId: postId!,
-      //     title,
-      //     content,
-      //     comments: [],  // Initialize comments array
-      //     likes: 0,  // Initialize likes count
-      //     createAt: new Date(),  // Set current date
-      //   },
-      // ]);
+      setPosts((prevPosts) => [
+        ...prevPosts,
+        {
+          uid: user.uid,
+          postId: postId!,
+          title,
+          content,
+          comments: [],  // Initialize comments array
+          likes: 0,  // Initialize likes count
+          createAt: new Date(),  // Set current date
+        },
+      ]);
       setTitle('');
       setContent('');
     } catch (error) {

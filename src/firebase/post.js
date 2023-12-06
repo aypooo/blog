@@ -31,8 +31,18 @@ export function writeNewPost(uid, username, title, body) {
   }
   
   // 게시물 데이터 읽기
+  export function readUserPost(uid) {
+    const postRef = ref(db, 'user-posts/' + uid);
+  
+    onValue(postRef, (snapshot) => {
+      const userPost = snapshot.val();
+      console.log(userPost);
+      return userPost
+    });
+  }
+
+
 export function readPostData(postId) {
-    const db = getDatabase();
     const postRef = ref(db, 'posts/' + postId);
   
     onValue(postRef, (snapshot) => {
