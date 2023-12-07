@@ -8,13 +8,13 @@ export type User = {
 export type Post = {
   uid: string;
   postId: string;
+  author: string;
   title: string;
   content: string;
   comments: Comment[];
   likes: number;
-  createAt: Date;
+  createAt: string;
 };
-
 export type Comment = {
   uid: string;
   postId: string;
@@ -42,7 +42,10 @@ export const commentsState = atom<Comment[]>({
   key: 'commentsState',
   default: [],
 });
-
+export const userPosts = atom({
+  key: 'userPosts',
+  default: [],
+})
 export const userPostsSelector = selector({
   key: 'userPostsSelector',
   get: ({ get }) => {

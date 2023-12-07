@@ -1,18 +1,21 @@
 import { getDatabase, ref,onValue,push,child,update } from "firebase/database";
 import { db } from "./firebase";
 
-export function writeNewPost(uid, username, title, body) {
+export function writeNewPost(uid, username, title, content, createdAt) {
     const postData = {
       author: username,
       uid: uid,
-      body: body,
+      content: content,
       title: title,
-      starCount: 0,
+      Comments: [],
+      likes: 0,
+      createAt: createdAt
     //   authorPic: picture
     };
+
     const newPostRef = push(child(ref(db), 'posts'));
     const newPostKey = newPostRef.key;
-    console.log('username',username, 'uid',uid, 'body',body,'title', title)
+    console.log('username',username, 'uid',uid, 'content',content,'title', title)
 
     const updates = {};
     updates['/posts/' + newPostKey] = postData;
@@ -31,23 +34,32 @@ export function writeNewPost(uid, username, title, body) {
   }
   
   // 게시물 데이터 읽기
+
   export function readUserPost(uid) {
     const postRef = ref(db, 'user-posts/' + uid);
   
-    onValue(postRef, (snapshot) => {
-      const userPost = snapshot.val();
-      console.log(userPost);
-      return userPost
+    return new Promise((resolve, reject) => {
+      onValue(postRef, (snapshot) => {
+        const userPost = snapshot.val();
+        resolve(userPost);
+      }, (error) => {
+        console.error('사용자 포스트를 읽는 중 에러 발생:', error);
+        reject(error);
+      });
     });
   }
 
 
-export function readPostData(postId) {
+  export function readPostData(postId) {
     const postRef = ref(db, 'posts/' + postId);
   
-    onValue(postRef, (snapshot) => {
-      const postData = snapshot.val();
-      console.log(postData);
-      return postData
+    return new Promise((resolve, reject) => {
+      onValue(postRef, (snapshot) => {
+        const postData = snapshot.val();
+        resolve(postData);
+      }, (error) => {
+        console.error('포스트 데이터를 읽는 중 에러 발생:', error);
+        reject(error);
+      });
     });
   }

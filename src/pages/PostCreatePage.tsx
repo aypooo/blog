@@ -18,19 +18,20 @@ const PostCreateForm: React.FC = () => {
       return;
     }
     try {
-      const postId = await writeNewPost(user.uid, user.email,  title, content);
-      console.log(postId)
+      const createdAt = new Date().toLocaleString();
+      const postId = await writeNewPost(user.uid, user.email, title, content, createdAt);
       // Recoil 상태 업데이트
       setPosts((prevPosts) => [
         ...prevPosts,
         {
           uid: user.uid,
           postId: postId!,
+          author:user.email,
           title,
           content,
           comments: [],  // Initialize comments array
           likes: 0,  // Initialize likes count
-          createAt: new Date(),  // Set current date
+          createAt: createdAt,  // Set current date
         },
       ]);
       setTitle('');
