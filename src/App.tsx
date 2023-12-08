@@ -3,7 +3,7 @@ import Gbn from './component/Gbn';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebase';
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import PageRoutes from './pageRoutes';
 import { isLoggedInState, userState } from './recoil';
 

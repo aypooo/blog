@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { newPostState, postsState, userState } from '../recoil';
-import { writeNewPost } from '../firebase/post';  // writeNewPost 함수를 가져옵니다.
-
+import { postsState, userPostsState, userState } from '../recoil';
+import { writeNewPost } from '../firebase/post';
+import { useNavigate } from 'react-router-dom'
 const PostCreateForm: React.FC = () => {
+  const navigate = useNavigate()
   const user = useRecoilValue(userState);
-  const setNewPost = useSetRecoilState(newPostState);
   const setPosts = useSetRecoilState(postsState);
-
+  const setUserPosts = useSetRecoilState(userPostsState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -21,21 +21,28 @@ const PostCreateForm: React.FC = () => {
       const createdAt = new Date().toLocaleString();
       const postId = await writeNewPost(user.uid, user.email, title, content, createdAt);
       // Recoil 상태 업데이트
-      setPosts((prevPosts) => [
-        ...prevPosts,
-        {
+      const newPost =    {
           uid: user.uid,
           postId: postId!,
           author:user.email,
           title,
           content,
-          comments: [],  // Initialize comments array
-          likes: 0,  // Initialize likes count
-          createAt: createdAt,  // Set current date
-        },
-      ]);
+          comments: [],  
+          likes: 0, 
+          createAt: createdAt,
+        }
+      // setPosts((prevPosts) => [
+      //   ...prevPosts,
+      //   newPost
+      // ]);
+      // setUserPosts((prevPosts) => [
+      //   ...prevPosts,
+      //   newPost
+      // ]);
+
       setTitle('');
       setContent('');
+      navigate("/post")
     } catch (error) {
       console.error('포스트 생성 오류: ', error);
     }

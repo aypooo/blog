@@ -37,16 +37,16 @@ export const postsState = atom<Post[]>({
   key: 'postsState',
   default: [],
 });
-
+export const userPostsState = atom<Post[]>({
+  key: 'userPostsState',
+  default: [],
+})
 export const commentsState = atom<Comment[]>({
   key: 'commentsState',
   default: [],
 });
-export const userPosts = atom({
-  key: 'userPosts',
-  default: [],
-})
-export const userPostsSelector = selector({
+
+export const userPostsSelector = selector<Post[]>({
   key: 'userPostsSelector',
   get: ({ get }) => {
     const user = get(userState);
@@ -55,17 +55,13 @@ export const userPostsSelector = selector({
   },
 });
 
-export const singlePostState = atom<Post | null>({
-  key: 'singlePostState',
-  default: null,
+export const selectedPostState = atom<Post | null>({
+  key: 'selectedPostState',
+  default: null
 });
 
-export const selectedPostIdState = atom<string | null>({
+export const selectedPostIdState = atom<string>({
   key: 'selectedPostIdState',
-  default: null,
+  default: "",
 });
 
-export const newPostState = atom<Post | null>({
-  key: 'newPostState',
-  default: null,
-});

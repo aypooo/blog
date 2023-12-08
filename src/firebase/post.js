@@ -1,41 +1,38 @@
-import { getDatabase, ref,onValue,push,child,update } from "firebase/database";
+import { ref,onValue,push,child,update } from "firebase/database";
 import { db } from "./firebase";
 
-export function writeNewPost(uid, username, title, content, createdAt) {
-    const postData = {
-      author: username,
-      uid: uid,
-      content: content,
-      title: title,
-      Comments: [],
-      likes: 0,
-      createAt: createdAt
+export async function writeNewPost(uid, username, title, content, createdAt) {
+  const postData = {
+    author: username,
+    uid: uid,
+    content: content,
+    title: title,
+    Comments: [],
+    likes: 0,
+    createAt: createdAt,
     //   authorPic: picture
-    };
+  };
 
-    const newPostRef = push(child(ref(db), 'posts'));
-    const newPostKey = newPostRef.key;
-    console.log('username',username, 'uid',uid, 'content',content,'title', title)
+  const newPostRef = push(child(ref(db), 'posts'));
+  const newPostKey = newPostRef.key;
 
-    const updates = {};
-    updates['/posts/' + newPostKey] = postData;
-    updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-    console.log("2")
-    return update(ref(db), updates)
-      .then(() => {
-        // 새로 생성된 포스트의 키(newPostKey)를 반환합니다.
-        console.log('3')
-        return newPostKey;
-      })
-      .catch((error) => {
-        console.error('포스트 생성 오류: ', error);
-        throw error;
-      });
+  const updates = {};
+  updates['/posts/' + newPostKey] = postData;
+  updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+
+  try {
+    await update(ref(db), updates);
+    // 새로 생성된 포스트의 키(newPostKey)를 반환합니다.
+    return newPostKey;
+  } catch (error) {
+    console.error('포스트 생성 오류: ', error);
+    throw error;
   }
+}
   
-  // 게시물 데이터 읽기
+  // 유저 게시물 데이터 읽기
 
-  export function readUserPost(uid) {
+  export const readUserPost = (uid) => {
     const postRef = ref(db, 'user-posts/' + uid);
   
     return new Promise((resolve, reject) => {
@@ -49,8 +46,9 @@ export function writeNewPost(uid, username, title, content, createdAt) {
     });
   }
 
+//게시물 데이터 읽기
 
-  export function readPostData(postId) {
+  export const readPostData = (postId) => {
     const postRef = ref(db, 'posts/' + postId);
   
     return new Promise((resolve, reject) => {
@@ -62,4 +60,31 @@ export function writeNewPost(uid, username, title, content, createdAt) {
         reject(error);
       });
     });
+  }
+  export const updatePost = async (postId, updatedContent) => {
+    try {
+      const updates = {
+        [`/posts/${postId}/content`]: updatedContent,
+      };
+  
+      await update(ref(db), updates);
+      console.log('포스트 업데이트 성공');
+    } catch (error) {
+      console.error('포스트 업데이트 중 오류 발생:', error);
+      throw error;
+    }
+  };
+  export const deletePost = async(postId, uid) => {
+    try {
+      // 포스트가 속한 'posts'와 'user-posts' 경로에서 해당 포스트 삭제
+      const updates = {};
+      updates['/posts/' + postId] = null;
+      updates['/user-posts/' + uid + '/' + postId] = null;
+  
+      await update(ref(db), updates);
+      console.log('포스트 삭제 성공');
+    } catch (error) {
+      console.error('포스트 삭제 오류:', error);
+      throw error;
+    }
   }
