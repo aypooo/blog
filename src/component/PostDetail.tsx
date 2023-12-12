@@ -15,7 +15,7 @@ const PostDetail: React.FC = () => {
   }
   
   const handlePostUpdate = () => {
-    navigate(`/write/modify/${selectedpostId}`)
+    navigate(`/write/${selectedpostId}`)
   }
   const handleDeletePost = async () => {
     try {
@@ -34,8 +34,8 @@ const PostDetail: React.FC = () => {
   return (
     <div>
       <h2>Post Detail</h2>
-      <h3>{selectedpost.title}</h3>
-      <p>{selectedpost.content}</p>
+      <h3>{Object.values(selectedpost.title)}</h3>
+      <p>{Object.values(selectedpost.content)}</p>
       {uid === selectedpost.uid ? (
         <>
           <button onClick={handlePostUpdate}>수정</button>

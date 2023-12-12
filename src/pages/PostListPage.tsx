@@ -10,7 +10,7 @@ const PostListPage: React.FC = () => {
     const [userPosts, setUserPosts] = useRecoilState<Post[]>(userPostsState);
     const setSelectedPost = useSetRecoilState(selectedPostState);
     const setSelectedPostId = useSetRecoilState(selectedPostIdState);   
-
+    console.log(Object.entries(userPosts))
     const handlePostClick = (selectedPost: Post, postId:string) => {
         setSelectedPost(selectedPost);
         setSelectedPostId(postId)
@@ -29,7 +29,7 @@ const PostListPage: React.FC = () => {
             }
         }
         fetchPost();
-    }, [uid]);
+    }, [setUserPosts, uid]);
     if(!uid) return <>로그인해주세요</>
     if(userPosts.length === 0) return <>작성한 글이 없습니다.</>
     return (
@@ -38,11 +38,11 @@ const PostListPage: React.FC = () => {
         <ul>
         {Object.entries(userPosts).reverse().map((post,index) => (
         <li key={index} onClick={()=>handlePostClick(post[1],post[0])}>
-                <h3>{post[1].title}</h3>
-                <p>{post[1].content}</p>
-                <p>작성자 {post[1].author}</p>
-                <p>좋아요 {post[1].likes}</p>
-                <p>작성일자 {post[1].createAt}</p>
+                <h3>{Object.values(post[1].title)}</h3>
+                <p>{Object.values(post[1].content)}</p>
+                <p>작성자 {Object.values(post[1].author)}</p>
+                <p>좋아요 {Object.values(post[1].likes)}</p>
+                <p>작성일자 {Object.values(post[1].createAt)}</p>
                 
         </li>
         ))}

@@ -1,4 +1,4 @@
-import { ref,onValue,push,child,update } from "firebase/database";
+import { ref,onValue,push,child,update,get } from "firebase/database";
 import { db } from "./firebase";
 
 export async function writeNewPost(uid, username, title, content, createdAt) {
@@ -61,19 +61,43 @@ export async function writeNewPost(uid, username, title, content, createdAt) {
       });
     });
   }
-  export const updatePost = async (postId, updatedContent) => {
-    try {
-      const updates = {
-        [`/posts/${postId}/content`]: updatedContent,
-      };
-  
-      await update(ref(db), updates);
-      console.log('포스트 업데이트 성공');
-    } catch (error) {
-      console.error('포스트 업데이트 중 오류 발생:', error);
-      throw error;
+
+//게시물 업데이트
+export async function updatePost(postKey, newTitle, newContent) {
+  const postRef = ref(db, 'posts/' + postKey);
+
+  try {
+    const postSnapshot = await get(postRef);
+    if (postSnapshot) {
+      const postData = postSnapshot.val();
+
+      // 새로운 제목 또는 내용이 제공된 경우에만 업데이트
+      const updates = {};
+      if (newTitle) {
+        updates.title = newTitle;
+      }
+      if (newContent) {
+        updates.content = newContent;
+      }
+
+      // 'posts' 컬렉션에서 포스트 업데이트
+      await update(postRef, updates);
+
+      // 'user-posts' 컬렉션에서도 포스트 업데이트
+      const uid = postData.uid;
+      const userPostRef = ref(db, 'user-posts/' + uid + '/' + postKey);
+      await update(userPostRef, updates);
+
+      console.log('포스트가 성공적으로 업데이트되었습니다.');
+    } else {
+      console.error('해당 키에 대한 포스트를 찾을 수 없습니다.');
     }
-  };
+  } catch (error) {
+    console.error('포스트 업데이트 오류: ', error);
+    throw error;
+  }
+}
+  //게시물 삭제
   export const deletePost = async(postId, uid) => {
     try {
       // 포스트가 속한 'posts'와 'user-posts' 경로에서 해당 포스트 삭제

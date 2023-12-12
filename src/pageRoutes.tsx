@@ -15,7 +15,7 @@ const PageRoutes = () => {
           <Route path="/signup" element={<SignupPage/>}/>
           {/* <Route path="/mypage" element={<MyPage/>}/> */}
           <Route path="/write" element={<PostCreatePage/>}/>
-          {/* <Route path="/write/modify/:id" element={<WritePage/>}/> */}
+          <Route path="/write/:id" element={<PostCreatePage/>}/>
           <Route path="/post" element={<PostListPage/>}/>
           <Route path="/post/:id" element={<PostDetail/>}/>
         </Routes>
