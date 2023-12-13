@@ -3,6 +3,7 @@ import { atom, selector } from 'recoil';
 export type User = {
   uid: string;
   email: string;
+  name?: string;
 };
 
 export type Post = {
@@ -25,7 +26,7 @@ export type Comment = {
 
 export const userState = atom<User>({
   key: 'userState',
-  default: { uid: '', email: '' },
+  default: { uid: '', name:' ',email: ''},
 });
 
 export const isLoggedInState = atom<boolean>({

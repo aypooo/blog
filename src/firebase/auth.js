@@ -1,25 +1,29 @@
 import { getDatabase, ref, set,onValue } from "firebase/database";
 import { db } from "./firebase";
+import { User } from "../recoil";
 
-export function writeUserData(userId, name, email, imageUrl) {
-  const userRef = ref(db, 'users/' + userId);
+export function writeUserData(uid, email, name) {
+  const userRef = ref(db, 'users/' + uid);
   
   set(userRef, {
-    username: name,
+    uid: uid,
     email: email,
-    profile_picture: imageUrl
+    username: name,
+    // profile_picture: imageUrl
   });
 }
 
 // 사용자 데이터 읽기
-export function readUserData(userId) {
+export function readUserData(uid) {
   const db = getDatabase();
-  const userRef = ref(db, 'users/' + userId);
+  const userRef = ref(db, 'users/' + uid);
 
-  onValue(userRef, (snapshot) => {
-    const userData = snapshot.val();
-    console.log(userData);
-    return userData
-    // 여기서 userData를 사용하여 필요한 작업 수행
+  return new Promise((resolve, reject) => {
+    onValue(userRef, (snapshot) => {
+      const userData = snapshot.val();
+      resolve(userData);
+    }, (error) => {
+      reject(error);
+    });
   });
 }
