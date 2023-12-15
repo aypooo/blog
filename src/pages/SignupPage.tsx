@@ -11,7 +11,7 @@ const SignupPage = () => {
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           const user = userCredential.user;
-          writeUserData(user.uid, user.email, name)
+          writeUserData(user.uid, user.email!, name)
           alert('회원가입이 완료되었습니다.')
           navigate('/')
         } catch (error: any) {

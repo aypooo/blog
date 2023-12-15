@@ -1,7 +1,8 @@
 import { ref,onValue,push,child,update,get } from "firebase/database";
 import { db } from "./firebase";
 
-export async function writeNewPost(uid, username, title, content, createdAt) {
+export async function writeNewPost(uid: string, username: string, title: string, content: string, createdAt: string): 
+Promise<string> {
   const postData = {
     author: username,
     uid: uid,
@@ -15,10 +16,14 @@ export async function writeNewPost(uid, username, title, content, createdAt) {
 
   const newPostRef = push(child(ref(db), 'posts'));
   const newPostKey = newPostRef.key;
+  if (!newPostKey) {
+    throw new Error("포스트 키를 생성하는 데 문제가 발생했습니다.");
+  }
 
-  const updates = {};
-  updates['/posts/' + newPostKey] = postData;
-  updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+  const updates: { [key: string]: any } = {};
+  updates["/posts/" + newPostKey] = postData;
+  updates["/user-posts/" + uid + "/" + newPostKey] = postData;
+
 
   try {
     await update(ref(db), updates);
@@ -32,7 +37,7 @@ export async function writeNewPost(uid, username, title, content, createdAt) {
   
   // 유저 게시물 데이터 읽기
 
-  export const readUserPost = (uid) => {
+  export const readUserPost = (uid: string): Promise<any> => {
     const postRef = ref(db, 'user-posts/' + uid);
   
     return new Promise((resolve, reject) => {
@@ -48,7 +53,7 @@ export async function writeNewPost(uid, username, title, content, createdAt) {
 
 //게시물 데이터 읽기
 
-  export const readPostData = (postId) => {
+  export const readPostData = (postId: string): Promise<any> => {
     const postRef = ref(db, 'posts/' + postId);
   
     return new Promise((resolve, reject) => {
@@ -63,7 +68,10 @@ export async function writeNewPost(uid, username, title, content, createdAt) {
   }
 
 //게시물 업데이트
-export async function updatePost(postKey, newTitle, newContent) {
+export async function updatePost(  postKey: string,
+  newTitle?: string,
+  newContent?: string
+): Promise<void> {
   const postRef = ref(db, 'posts/' + postKey);
 
   try {
@@ -72,7 +80,7 @@ export async function updatePost(postKey, newTitle, newContent) {
       const postData = postSnapshot.val();
 
       // 새로운 제목 또는 내용이 제공된 경우에만 업데이트
-      const updates = {};
+      const updates: { [key: string]: any } = {};
       if (newTitle) {
         updates.title = newTitle;
       }
@@ -98,10 +106,10 @@ export async function updatePost(postKey, newTitle, newContent) {
   }
 }
   //게시물 삭제
-  export const deletePost = async(postId, uid) => {
+  export const deletePost = async (postId: string, uid: string): Promise<void> => {
     try {
       // 포스트가 속한 'posts'와 'user-posts' 경로에서 해당 포스트 삭제
-      const updates = {};
+      const updates: { [key: string]: any } = {};
       updates['/posts/' + postId] = null;
       updates['/user-posts/' + uid + '/' + postId] = null;
   

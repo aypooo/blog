@@ -2,7 +2,7 @@ import { getDatabase, ref, set,onValue } from "firebase/database";
 import { db } from "./firebase";
 import { User } from "../recoil";
 
-export function writeUserData(uid, email, name) {
+export function writeUserData(uid: string, email: string, name: string): void {
   const userRef = ref(db, 'users/' + uid);
   
   set(userRef, {
@@ -14,7 +14,7 @@ export function writeUserData(uid, email, name) {
 }
 
 // 사용자 데이터 읽기
-export function readUserData(uid) {
+export function readUserData(uid: string): Promise<User | null> {
   const db = getDatabase();
   const userRef = ref(db, 'users/' + uid);
 

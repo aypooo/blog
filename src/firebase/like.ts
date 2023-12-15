@@ -1,7 +1,7 @@
 import { getDatabase, ref,onValue,runTransaction } from "firebase/database";
 import { db } from "./firebase";
 
-export function toggleLike(postId, uid) {
+export function toggleLike(postId: string, uid: string): void {
     const postRef = ref(db, 'posts/' + postId);
   
     runTransaction(postRef, (post) => {
@@ -22,7 +22,7 @@ export function toggleLike(postId, uid) {
   }
   
   // 좋아요 데이터 읽기
-export function readLikeData(postId) {
+  export function readLikeData(postId: string): void {
     const db = getDatabase();
     const postRef = ref(db, 'posts/' + postId + '/likes');
   
