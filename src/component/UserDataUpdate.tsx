@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { writeUserData } from '../firebase/auth';
-
 import { userState } from '../recoil';
 import { useRecoilState } from 'recoil';
-
 
 const UserDataUpdate = () => {
     const [user,setUser] = useRecoilState(userState);
@@ -17,13 +15,16 @@ const UserDataUpdate = () => {
         }catch(error){
             console.log(error)
         }
-        
     }
-
+    useEffect(()=>{
+        if(user.name){
+            setName(user.name)
+        }
+    },[user])
     return (
         <div>
             <div>email: {user.email}</div>
-            <input placeholder="name" onChange={(e) => setName(e.target.value)} />
+            <input placeholder="name" value={name} onChange={(e) => setName(e.target.value)} />
             <button onClick={handleUserData}>업데이트</button>
         </div>
     );

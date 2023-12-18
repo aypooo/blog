@@ -4,8 +4,11 @@ import { isLoggedInState, userState } from '../recoil';
 import LoginForm from './LoginForm';
 import { setPersistence, signInWithEmailAndPassword, browserLocalPersistence } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
+import { readUserData } from '../firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
+  const navgate = useNavigate()
   const [user, setUser] = useRecoilState(userState);
   const [isLoggedIn, setisLoggedIn] = useRecoilState(isLoggedInState);
 
@@ -13,26 +16,17 @@ const Login: React.FC = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      
       if (user && user.email) {
-        setUser({ uid: user.uid, email: user.email });
+        const userData = await readUserData(user.uid!)
+        setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name });
         setisLoggedIn(true);
+        navgate('/userpost')
       }
     } catch (error) {
       console.error('로그인 에러:', error);
     }
   };
-
-
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-      setUser({ uid: '', email: '' });
-      setisLoggedIn(false);
-    } catch (error) {
-      console.error('로그아웃 에러:', error);
-    }
-  };
-
   useEffect(() => {
     const initializeAuthPersistence = async () => {
       try {
@@ -47,14 +41,7 @@ const Login: React.FC = () => {
   }, [setUser, user.email, user.uid]);
   return (
     <div>
-      {isLoggedIn ? (
-        <>
-          <div>{user.email}</div>
-          <button onClick={handleLogout}>로그아웃</button>
-        </>
-      ) : (
         <LoginForm onLogin={handleLogin} />
-      )}
     </div>
   );
 };

@@ -6,18 +6,21 @@ import { auth } from './firebase/firebase';
 import { useSetRecoilState } from 'recoil';
 import PageRoutes from './pageRoutes';
 import { isLoggedInState, userState } from './recoil';
+import { readUserData } from './firebase/auth';
 
 function App() {
   const setUser = useSetRecoilState(userState);
   const setisLoggedIn = useSetRecoilState(isLoggedInState);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser({ uid: user.uid, email: user.email! });
+    const unsubscribe = onAuthStateChanged(auth, async(user) => {
+    if (user) {
+        const userData = await readUserData(user.uid!)
+        console.log(userData)
+        setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name });
         setisLoggedIn(true);
       } else {
-        setUser({ uid: '', email: '' });
+        setUser({ uid: '', email: '', name: '' });
         setisLoggedIn(false);
       }
     });

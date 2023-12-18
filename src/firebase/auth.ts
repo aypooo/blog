@@ -8,7 +8,7 @@ export function writeUserData(uid: string, email: string, name: string): void {
   set(userRef, {
     uid: uid,
     email: email,
-    username: name,
+    name: name,
     // profile_picture: imageUrl
   });
 }

@@ -3,6 +3,8 @@ import { RecoilState, useRecoilState, useRecoilValue, useSetRecoilState } from '
 import { Post, selectedPostIdState, selectedPostState, userPostsState, userState } from '../recoil';
 import { deletePost } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
+import Comment from '../component/Comment';
+import CommentList from '../component/CommentList';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
@@ -21,11 +23,11 @@ const PostDetail: React.FC = () => {
     try {
       window.confirm("삭제하시겠습니까?")
       await deletePost(selectedpostId, selectedpost.uid);
-      setUserPosts((prevUserPosts) => Object.values(prevUserPosts).filter((post) => post.postId !== selectedpostId));
+      setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpostId));
       setSelectedPost(null);
       setSelectedPostId('');
       alert('포스트가 성공적으로 삭제되었습니다.');
-      navigate('/post')
+      navigate('/userpost')
     } catch (error) {
       console.error('포스트 삭제 중 오류 발생:', error);
     }
@@ -44,7 +46,7 @@ const PostDetail: React.FC = () => {
       ):(
         <></>
       ) }
-      
+      <CommentList postId={selectedpostId} postUid={selectedpost.uid}/>
     </div>
   );
 };

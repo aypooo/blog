@@ -4,7 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PostCreatePage from "./pages/PostCreatePage";
 import PostListPage from "./pages/PostListPage";
-import PostDetail from "./component/PostDetail";
+import PostDetail from "./pages/PostDetail";
 import MyPage from "./pages/MyPage";
 
 const PageRoutes = () => {

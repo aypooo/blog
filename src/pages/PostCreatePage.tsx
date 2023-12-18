@@ -9,39 +9,39 @@ const PostCreateForm: React.FC = () => {
   const user = useRecoilValue(userState);
   // const [posts, setPosts] = useRecoilState(postsState);
   // const [userPosts, setUserPosts] = useRecoilState(userPostsState);
-  const selectedpost = useRecoilValue<Post | null>(selectedPostState);
-  const selectedpostId = useRecoilValue(selectedPostIdState);
+  const [selectedpost,setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
+  const [selectedpostId,setSelectedpostId] = useRecoilState<string>(selectedPostIdState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-
+  
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user.uid.length) {
       return alert("로그인 후 작성 가능합니다.");
     }
+    if(!title.length || !content.length){
+      return alert('제목과 내용을 작성해주세요')
+    }
     try {
-
       const createdAt = new Date().toLocaleString();
       let postId
       if (selectedpostId) {
         postId = selectedpostId
         await updatePost(postId, title, content);
       } else {
-        postId = await writeNewPost(user.uid, user.email, title, content, createdAt);
+        postId = await writeNewPost(user.uid, user.name!, title, content, createdAt);
       }
       // Recoil 상태 업데이트
-      const newPost =    {
-          uid: user.uid,
-          postId: postId!,
-          author:user.email,
-          title,
-          content,
-          comments: [],  
-          likes: 0, 
-          createAt: createdAt,
-        }
-
-        //객체라서 prevPosts가 작동이 안됨, 수정해야함
+      // const newPost =    {
+      //     uid: user.uid,
+      //     postId: postId!,
+      //     author:user.name,
+      //     title,
+      //     content,
+      //     comments: [],  
+      //     likes: 0, 
+      //     createAt: createdAt,
+      //   }
         // if(posts){
         //   setPosts((prevPosts) => [
         //     ...prevPosts,
@@ -54,7 +54,6 @@ const PostCreateForm: React.FC = () => {
         //     ...prevPosts,
         //     newPost
         //   ]);
-    
         // }
   
       setTitle('');
@@ -68,8 +67,11 @@ const PostCreateForm: React.FC = () => {
     if(selectedpost && postid){
       setTitle(selectedpost.title)
       setContent(selectedpost.content)
+    } else {
+      setSelectedpost(null)
+      setSelectedpostId('')
     }
-  },[postid, selectedpost])
+  },[postid, selectedpost,setSelectedpost, setSelectedpostId])
   
 
   return (

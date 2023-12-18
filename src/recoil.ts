@@ -3,7 +3,7 @@ import { atom, selector } from 'recoil';
 export type User = {
   uid: string;
   email: string;
-  name?: string;
+  name: string;
 };
 
 export type Post = {
@@ -19,14 +19,15 @@ export type Post = {
 export type Comment = {
   uid: string;
   postId: string;
-  content: string;
+  author: string;
+  comment: string;
   likes: number;
-  createAt: Date;
+  createAt: string;
 };
 
 export const userState = atom<User>({
   key: 'userState',
-  default: { uid: '', name:' ',email: ''},
+  default: { uid: '',email: '', name:''},
 });
 
 export const isLoggedInState = atom<boolean>({
@@ -42,6 +43,15 @@ export const userPostsState = atom<Post[]>({
   key: 'userPostsState',
   default: [],
 })
+export const commentkeys = atom<string[]>({
+  key: 'commentkeysState',
+  default: [],
+});
+
+export const commentsCountState = atom<number>({
+  key: 'commentsCountState',
+  default: 0,
+});
 export const commentsState = atom<Comment[]>({
   key: 'commentsState',
   default: [],

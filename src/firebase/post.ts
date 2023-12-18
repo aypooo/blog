@@ -1,10 +1,10 @@
 import { ref,onValue,push,child,update,get } from "firebase/database";
 import { db } from "./firebase";
 
-export async function writeNewPost(uid: string, username: string, title: string, content: string, createdAt: string): 
+export async function writeNewPost(uid: string, name: string, title: string, content: string, createdAt: string): 
 Promise<string> {
   const postData = {
-    author: username,
+    author: name,
     uid: uid,
     content: content,
     title: title,
@@ -37,7 +37,7 @@ Promise<string> {
   
   // 유저 게시물 데이터 읽기
 
-  export const readUserPost = (uid: string): Promise<any> => {
+  export function readUserPost (uid: string): Promise<any> {
     const postRef = ref(db, 'user-posts/' + uid);
   
     return new Promise((resolve, reject) => {
@@ -53,7 +53,7 @@ Promise<string> {
 
 //게시물 데이터 읽기
 
-  export const readPostData = (postId: string): Promise<any> => {
+  export function readPostData(postId: string): Promise<any> {
     const postRef = ref(db, 'posts/' + postId);
   
     return new Promise((resolve, reject) => {
@@ -68,9 +68,7 @@ Promise<string> {
   }
 
 //게시물 업데이트
-export async function updatePost(  postKey: string,
-  newTitle?: string,
-  newContent?: string
+export async function updatePost(  postKey: string, newTitle?: string, newContent?: string
 ): Promise<void> {
   const postRef = ref(db, 'posts/' + postKey);
 
@@ -106,7 +104,7 @@ export async function updatePost(  postKey: string,
   }
 }
   //게시물 삭제
-  export const deletePost = async (postId: string, uid: string): Promise<void> => {
+  export async function deletePost (postId: string, uid: string): Promise<void> {
     try {
       // 포스트가 속한 'posts'와 'user-posts' 경로에서 해당 포스트 삭제
       const updates: { [key: string]: any } = {};
