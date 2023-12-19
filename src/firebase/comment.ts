@@ -1,16 +1,17 @@
-import { getDatabase, ref,onValue,push,child,update, get } from "firebase/database";
+import { ref,onValue,push,child,update, get, remove } from "firebase/database";
 import { Comment } from "../recoil";
 import { db } from "./firebase";
 
 // 댓글 쓰기
 export function writeNewComment(postId: string, postUid:string,  uid: string, name: string, comment: string) {
   const commentData: Comment = {
-    uid: uid,
-    postId: postId,
     author: name,
     comment: comment,
-    likes: 0,
+    commentId:'',
+    postId: postId,
     createAt: new Date().toLocaleString(),
+    likes: 0,
+    uid: uid,
   };
 
   const newCommentKey = push(child(ref(db), 'comments/' + postId)).key;
@@ -28,7 +29,7 @@ export function writeNewComment(postId: string, postUid:string,  uid: string, na
   }
 }
   // 댓글 데이터 읽기
-  export function readCommentData(postId: string): Promise<Comment | null> {
+  export function readCommentData(postId: string): Promise<Comment[]> {
     const commentsRef = ref(db, 'posts/' + postId + '/' + 'comments');
   
     return new Promise((resolve,reject) => {
@@ -36,6 +37,7 @@ export function writeNewComment(postId: string, postUid:string,  uid: string, na
         const commentsData = snapshot.val();
         resolve(commentsData)
       },(error) => {
+        console.error('댓글을 읽는 중 에러 발생:', error);
         reject(error);
       });
     })
@@ -45,7 +47,7 @@ export function writeNewComment(postId: string, postUid:string,  uid: string, na
 
   export async function updateComment(postUid:string, postId: string, commentId: string, updatedText: string): Promise<void> {
     const commentRef = ref(db, 'posts/' + postId+ '/' + 'comments/' + commentId);
-    const userPostCommentRef = ref(db, '/user-posts/' + postUid + '/' + postId +'/' + 'comments/' + + commentId);
+    const userPostCommentRef = ref(db, 'user-posts/' + postUid + '/' + postId + '/' + 'comments/' + commentId);
     try {
       const commentSnapshot = await get(commentRef);
       if (commentSnapshot) {
@@ -60,6 +62,23 @@ export function writeNewComment(postId: string, postUid:string,  uid: string, na
       }
     } catch (error) {
       console.error('Error updating comment:', error);
+      throw error;
+    }
+  }
+
+  //댓글 삭제
+
+  export async function deleteComment(postUid: string, postId: string, commentId: string): Promise<void> {
+    const commentRef = ref(db, 'posts/' + postId+ '/' + 'comments/' + commentId);
+    const userPostCommentRef = ref(db, '/user-posts/' + postUid + '/' + postId +'/' + 'comments/' + + commentId);
+  
+    try {
+      // 댓글 삭제
+      await remove(commentRef);
+      // 사용자의 게시물에서도 댓글 삭제
+      await remove(userPostCommentRef);
+    } catch (error) {
+      console.error('댓글 삭제 오류:', error);
       throw error;
     }
   }

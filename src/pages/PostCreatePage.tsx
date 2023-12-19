@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { Post, postsState, selectedPostIdState, selectedPostState, userPostsState, userState } from '../recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { Post, postsState, selectedPostIdState, selectedPostState, userState } from '../recoil';
 import { updatePost, writeNewPost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom'
 const PostCreateForm: React.FC = () => {
   const {postid} = useParams()
   const navigate = useNavigate()
   const user = useRecoilValue(userState);
-  // const [posts, setPosts] = useRecoilState(postsState);
-  // const [userPosts, setUserPosts] = useRecoilState(userPostsState);
+  const [posts, setPosts] = useRecoilState(postsState);
   const [selectedpost,setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
   const [selectedpostId,setSelectedpostId] = useRecoilState<string>(selectedPostIdState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  
+  console.log(posts)
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user.uid.length) {
@@ -24,7 +23,7 @@ const PostCreateForm: React.FC = () => {
     }
     try {
       const createdAt = new Date().toLocaleString();
-      let postId
+      let postId: string
       if (selectedpostId) {
         postId = selectedpostId
         await updatePost(postId, title, content);
@@ -32,29 +31,19 @@ const PostCreateForm: React.FC = () => {
         postId = await writeNewPost(user.uid, user.name!, title, content, createdAt);
       }
       // Recoil 상태 업데이트
-      // const newPost =    {
-      //     uid: user.uid,
-      //     postId: postId!,
-      //     author:user.name,
-      //     title,
-      //     content,
-      //     comments: [],  
-      //     likes: 0, 
-      //     createAt: createdAt,
-      //   }
-        // if(posts){
-        //   setPosts((prevPosts) => [
-        //     ...prevPosts,
-        //     newPost
-        //   ]);
-        // }
-
-        // if(userPosts){
-        //   setUserPosts((prevPosts) => [
-        //     ...prevPosts,
-        //     newPost
-        //   ]);
-        // }
+      const newPost = {
+          author:user.name,
+          content,
+          comments: [],  
+          createAt: createdAt,
+          likes: 0, 
+          postId:postId,
+          title,
+          uid: user.uid,
+        }
+        if(posts){
+          setPosts((prevPosts) => [...prevPosts,newPost]);
+        }
   
       setTitle('');
       setContent('');
@@ -72,8 +61,6 @@ const PostCreateForm: React.FC = () => {
       setSelectedpostId('')
     }
   },[postid, selectedpost,setSelectedpost, setSelectedpostId])
-  
-
   return (
     <form onSubmit={handleCreateSubmit}>
       <label>
@@ -89,7 +76,7 @@ const PostCreateForm: React.FC = () => {
       {selectedpostId ? (
         <>
           <button type="submit">수정</button>    
-          <button type="submit">취소</button>
+          <button onClick={() =>navigate(-1)} >취소</button>
         </>
       ):(
         <>        

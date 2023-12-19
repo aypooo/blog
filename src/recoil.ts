@@ -23,6 +23,7 @@ export type Comment = {
   comment: string;
   likes: number;
   createAt: string;
+  commentId: string
 };
 
 export const userState = atom<User>({
@@ -39,19 +40,15 @@ export const postsState = atom<Post[]>({
   key: 'postsState',
   default: [],
 });
-export const userPostsState = atom<Post[]>({
-  key: 'userPostsState',
-  default: [],
-})
-export const commentkeys = atom<string[]>({
-  key: 'commentkeysState',
-  default: [],
-});
-
-export const commentsCountState = atom<number>({
-  key: 'commentsCountState',
+// export const userPostsState = atom<Post[]>({
+//   key: 'userPostsState',
+//   default: [],
+// })
+export const commentCountState = atom<number>({
+  key: 'commentCountState',
   default: 0,
 });
+
 export const commentsState = atom<Comment[]>({
   key: 'commentsState',
   default: [],

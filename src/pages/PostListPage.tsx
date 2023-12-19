@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { userState, Post, userPostsState, selectedPostState, selectedPostIdState, commentsCountState } from '../recoil';
-import { readUserPost } from '../firebase/post';
+import { userState, Post, selectedPostState, selectedPostIdState, postsState, userPostsSelector } from '../recoil';
+import { readPostData } from '../firebase/post';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from 'react-js-pagination';
 
@@ -9,66 +9,73 @@ const POSTS_PER_PAGE = 5; // 페이지당 포스트 수
 
 const PostListPage: React.FC = () => {
     const navigate = useNavigate()
-    const { uid, } = useRecoilValue(userState);
-    const [userPosts, setUserPosts] = useRecoilState(userPostsState);
+    const { uid } = useRecoilValue(userState);
+    const [Posts, setPosts] = useRecoilState(postsState);
+    const userPosts = useRecoilValue(userPostsSelector);
+
     const setSelectedPost = useSetRecoilState(selectedPostState);
-    const setSelectedPostId = useSetRecoilState(selectedPostIdState); 
-    const [commentCount, setCommentCount] = useRecoilState(commentsCountState)  
+    const setSelectedPostId = useSetRecoilState(selectedPostIdState);
     //pagenation
     const [currentPage, setCurrentPage] = useState(1);
     const indexOfLastPost = currentPage * POSTS_PER_PAGE;
     const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
-    const postsArray = userPosts ? Object.entries(userPosts) : []
+    const postsArray = userPosts ?Object.values(userPosts) : []
     const currentPosts = postsArray.reverse().slice(indexOfFirstPost, indexOfLastPost);
-
     
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-    const handlePostClick = (selectedPost: Post, postId:string) => {
+    const handlePostClick = (selectedPost: Post) => {
         setSelectedPost(selectedPost);
-        setSelectedPostId(postId)
-        navigate(`/userpost/${postId}`)
+        setSelectedPostId(selectedPost.postId!)
+        navigate(`/userpost/${selectedPost.postId}`)
     };
     useEffect(() => {
         async function fetchPost() {
             if(uid){
                 try {
-                    const userPost = await readUserPost(uid);
-                    setUserPosts(userPost);
-            
-                    if(userPost.comments){
-                      
-                      setCommentCount(Object.keys(userPost.comments).length)
-                    }         
+                    const userPost= await readPostData(uid);
+                    const postArray = Object.entries(userPost).map(([postId, post]) => ({
+                        postId,
+                        author:post.author,
+                        content:post.content,
+                        comments: post.comments, 
+                        createAt: post.createAt,
+                        likes: post.likes, 
+                        title:post.title,
+                        uid: post.uid,
+                      }));
+                      setPosts(postArray);    
+                    console.log('패치됨')
+                    console.log(userPost)
                 } catch (error) {
                     console.error('유저 포스트 불러오기에 실패', error);
                 }
             }
         }
         fetchPost();
-    }, [setCommentCount, setUserPosts, uid]);
+    }, [setPosts, uid]);
 
     if(!uid) return <>로그인해주세요</>
-    if(!userPosts) return <>작성한 글이 없습니다.
-         <Link to="/write"> 글쓰기</Link>
-    </>
-
-
-
-  console.log(userPosts)
+    if(!userPosts) return (
+        <div>
+            <span>작성한 글이 없습니다.</span>
+            <Link to="/write"> 글쓰기</Link>
+        </div>    
+    )
+    console.log(userPosts)
     return (
     <div>
         <h2>Your Posts</h2>
         <Link to="/write"> 글쓰기</Link>
         <ul>
             {currentPosts.map((post,index) => (
-            <li key={index} onClick={()=>handlePostClick(post[1],post[0])}>
-                    <h3>{Object.values(post[1].title)}</h3>
-                    <p>{Object.values(post[1].content)}</p>
-                    <p>작성자 {Object.values(post[1].author)}</p>
-                    <p>좋아요 {Object.values(post[1].likes)}</p>
-                    <p>작성일자 {Object.values(post[1].createAt)}</p>
-                    <p>{post[1].comments ? Object.keys(post[1].comments).length : 0}개의 댓글</p>
+            <li key={index} onClick={()=>handlePostClick(post)}>
+                    <h3>{post.title}</h3>
+                    <p>{post.content}</p>
+                    <p>작성자 {post.author}</p>
+                    <p>좋아요 {post.likes}</p>
+                    <p>작성일자 {post.createAt}</p>
+                    <p>{post.comments ? Object.keys(post.comments).length: 0}개의 댓글</p>
             </li>
             ))}
         </ul>

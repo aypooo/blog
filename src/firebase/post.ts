@@ -1,5 +1,6 @@
 import { ref,onValue,push,child,update,get } from "firebase/database";
 import { db } from "./firebase";
+import { Post } from "../recoil";
 
 export async function writeNewPost(uid: string, name: string, title: string, content: string, createdAt: string): 
 Promise<string> {
@@ -37,7 +38,7 @@ Promise<string> {
   
   // 유저 게시물 데이터 읽기
 
-  export function readUserPost (uid: string): Promise<any> {
+  export function readUserPost (uid: string): Promise<Post[]> {
     const postRef = ref(db, 'user-posts/' + uid);
   
     return new Promise((resolve, reject) => {
@@ -53,8 +54,8 @@ Promise<string> {
 
 //게시물 데이터 읽기
 
-  export function readPostData(postId: string): Promise<any> {
-    const postRef = ref(db, 'posts/' + postId);
+  export function readPostData(postId: string): Promise<Post[]> {
+    const postRef = ref(db, 'posts/');
   
     return new Promise((resolve, reject) => {
       onValue(postRef, (snapshot) => {
