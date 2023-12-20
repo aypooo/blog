@@ -1,28 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { deleteComment, readCommentData, updateComment, writeNewComment } from '../firebase/comment';
-import { useRecoilValue } from 'recoil';
-import { userState ,Comment} from '../recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { userState ,Comment, selectedPostState, Post, postsState} from '../recoil';
+import TimeAgoComponent from './TimeAgoComponent ';
+import { useNavigate } from 'react-router-dom';
+import UserProfile from './UserProfile';
 
 const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) => {
   const user = useRecoilValue(userState)
+  const navigate = useNavigate()
   const [commentList, setCommentList] = useState<Comment[]>([]);
   const [commentKeys,setCommentKeys] = useState('')
-  const [comment, setComment] = useState('');
+  const [newComment, setnewComment] = useState('');
+  const setPosts = useSetRecoilState(postsState);
+  const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
   const [updatedCommentId, setUpdatedCommentId] = useState<string | null>(null);
   const [updatedComment, setUpdatedComment] = useState<string>('');
-
+  console.log(selectedpost)
   const handleWriteComment = async() => {
-      try{
-        const commentKey = writeNewComment(postId, postUid, user.uid, user.name, comment)
-        setCommentKeys(commentKey!)
-        alert('댓글이 작성되었습니다.')
-      }catch(error){
-          console.log('댓글 작성 실패', error)
-      }
+    if(!user.uid) {
+      navigate('/login')
+      return alert('로그인해주세요')
+    }
+    
+    try {
+      const commentKey = writeNewComment(selectedpost!.postId, selectedpost!.uid, user.uid, user.name, newComment);
+      setCommentKeys(commentKey!)
+    } catch (error) {
+      console.error('댓글 작성 실패:', error);
+    }
     }
     const handleUpdateComment = async (commentId: string, updatedComment:string) => {
       try {
-        await updateComment(postUid, postId, commentId, updatedComment);
+        await updateComment(selectedpost!.uid, selectedpost!.postId, commentId, updatedComment);
         setCommentList((prevComments) => {
           return prevComments.map((comment) => 
             comment.commentId === commentId ? { ...comment, comment: updatedComment } : comment
@@ -68,7 +78,6 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
     };
     fetchData();
 
-    //comment 재랜더 시키는것, commentKeys 삭제?
   }, [postId, commentKeys,setUpdatedCommentId]);
   //페이지네이션 붙이기?
   
@@ -77,7 +86,7 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
       <h3>{commentList ? Object.keys(commentList).length : 0}개의 댓글</h3>
       <div>
         <div>
-          <input type="text" onChange={(e) => setComment(e.target.value)} />
+          <input type="text" onChange={(e) => setnewComment(e.target.value)} />
           <button onClick={handleWriteComment}>작성하기</button>
         </div>
       </div>
@@ -85,7 +94,8 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
         {commentList &&
           commentList.map((comment: any) => (
             <li key={comment.commentId}>
-              <p>{comment.author}</p>
+              <p><UserProfile>{comment.author}</UserProfile></p>
+              <p><TimeAgoComponent timestamp={comment.createAt}/></p>
               <p>{comment.likes}</p>
               <p>{comment.createAt}</p>
               {updatedCommentId === comment.commentId ? (

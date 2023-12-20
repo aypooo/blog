@@ -1,30 +1,29 @@
 import React from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { Post, postsState, selectedPostIdState, selectedPostState, userState } from '../recoil';
+import { Post, postsState, selectedPostState, userState } from '../recoil';
 import { deletePost } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
 import CommentList from '../component/CommentList';
+import UserProfile from '../component/UserProfile';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
   const { uid } = useRecoilValue(userState);
   const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
-  const [selectedpostId, setSelectedPostId] = useRecoilState(selectedPostIdState);
   const setPosts = useSetRecoilState(postsState)
   if (!selectedpost) {
     return null;
   }
   
   const handlePostUpdate = () => {
-    navigate(`/write/${selectedpostId}`)
+    navigate(`/write/${selectedpost.postId}`)
   }
   const handleDeletePost = async () => {
     try {
       window.confirm("삭제하시겠습니까?")
-      await deletePost(selectedpostId, selectedpost.uid);
-      setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpostId));
+      await deletePost(selectedpost.postId, selectedpost.uid);
+      setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setSelectedPost(null);
-      setSelectedPostId('');
       alert('포스트가 성공적으로 삭제되었습니다.');
       navigate('/userpost')
     } catch (error) {
@@ -35,6 +34,8 @@ const PostDetail: React.FC = () => {
   return (
     <div>
       <h2>Post Detail</h2>
+
+      <UserProfile>{selectedpost.author}</UserProfile>
       <h3>{Object.values(selectedpost.title)}</h3>
       <p>{Object.values(selectedpost.content)}</p>
       {uid === selectedpost.uid ? (
@@ -45,7 +46,7 @@ const PostDetail: React.FC = () => {
       ):(
         <></>
       ) }
-      <CommentList postId={selectedpostId} postUid={selectedpost.uid}/>
+      <CommentList postId={selectedpost.postId} postUid={selectedpost.uid}/>
     </div>
   );
 };

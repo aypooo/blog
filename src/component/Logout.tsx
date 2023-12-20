@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { userState, isLoggedInState } from '../recoil';
 import { auth } from '../firebase/firebase';
 import { useNavigate } from 'react-router-dom';
+import UserProfile from './UserProfile';
 
 const Logout: React.FC = () => {
     const navgate = useNavigate()
@@ -24,7 +25,7 @@ const Logout: React.FC = () => {
 
     return (
         <>
-        <span>{user.name}</span>
+        <UserProfile>{user.name}</UserProfile>
         <button onClick={handleLogout}>로그아웃</button>
         </>
     );
