@@ -14,7 +14,7 @@ export type Post = {
   content: string;
   comments: Comment[];
   likes: number;
-  createAt: string;
+  createAt: Date;
 };
 export type Comment = {
   uid: string;
@@ -22,8 +22,8 @@ export type Comment = {
   author: string;
   comment: string;
   likes: number;
-  createAt: string;
-  commentId: string
+  createAt: Date;
+  commentId: string;
 };
 
 export const userState = atom<User>({
@@ -54,22 +54,23 @@ export const commentsState = atom<Comment[]>({
   default: [],
 });
 
-export const userPostsSelector = selector<Post[]>({
+export const selectedUserState = atom({
+  key: 'selectedUserState',
+  default: "",
+});
+export const userPostsSelector = selector({
   key: 'userPostsSelector',
   get: ({ get }) => {
-    const user = get(userState);
-    const posts = get(postsState);
-    return posts.filter((post) => post.uid === user?.uid);
+    const allPosts = get(postsState);
+    const selectedUser = get(selectedUserState);
+
+    // 특정 사용자의 게시물만 필터링
+    const userPosts = Object.values(allPosts).filter(post => post.author === selectedUser);
+    console.log(userPosts)
+    return userPosts;
   },
 });
-
 export const selectedPostState = atom<Post | null>({
   key: 'selectedPostState',
   default: null
 });
-
-export const selectedPostIdState = atom<string>({
-  key: 'selectedPostIdState',
-  default: "",
-});
-

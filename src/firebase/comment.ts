@@ -9,7 +9,7 @@ export function writeNewComment(postId: string, postUid:string,  uid: string, na
     comment: comment,
     commentId:'',
     postId: postId,
-    createAt: new Date().toLocaleString(),
+    createAt: new Date(),
     likes: 0,
     uid: uid,
   };

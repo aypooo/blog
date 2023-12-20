@@ -2,7 +2,7 @@ import { ref,onValue,push,child,update,get } from "firebase/database";
 import { db } from "./firebase";
 import { Post } from "../recoil";
 
-export async function writeNewPost(uid: string, name: string, title: string, content: string, createdAt: string): 
+export async function writeNewPost(uid: string, name: string, title: string, content: string, createdAt: Date): 
 Promise<string> {
   const postData = {
     author: name,
