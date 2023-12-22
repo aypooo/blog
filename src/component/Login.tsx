@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { isLoggedInState, userState } from '../recoil';
 import LoginForm from './LoginForm';
 import { setPersistence, signInWithEmailAndPassword, browserLocalPersistence } from 'firebase/auth';
@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const Login: React.FC = () => {
   const navgate = useNavigate()
   const [user, setUser] = useRecoilState(userState);
-  const [isLoggedIn, setisLoggedIn] = useRecoilState(isLoggedInState);
+  const  setisLoggedIn = useSetRecoilState(isLoggedInState);
 
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -21,7 +21,7 @@ const Login: React.FC = () => {
         const userData = await readUserData(user.uid!)
         setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name });
         setisLoggedIn(true);
-        navgate('/userpost')
+        navgate("/")
       }
     } catch (error) {
       console.error('로그인 에러:', error);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { deleteComment, readCommentData, updateComment, writeNewComment } from '../firebase/comment';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {  useRecoilValue } from 'recoil';
 import { userState ,Comment, selectedPostState, Post, postsState} from '../recoil';
 import TimeAgoComponent from './TimeAgoComponent ';
 import { useNavigate } from 'react-router-dom';
@@ -9,14 +9,13 @@ import UserProfile from './UserProfile';
 const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) => {
   const user = useRecoilValue(userState)
   const navigate = useNavigate()
+  const selectedpost = useRecoilValue<Post | null>(selectedPostState);
   const [commentList, setCommentList] = useState<Comment[]>([]);
   const [commentKeys,setCommentKeys] = useState('')
   const [newComment, setnewComment] = useState('');
-  const setPosts = useSetRecoilState(postsState);
-  const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
   const [updatedCommentId, setUpdatedCommentId] = useState<string | null>(null);
   const [updatedComment, setUpdatedComment] = useState<string>('');
-  console.log(selectedpost)
+
   const handleWriteComment = async() => {
     if(!user.uid) {
       navigate('/login')
@@ -26,6 +25,7 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
     try {
       const commentKey = writeNewComment(selectedpost!.postId, selectedpost!.uid, user.uid, user.name, newComment);
       setCommentKeys(commentKey!)
+      setnewComment('')
     } catch (error) {
       console.error('댓글 작성 실패:', error);
     }
@@ -86,7 +86,7 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
       <h3>{commentList ? Object.keys(commentList).length : 0}개의 댓글</h3>
       <div>
         <div>
-          <input type="text" onChange={(e) => setnewComment(e.target.value)} />
+          <input type="text" value={newComment} onChange={(e) => setnewComment(e.target.value)} />
           <button onClick={handleWriteComment}>작성하기</button>
         </div>
       </div>

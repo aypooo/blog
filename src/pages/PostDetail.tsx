@@ -25,7 +25,7 @@ const PostDetail: React.FC = () => {
       setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setSelectedPost(null);
       alert('포스트가 성공적으로 삭제되었습니다.');
-      navigate('/userpost')
+      navigate(`/${selectedpost.author}`)
     } catch (error) {
       console.error('포스트 삭제 중 오류 발생:', error);
     }
