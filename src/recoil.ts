@@ -66,7 +66,6 @@ export const userPostsSelector = selector({
 
     // 특정 사용자의 게시물만 필터링
     const userPosts = Object.values(allPosts).filter(post => post.author === selectedUser);
-    console.log(userPosts)
     return userPosts;
   },
 });

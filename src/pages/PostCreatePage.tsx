@@ -11,7 +11,7 @@ const PostCreateForm: React.FC = () => {
   const [selectedpost,setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  console.log(posts)
+
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user.uid.length) {
@@ -48,15 +48,15 @@ const PostCreateForm: React.FC = () => {
           uid: user.uid,
         }
         if(posts){
-          setPosts((prevPosts) => [...prevPosts,newPost]);
-          setSelectedpost(newPost)
+        setPosts((prevPosts) => [...prevPosts,newPost]);
+        setSelectedpost(newPost)
         }
       }
       setTitle('');
       setContent('');
-      navigate(`/${selectedpost?.author}`)
-      // navigate(`/${selectedpost?.author}/${selectedpost?.postId}`)
-      // recoil 업데이트가 안됨, 수정해야함
+      alert('글이 작성되었습니다.')
+      console.log(posts)
+      navigate(`/${user.name}`)
     } catch (error) {
       console.error('포스트 생성 오류: ', error);
     }
