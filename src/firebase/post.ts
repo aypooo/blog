@@ -1,4 +1,4 @@
-import { ref,onValue,push,child,update,get,orderByKey } from "firebase/database";
+import { ref,onValue,push,child,update,get } from "firebase/database";
 import { db } from "./firebase";
 import { Post } from "../recoil";
 
@@ -52,38 +52,11 @@ Promise<string> {
   //   });
   // }
 
-    export function fetchNextPosts(uid: string, limit: number, startAfter?: string | null): Promise<Post[]> {
-      const postRef = ref(db, 'posts');
-    
-      // 시작점 설정
-      if (startAfter) {
-        postRef.orderByKey().startAfter(startAfter);
-      }
-    
-      // 리미트 및 정렬 설정
-      const query = limit
-        ? postRef.orderByKey().limitToLast(limit)
-        : postRef;
-    
-      return new Promise(async (resolve, reject) => {
-        try {
-          const snapshot = await get(query);
-    
-          if (snapshot.exists()) {
-            const postData = snapshot.val();
-            resolve(postData);
-          } else {
-            resolve([]);
-          }
-        } catch (error) {
-          console.error('포스트 데이터를 읽는 중 에러 발생:', error);
-          reject(error);
-        }
-      });
-    }
+ 
+
 
 //게시물 데이터 읽기
-  export function readPostData(postId: string): Promise<Post[]> {
+  export function readPostData(): Promise<Post[]> {
     const postRef = ref(db, 'posts/');
   
     return new Promise((resolve, reject) => {
@@ -96,7 +69,6 @@ Promise<string> {
       });
     });
   }
-
 //게시물 업데이트
 export async function updatePost(  postKey: string, newTitle?: string, newContent?: string
 ): Promise<void> {

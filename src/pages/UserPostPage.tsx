@@ -31,7 +31,10 @@ const UserPostPage = () => {
 
     useEffect(() => {
         //우선 적용, 여기서도 불러와야할지 아니면 다르게 처리 할지 고민요망
-        FetchPostData(uid, setPosts);
+        if(posts.length === 0){
+            console.log('userPostFetch')
+            FetchPostData(setPosts);
+        }
       }, [uid, setPosts]);
     
     if(!uid) return <>로그인해주세요</>

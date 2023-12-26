@@ -9,7 +9,7 @@ const PostPage = () => {
   const [posts, setPosts] = useRecoilState(postsState);
 
   useEffect(() => {
-    FetchPostData(uid, setPosts);
+    FetchPostData(setPosts);
   }, [uid, setPosts]);
 
   return (

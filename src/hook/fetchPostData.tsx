@@ -1,9 +1,9 @@
 import { Post, User } from "../recoil";
 import { readPostData } from "../firebase/post";
 
-const FetchPostData = async (uid: string, setPosts: (posts: Post[]) => void) => {
+const FetchPostData = async (setPosts: (posts: Post[]) => void) => {
   try {
-    const userPost = await readPostData(uid);
+    const userPost = await readPostData();
     const postArray = Object.entries(userPost).reverse().map(([postId, post]) => ({
       postId,
       author: post.author,
