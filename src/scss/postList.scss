@@ -1,0 +1,54 @@
+.post-list {
+    &__title {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    
+    &__item {
+      cursor: pointer;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+      // background-color: blue;
+  
+      &:hover {
+        background-color: #f5f5f5;
+      }
+  
+      &__heading {
+        margin-bottom: 10px;
+        font-size: 1.2em;
+        color: #333;
+      }
+  
+      &__author,
+      &__likes,
+      &__date,
+      &__comments {
+        margin: 5px 0;
+        color: #777;
+      }
+  
+      &__likes {
+        color: #3498db;
+      }
+  
+      &__comments {
+        color: #e74c3c;
+      }
+    }
+  }
+  
+.write-link {
+display: block;
+margin-top: 20px;
+color: #3498db;
+text-decoration: none;
+font-weight: bold;
+
+&:hover {
+    text-decoration: underline;
+}
+}

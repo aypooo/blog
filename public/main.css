@@ -1,0 +1,43 @@
+.post-list__title {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #333;
+}
+.post-list__item {
+  cursor: pointer;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+.post-list__item:hover {
+  background-color: #f5f5f5;
+}
+.post-list__item__heading {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+.post-list__item__author, .post-list__item__likes, .post-list__item__date, .post-list__item__comments {
+  margin: 5px 0;
+  color: #777;
+}
+.post-list__item__likes {
+  color: #3498db;
+}
+.post-list__item__comments {
+  color: #e74c3c;
+}
+
+.write-link {
+  display: block;
+  margin-top: 20px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+.write-link:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=main.css.map */

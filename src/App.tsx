@@ -1,5 +1,4 @@
 import './App.css';
-import Gbn from './component/Gbn';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/firebase';
@@ -7,6 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import PageRoutes from './pageRoutes';
 import { isLoggedInState, userState } from './recoil';
 import { readUserData } from './firebase/auth';
+import Gnb from './component/Gnb';
 
 function App() {
   const setUser = useSetRecoilState(userState);
@@ -31,7 +31,7 @@ function App() {
 
   return (
     <div className="App">
-      <Gbn />
+      <Gnb />
       <PageRoutes />
     </div>
   );

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { isLoggedInState, userState } from '../recoil';
 import Logout from './Logout';
-const Gbn = () => {
+const Gnb = () => {
     const isLoggedIn = useRecoilValue(isLoggedInState);
     const user = useRecoilValue(userState)
     return (
@@ -21,4 +21,4 @@ const Gbn = () => {
     );
 };
 
-export default Gbn
+export default Gnb;
