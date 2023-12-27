@@ -3,7 +3,7 @@ import PostList from '../component/PostList';
 import { Link, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { postsState, selectedUserState, userPostsSelector, userState } from '../recoil';
-import Pagination from 'react-js-pagination';
+import Pagination from '../component/Pagination';
 import FetchPostData from '../hook/fetchPostData';
 
 
@@ -38,26 +38,27 @@ const UserPostPage = () => {
       }, [uid, setPosts]);
     
     if(!uid) return <>로그인해주세요</>
-    if (!userPosts || Object.keys(userPosts).length === 0) {
-        return (
-            <div>
-                <span>작성한 글이 없습니다.</span>
-                <Link to="/write"> 글쓰기</Link>
-            </div>
-        );
-    }
-    
     return (
-        <div>
-            <PostList posts={currentPosts} title='Your Post'/>
-            <Pagination
+        <div className="user-post-page">
+          {(!userPosts || Object.keys(userPosts).length === 0) ? (
+            <div className="user-post-page__no-posts">
+              <span>작성한 글이 없습니다.</span>
+              <Link to="/write" className="write-link"> 글쓰기</Link>
+            </div>
+          ) : (
+            <div>
+              <PostList posts={currentPosts} title='Your Post' />
+              <Pagination
                 activePage={currentPage}
                 itemsCountPerPage={POSTS_PER_PAGE}
                 totalItemsCount={Object.keys(userPosts).length}
                 onChange={paginate}
-            />
+              />
+            </div>
+          )}
         </div>
-    );
-};
+      );
+    };
+    
 
 export default UserPostPage;

@@ -1,0 +1,48 @@
+/* Gnb.scss */
+
+.gnb {
+    height: 100px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 3개의 컬럼을 가진 그리드 */
+    gap: 15px;
+    align-items: center;
+    &__right{
+        display: grid;
+        align-items: center;
+        justify-items: end;
+    }
+    &__link {
+      margin-right: 15px;
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  /* LogoutButton.scss */
+  
+.logout{
+display: flex;
+    &__name{
+        color:#3498db;
+        cursor: pointer;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    &__button {
+        border:none;
+        background-color: none;
+        margin-left: 15px;
+        color: #e74c3c;
+        cursor: pointer;
+
+        &:hover {
+        text-decoration: underline;
+        }
+}
+}

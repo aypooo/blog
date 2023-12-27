@@ -24,10 +24,10 @@ const Logout: React.FC = () => {
     };
 
     return (
-        <>
-        <UserProfile>{user.name}</UserProfile>
-        <button onClick={handleLogout}>로그아웃</button>
-        </>
+        <div className='logout'>
+            <div className='logout__name'><UserProfile>{user.name ? user.name : 'username'}</UserProfile></div>
+            <button className='logout__button' onClick={handleLogout}>로그아웃</button>
+        </div>
     );
     };
 

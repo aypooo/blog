@@ -1,24 +1,28 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { isLoggedInState, userState } from '../recoil';
+import { isLoggedInState } from '../recoil';
 import Logout from './Logout';
+
 const Gnb = () => {
-    const isLoggedIn = useRecoilValue(isLoggedInState);
-    const user = useRecoilValue(userState)
-    return (
-        <div>
-            <Link to="/">홈</Link>
-            {isLoggedIn ? (
-                <>
-                <Link to="/mypage"> 내정보</Link>
-                <Logout/>
-                </>
-            ):(
-                <Link to="/login">로그인</Link>
-            )}
-            
+  const isLoggedIn = useRecoilValue(isLoggedInState);
+
+  return (
+    <div className="gnb">
+        <div className='gnb__left'>
+            <Link to="/" className="gnb__link">홈</Link>
         </div>
-    );
+      {isLoggedIn ? (
+        <div className='gnb__right'>
+          <Logout />
+        </div>
+      ) : (
+        <div className='gnb__right'>
+        <Link to="/login" className="gnb__link">로그인</Link>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default Gnb;

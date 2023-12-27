@@ -1,1 +1,6 @@
-@import 'postList.scss'
+@import 'components/postList.scss';
+@import 'components/pagination.scss';
+@import 'components/gnb.scss';
+
+@import 'pages/postCreate.scss';
+@import 'pages/userPost.scss';

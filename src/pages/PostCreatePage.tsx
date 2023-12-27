@@ -71,29 +71,48 @@ const PostCreateForm: React.FC = () => {
   },[postid, selectedpost,setSelectedpost])
 
   return (
-    <form onSubmit={handleCreateSubmit}>
-      <label>
-        Title:
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+    <form className="post-create-form" onSubmit={handleCreateSubmit}>
+      <label className="post-create-form__label">
+
+        <input
+          placeholder='제목'
+          type="text"
+          className="post-create-form__input"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
       </label>
-      <br />
-      <label>
-        Content:
-        <textarea value={content} onChange={(e) => setContent(e.target.value)} />
+      <label className="post-create-form__label">
+        <textarea
+          placeholder='내용'
+          className="post-create-form__textarea"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+        />
       </label>
 
-      {selectedpost && selectedpost.postId ? (
-        <>
-          <button type="submit">수정</button>    
-          <button onClick={() =>navigate(-1)} >취소</button>
-        </>
-      ):(
-        <>        
-          <button type="submit">글작성</button>
-        </>
-
-      )}
-
+      <div className="post-create-form__buttons">
+        {selectedpost && selectedpost.postId ? (
+          <>
+            <button type="submit" className="post-create-form__button">
+              수정
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="post-create-form__button"
+            >
+              취소
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="submit" className="post-create-form__button">
+              글작성
+            </button>
+          </>
+        )}
+      </div>
     </form>
   );
 };
