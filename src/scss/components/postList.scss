@@ -1,54 +1,80 @@
 .post-list {
+    display: grid;
+    padding: 0 20px;
     &__title {
+      width: 100%;
       font-size: 1.5em;
       margin-bottom: 20px;
       color: #333;
     }
     
     &__item {
-      cursor: pointer;
+      height: 150px;
+      display: grid;
+      margin: 5px 0;
       padding: 20px;
       border: 1px solid #ddd;
       border-radius: 8px;
       transition: background-color 0.3s;
-      // background-color: blue;
-  
+      cursor: pointer;
+
       &:hover {
         background-color: #f5f5f5;
+      } 
+    }
+    &__header{
+      height: min(20px);
+      &__author{
+        margin: 0;
       }
-  
+    }
+    &__body{
       &__heading {
         margin-bottom: 10px;
         font-size: 1.2em;
         color: #333;
       }
-  
-      &__author,
-      &__likes,
-      &__date,
-      &__comments {
-        margin: 5px 0;
-        color: #777;
+      &__content {
+        font-size: 1em;
+        font-weight:lighter;
       }
-  
+    }
+     
+    &__footer {
+      display: grid;
+      grid-template-columns: 1fr auto auto; 
+      justify-items: end;
+
+      &__likes, 
+      &__date,
+      &__comments{
+        margin: 0 5px;
+      }
+
       &__likes {
         color: #3498db;
+        margin: 0 5px;
+      }
+  
+      &__date {
+        color: #777;
       }
   
       &__comments {
         color: #e74c3c;
+        justify-self: end; 
       }
     }
   }
   
 .write-link {
-display: block;
-margin-top: 20px;
-color: #3498db;
-text-decoration: none;
-font-weight: bold;
+  display: block;
+  margin-top: 20px;
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
 
-&:hover {
-    text-decoration: underline;
-}
+  &:hover {
+      text-decoration: underline;
+  }
 }
