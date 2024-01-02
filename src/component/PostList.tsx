@@ -18,23 +18,33 @@ const PostList: React.FC<PostListProps> = ({ posts, title }) => {
   };
   console.log(posts)
   return (
-    <div className='post-list'>
+    <div className='container'>
+      <ul className='post-list'>
       <h2 className='post-list__title'>{title}</h2>
       <Link to="/write" className='write-link'>
         글쓰기
       </Link>
-      <ul>
         {posts.map((post, index) => (
           <li key={index} className='post-list__item' onClick={() => handlePostClick(post)}>
-            <h3 className='post-list__item__heading'>{post.title}</h3>
-            <p className='post-list__item__author'>작성자 {post.author}</p>
-            <p className='post-list__item__likes'>좋아요 {post.likes}</p>
-            <p className='post-list__item__date'>
-              작성일자 <TimeAgoComponent timestamp={post.createAt} />
-            </p>
-            <p className='post-list__item__comments'>
-              {post.comments ? Object.keys(post.comments).length : 0}개의 댓글
-            </p>
+            <div className='post-list__header'>
+              <p className='post-list__header__author'>{post.author}</p>
+            </div>
+            <div className='post-list__body'>
+              <h3 className='post-list__content__heading'>{post.title}</h3>
+              <h3 className='post-list__content__content'>{post.content}</h3>
+            </div>
+            <div className='post-list__footer'>
+              <p className='post-list__footer__date'>
+                <TimeAgoComponent timestamp={post.createAt}/>
+              </p>
+              <p className='post-list__footer__likes'>
+                <span>좋아요</span>
+                {post.likes}</p>
+              <p className='post-list__footer__comments'>
+                {post.comments ? Object.keys(post.comments).length : 0}
+                <span>개의 댓글</span>
+              </p>
+            </div>
           </li>
         ))}
       </ul>

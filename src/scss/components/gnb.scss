@@ -3,7 +3,7 @@
 .gnb {
     height: 100px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 3개의 컬럼을 가진 그리드 */
+    grid-template-columns: repeat(3, 1fr); 
     gap: 15px;
     align-items: center;
     &__right{
@@ -26,7 +26,7 @@
   /* LogoutButton.scss */
   
 .logout{
-display: flex;
+  display: flex;
     &__name{
         color:#3498db;
         cursor: pointer;
