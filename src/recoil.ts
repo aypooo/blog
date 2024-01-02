@@ -14,6 +14,7 @@ export type Post = {
   content: string;
   comments: Comment[];
   likes: number;
+  imageUrls: string[];
   createAt: Date;
 };
 export type Comment = {

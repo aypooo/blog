@@ -16,7 +16,7 @@ const PostList: React.FC<PostListProps> = ({ posts, title }) => {
     setSelectedPost(selectedPost);
     navigate(`/${selectedPost.author}/${selectedPost.postId}`);
   };
-
+  console.log(posts)
   return (
     <div className='post-list'>
       <h2 className='post-list__title'>{title}</h2>

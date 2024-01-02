@@ -1,32 +1,44 @@
 import { ref,onValue,push,child,update,get } from "firebase/database";
-import { db } from "./firebase";
+import { db, storage } from "./firebase";
 import { Post } from "../recoil";
+import { ref as storageRef, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
-export async function writeNewPost(uid: string, name: string, title: string, content: string, createdAt: Date): 
-Promise<string> {
-  const postData = {
+export async function writeNewPost(uid: string, name: string, title: string, content: string, imageUrls: string[], createdAt: Date ): Promise<string> {
+  const postData: Post = {
     author: name,
+    postId: "",
     uid: uid,
     content: content,
     title: title,
-    Comments: [],
+    comments: [],
     likes: 0,
     createAt: createdAt,
-    //   authorPic: picture
+    imageUrls: imageUrls,
+
   };
 
   const newPostRef = push(child(ref(db), 'posts'));
   const newPostKey = newPostRef.key;
+  
   if (!newPostKey) {
     throw new Error("포스트 키를 생성하는 데 문제가 발생했습니다.");
   }
 
   const updates: { [key: string]: any } = {};
   updates["/posts/" + newPostKey] = postData;
-  updates["/user-posts/" + uid + "/" + newPostKey] = postData;
-
+  // updates["/user-posts/" + uid + "/" + newPostKey] = postData;
 
   try {
+    // const imageUploadPromises = images.map(async (image, index) => {
+    //   const imageName = `${newPostKey}_image_${index}`;
+    //   const imageStorageRef = storageRef(storage, `postImages/${imageName}`);
+    //   await uploadBytesResumable(imageStorageRef, image);
+    //   const imageUrl = await getDownloadURL(imageStorageRef);
+    //   postData.imageUrls.push(imageUrl);
+    // });
+
+    // await Promise.all(imageUploadPromises);
+
     await update(ref(db), updates);
     // 새로 생성된 포스트의 키(newPostKey)를 반환합니다.
     return newPostKey;
@@ -70,13 +82,17 @@ Promise<string> {
     });
   }
 //게시물 업데이트
-export async function updatePost(  postKey: string, newTitle?: string, newContent?: string
+export async function updatePost(
+  postKey: string,
+  newTitle?: string,
+  newContent?: string,
+  newImages?: string[],
 ): Promise<void> {
   const postRef = ref(db, 'posts/' + postKey);
 
   try {
     const postSnapshot = await get(postRef);
-    if (postSnapshot) {
+    if (postSnapshot.exists()) {
       const postData = postSnapshot.val();
 
       // 새로운 제목 또는 내용이 제공된 경우에만 업데이트
@@ -86,6 +102,20 @@ export async function updatePost(  postKey: string, newTitle?: string, newConten
       }
       if (newContent) {
         updates.content = newContent;
+      }
+
+      if (newImages && newImages.length > 0) {
+        // 이미지 업로드
+        updates.imageUrls = newImages;
+        // const imageUploadPromises = newImages.map(async (image, index) => {
+        //   const imageName = `${postKey}_image_${index}`;
+        //   const imageStorageRef = storageRef(storage, `postImages/${imageName}`);
+        //   await uploadBytesResumable(imageStorageRef, image);
+        //   const imageUrl = await getDownloadURL(imageStorageRef);
+   
+        // });
+
+        // await Promise.all(imageUploadPromises);
       }
 
       // 'posts' 컬렉션에서 포스트 업데이트

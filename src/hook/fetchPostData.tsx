@@ -11,6 +11,7 @@ const FetchPostData = async (setPosts: (posts: Post[]) => void) => {
       comments: post.comments,
       createAt: post.createAt,
       likes: post.likes,
+      imageUrls: post.imageUrls,
       title: post.title,
       uid: post.uid,
     }));
