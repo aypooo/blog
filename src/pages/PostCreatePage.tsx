@@ -3,9 +3,6 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { Post, postsState, selectedPostState, userState } from '../recoil';
 import { updatePost, writeNewPost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase/firebase';
-import ReactQuill from 'react-quill';
 import Editor from '../component/Editor';
 
 const PostCreateForm: React.FC = () => {
@@ -16,43 +13,7 @@ const PostCreateForm: React.FC = () => {
   const [selectedpost, setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [images, setImages] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedImages = Array.from(e.target.files);
-      setImages((prevImages) => [...prevImages, ...selectedImages]);
-
-      const imagePreviewUrls = selectedImages.map((image) => URL.createObjectURL(image));
-      setImagePreviews((prevPreviews) => [...prevPreviews, ...imagePreviewUrls]);
-    }
-  };
-
-  // 이미지 삭제 함수
-  const handleImageRemove = (index: number) => {
-    const updatedImages = [...images];
-    const updatedPreviews = [...imagePreviews];
-
-    updatedImages.splice(index, 1);
-    updatedPreviews.splice(index, 1);
-
-    setImages(updatedImages);
-    setImagePreviews(updatedPreviews);
-  };
-
-  const uploadImages = async () => {
-    const uploadPromises = images.map(async (image, index) => {
-      const imageName = `${title}_${index}`;
-      const imageStorageRef = storageRef(storage, `postImages/${imageName}`);
-      await uploadBytesResumable(imageStorageRef, image);
-      const imageUrl = await getDownloadURL(imageStorageRef);
-      return imageUrl;
-    });
-
-    const uploadedImageUrls = await Promise.all(uploadPromises);
-    return uploadedImageUrls;
-  };
+  const [imageUrls,setImageUrls] = useState([''])
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,8 +26,6 @@ const PostCreateForm: React.FC = () => {
     try {
       const createdAt = new Date();
       let postId: string;
-
-      const imageUrls = await uploadImages();
 
       if (selectedpost) {
         postId = selectedpost.postId;
@@ -100,8 +59,6 @@ const PostCreateForm: React.FC = () => {
 
       setTitle('');
       setContent('');
-      setImages([]);
-      setImagePreviews([]);
       alert('글이 작성되었습니다.');
       console.log(posts);
       navigate(`/${user.name}`);
@@ -114,7 +71,6 @@ const PostCreateForm: React.FC = () => {
     if (selectedpost && postid) {
       setTitle(selectedpost.title);
       setContent(selectedpost.content);
-      setImagePreviews(selectedpost.imageUrls || []);
     } else {
       setSelectedpost(null);
     }
@@ -131,35 +87,7 @@ const PostCreateForm: React.FC = () => {
           onChange={(e) => setTitle(e.target.value)}
         />
       </label>
-      {/* <label className="post-create-form__label">
-        <input
-          type="file"
-          multiple
-          onChange={(e) => handleImageChange(e)}
-          className="post-create-form__input"
-        />
-      </label>
-      <div className="post-create-form__image-preview">
-        {imagePreviews.map((previewUrl, index) => (
-          <div key={index} className="image-preview-container">
-            <img src={previewUrl} alt={`Image Preview ${index}`} />
-            <button type="button" onClick={() => handleImageRemove(index)}>
-              삭제
-            </button>
-          </div>
-        ))}
-      </div> */}
-
-      {/* <label className="post-create-form__label">
-        <textarea
-          placeholder="내용"
-          className="post-create-form__textarea"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-      </label> */}
-
-      <Editor value={content} onChange={setContent}/>
+      <Editor value={content} onChange={setContent} setImageUrls={setImageUrls} />
       <div className="post-create-form__buttons">
         {selectedpost && selectedpost.postId ? (
           <>

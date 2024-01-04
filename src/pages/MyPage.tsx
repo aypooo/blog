@@ -4,7 +4,7 @@ import UserDataUpdate from '../component/UserDataUpdate';
 
 const MyPage = () => {
     return (
-        <div>
+        <div >
             <UserDataUpdate/>
         </div>
     );

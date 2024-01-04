@@ -5,6 +5,7 @@ import { deletePost } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
 import CommentList from '../component/CommentList';
 import UserProfile from '../component/UserProfile';
+import SanitizedHTML from '../hook/SanitizedHTML';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
@@ -37,7 +38,7 @@ const PostDetail: React.FC = () => {
 
       <UserProfile>{selectedpost.author}</UserProfile>
       <h3>{Object.values(selectedpost.title)}</h3>
-      <p>{Object.values(selectedpost.content)}</p>
+      <SanitizedHTML html={Object.values(selectedpost.content).join('')}/>
       {uid === selectedpost.uid ? (
         <>
           <button onClick={handlePostUpdate}>수정</button>

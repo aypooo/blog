@@ -3,6 +3,7 @@ import { useSetRecoilState } from 'recoil';
 import { Post, selectedPostState } from '../recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import TimeAgoComponent from './TimeAgoComponent ';
+import SanitizedHTML from '../hook/SanitizedHTML';
 type PostListProps = {
   posts: Post[];
   title: string;
@@ -26,25 +27,39 @@ const PostList: React.FC<PostListProps> = ({ posts, title }) => {
       </Link>
         {posts.map((post, index) => (
           <li key={index} className='post-list__item' onClick={() => handlePostClick(post)}>
+            <div className='post-list__left'>
             <div className='post-list__header'>
-              <p className='post-list__header__author'>{post.author}</p>
+              <span className='post-list__header__author'>{post.author}</span>
             </div>
             <div className='post-list__body'>
-              <h3 className='post-list__content__heading'>{post.title}</h3>
-              <h3 className='post-list__content__content'>{post.content}</h3>
+              <h3 className='post-list__body__heading'>{post.title}</h3>
+              <SanitizedHTML html={Object.values(post.content).join('')} />
+                </div>
+                <div className='post-list__footer'>
+                    <p className='post-list__footer__likes'>
+                      <span> ♥️ </span>
+                      {post.likes}</p>
+                    <p className='post-list__footer__comments'>
+                    <span>댓글 </span>
+                      {post.comments ? Object.keys(post.comments).length : 0}
+                    </p>
+                    <p className='post-list__footer__date'>
+                      <TimeAgoComponent timestamp={post.createAt} />
+                    </p>
+                  </div>
+                </div>
+            <div className='post-list__right'>
+              {post.imageUrls ? (
+                      <div className='post-list__image'>
+                        <img src={post.imageUrls[0]} alt="postImage" />
+                      </div>
+                    ):(
+                    <>
+                    </>
+                    )}
             </div>
-            <div className='post-list__footer'>
-              <p className='post-list__footer__date'>
-                <TimeAgoComponent timestamp={post.createAt}/>
-              </p>
-              <p className='post-list__footer__likes'>
-                <span>좋아요</span>
-                {post.likes}</p>
-              <p className='post-list__footer__comments'>
-                {post.comments ? Object.keys(post.comments).length : 0}
-                <span>개의 댓글</span>
-              </p>
-            </div>
+
+
           </li>
         ))}
       </ul>

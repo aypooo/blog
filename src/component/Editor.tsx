@@ -6,15 +6,17 @@ import uploadImages from '../hook/uploadImages';
 interface MyEditorProps {
   value: string;
   onChange: (content: string) => void;
+  setImageUrls: (url: string[]) => void;
 }
 
-const Editor: React.FC<MyEditorProps> = ({ value, onChange }) => {
+const Editor: React.FC<MyEditorProps> = ({ value, onChange, setImageUrls }) => {
   const quillRef = useRef<ReactQuill|null>(null);
 
-  const handleImage = () => {
+  const imageHandler = () => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
+
     input.click();
     input.onchange = async () => {
       const file = input.files![0]
@@ -27,16 +29,16 @@ const Editor: React.FC<MyEditorProps> = ({ value, onChange }) => {
 
       try {
         // 서버에 업로드 한뒤 이미지 태그에 삽입할 url을 반환받도록 구현하면 된다 
-        const filePath = `contents/temp/${Date.now()}`;
+        const filePath = `${Date.now()}`;
         const url = await uploadImages([file], filePath); 
-        
+        setImageUrls(url)
         // 정상적으로 업로드 됐다면 로딩 placeholder 삭제
         quillObj!.deleteText(range.index, 1);
         // 받아온 url을 이미지 태그에 삽입
-        quillObj!.insertEmbed(range.index, "image", url);
+        quillObj!.insertEmbed(range.index, "image", url[0]);
         
         // 사용자 편의를 위해 커서 이미지 오른쪽으로 이동
-        // quillObj!.setSelection(range.index + 1);
+       quillObj!.setSelection({ index: range.index + 1, length: 0 });
       } catch (e) {
         quillObj!.deleteText(range.index, 1);
       }
@@ -46,35 +48,54 @@ const Editor: React.FC<MyEditorProps> = ({ value, onChange }) => {
     const handleEditorChange = (value: string) => {
       onChange(value);
     };
-    
-    const modules = useMemo(() => {
-      return {
-        toolbar: [
-          ['bold', 'italic', 'underline', 'strike'], // 텍스트 서식
-          [{ 'header': 1 }, { 'header': 2 }], // 제목
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }], // 리스트
-          [{ 'script': 'sub' }, { 'script': 'super' }], // 첨자, 윗첨자
-          [{ 'indent': '-1' }, { 'indent': '+1' }], // 들여쓰기
-          [{ 'direction': 'rtl' }], // 텍스트 방향
-          [{ 'size': ['small', false, 'large', 'huge'] }], // 글자 크기
-          [{ 'color': [] }, { 'background': [] }], // 글자색, 배경색
-          [{ 'font': [] }], // 글꼴
-          ['link', 'image', 'video'], // 링크, 이미지, 비디오 삽입
-          ['clean'], // 모든 서식 제거
-        ], 
-         handlers: {
-          image: handleImage,
+    const modules = useMemo(
+      () => ({
+        toolbar: {
+          container: [
+            [{ header: '1' }, { header: '2' }],
+            [{ size: [] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ list: 'ordered' }, { list: 'bullet' }, { align: [] }],
+            ['image'],
+          ],
+          handlers: { image: imageHandler },
         },
-      };
-    }, []);
-
+        clipboard: {
+          matchVisual: false,
+        },
+      }),
+      [],
+    );
+    const formats = [
+      'header',
+      'font',
+      'size',
+      'bold',
+      'italic',
+      'underline',
+      'strike',
+      'blockquote',
+      'list',
+      'bullet',
+      'align',
+      'image',
+    ];
+  
     return (
       <ReactQuill
-      ref={quillRef}
-        value={value}
-        onChange={handleEditorChange}
-        modules={modules}
-        theme="snow"
+        ref={quillRef}
+          value={value}
+          onChange={handleEditorChange}
+          modules={modules}
+          formats={formats}
+          theme="snow"
+          placeholder= "글을 작성해 주세요." 
+          style={{
+            width:"700px",
+            height:"700px",
+            padding:"20px",
+            lineHeight:"0px",
+          }}
       />
     );
   };
