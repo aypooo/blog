@@ -79,7 +79,6 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
     fetchData();
 
   }, [postId, commentKeys,setUpdatedCommentId]);
-  //페이지네이션 붙이기?
   
   return (
     <div>
@@ -92,12 +91,11 @@ const CommentList = ({ postId, postUid }: { postId: string, postUid:string }) =>
       </div>
       <ul>
         {commentList &&
-          commentList.map((comment: any) => (
+          commentList.map((comment: Comment) => (
             <li key={comment.commentId}>
               <p><UserProfile>{comment.author}</UserProfile></p>
               <p><TimeAgoComponent timestamp={comment.createAt}/></p>
               <p>{comment.likes}</p>
-              <p>{comment.createAt}</p>
               {updatedCommentId === comment.commentId ? (
                 <div>
                   <input type="text" value={updatedComment} onChange={(e) => setUpdatedComment(e.target.value)}/>

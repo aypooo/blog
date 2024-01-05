@@ -13,7 +13,7 @@ const PostCreateForm: React.FC = () => {
   const [selectedpost, setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [imageUrls,setImageUrls] = useState([''])
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ const PostCreateForm: React.FC = () => {
           content,
           comments: [],
           createAt: createdAt,
-          likes: 0,
+          likes: [],
           postId,
           title,
           uid: user.uid,

@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, selector, useRecoilCallback } from 'recoil';
 
 export type User = {
   uid: string;
@@ -13,7 +13,7 @@ export type Post = {
   title: string;
   content: string;
   comments: Comment[];
-  likes: number;
+  likes: string[];
   imageUrls: string[];
   createAt: Date;
 };
@@ -22,7 +22,7 @@ export type Comment = {
   postId: string;
   author: string;
   comment: string;
-  likes: number;
+  likes: string[];
   createAt: Date;
   commentId: string;
 };

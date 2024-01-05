@@ -7,12 +7,18 @@ const useTimeAgo = (timestamp: Date) => {
     const calculateTimeAgo = () => {
       const now = new Date();
       const createdDate = new Date(timestamp);
-
+    
+      if (isNaN(createdDate.getTime())) {
+        // 날짜가 유효하지 않은 경우
+        setTimeAgo('방금전');
+        return;
+      }
+    
       const timeDifference = now.getTime() - createdDate.getTime();
       const seconds = Math.floor(timeDifference / 1000);
       const minutes = Math.floor(seconds / 60);
       const hours = Math.floor(minutes / 60);
-
+    
       if (seconds < 60) {
         setTimeAgo('방금 전');
       } else if (minutes < 60) {

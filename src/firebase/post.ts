@@ -1,7 +1,7 @@
 import { ref,onValue,push,child,update,get } from "firebase/database";
-import { db, storage } from "./firebase";
+import { db } from "./firebase";
 import { Post } from "../recoil";
-import { ref as storageRef, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+
 
 export async function writeNewPost(uid: string, name: string, title: string, content: string, imageUrls: string[], createdAt: Date ): Promise<string> {
   const postData: Post = {
@@ -11,7 +11,7 @@ export async function writeNewPost(uid: string, name: string, title: string, con
     content: content,
     title: title,
     comments: [],
-    likes: 0,
+    likes: [],
     createAt: createdAt,
     imageUrls: imageUrls,
 
@@ -29,16 +29,6 @@ export async function writeNewPost(uid: string, name: string, title: string, con
   // updates["/user-posts/" + uid + "/" + newPostKey] = postData;
 
   try {
-    // const imageUploadPromises = images.map(async (image, index) => {
-    //   const imageName = `${newPostKey}_image_${index}`;
-    //   const imageStorageRef = storageRef(storage, `postImages/${imageName}`);
-    //   await uploadBytesResumable(imageStorageRef, image);
-    //   const imageUrl = await getDownloadURL(imageStorageRef);
-    //   postData.imageUrls.push(imageUrl);
-    // });
-
-    // await Promise.all(imageUploadPromises);
-
     await update(ref(db), updates);
     // 새로 생성된 포스트의 키(newPostKey)를 반환합니다.
     return newPostKey;
@@ -107,24 +97,15 @@ export async function updatePost(
       if (newImages && newImages.length > 0) {
         // 이미지 업로드
         updates.imageUrls = newImages;
-        // const imageUploadPromises = newImages.map(async (image, index) => {
-        //   const imageName = `${postKey}_image_${index}`;
-        //   const imageStorageRef = storageRef(storage, `postImages/${imageName}`);
-        //   await uploadBytesResumable(imageStorageRef, image);
-        //   const imageUrl = await getDownloadURL(imageStorageRef);
-   
-        // });
-
-        // await Promise.all(imageUploadPromises);
       }
 
       // 'posts' 컬렉션에서 포스트 업데이트
       await update(postRef, updates);
 
       // 'user-posts' 컬렉션에서도 포스트 업데이트
-      const uid = postData.uid;
-      const userPostRef = ref(db, 'user-posts/' + uid + '/' + postKey);
-      await update(userPostRef, updates);
+      // const uid = postData.uid;
+      // const userPostRef = ref(db, 'user-posts/' + uid + '/' + postKey);
+      // await update(userPostRef, updates);
 
       console.log('포스트가 성공적으로 업데이트되었습니다.');
     } else {

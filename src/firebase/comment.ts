@@ -10,7 +10,7 @@ export function writeNewComment(postId: string, postUid:string,  uid: string, na
     commentId:'',
     postId: postId,
     createAt: new Date(),
-    likes: 0,
+    likes: [],
     uid: uid,
   };
 

@@ -11,7 +11,7 @@ const PostPage = () => {
   useEffect(() => {
     FetchPostData(setPosts);
   }, [uid, setPosts]);
-
+  console.log(posts)
   return (
     <div>
       <PostList posts={posts} title='Post'/>

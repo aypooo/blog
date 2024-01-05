@@ -4,6 +4,7 @@ import { Post, selectedPostState } from '../recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import TimeAgoComponent from './TimeAgoComponent ';
 import SanitizedHTML from '../hook/SanitizedHTML';
+
 type PostListProps = {
   posts: Post[];
   title: string;
@@ -15,6 +16,7 @@ const PostList: React.FC<PostListProps> = ({ posts, title }) => {
 
   const handlePostClick = (selectedPost: Post) => {
     setSelectedPost(selectedPost);
+    console.log(selectedPost)
     navigate(`/${selectedPost.author}/${selectedPost.postId}`);
   };
   console.log(posts)
@@ -33,12 +35,12 @@ const PostList: React.FC<PostListProps> = ({ posts, title }) => {
             </div>
             <div className='post-list__body'>
               <h3 className='post-list__body__heading'>{post.title}</h3>
-              <SanitizedHTML html={Object.values(post.content).join('')} />
+              {/* <SanitizedHTML html={Object.values(post.content).join('')} /> */}
                 </div>
                 <div className='post-list__footer'>
                     <p className='post-list__footer__likes'>
                       <span> ♥️ </span>
-                      {post.likes}</p>
+                      {post.likes ? post.likes.length : 0}</p>
                     <p className='post-list__footer__comments'>
                     <span>댓글 </span>
                       {post.comments ? Object.keys(post.comments).length : 0}
