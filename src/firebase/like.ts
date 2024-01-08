@@ -1,9 +1,8 @@
 import { getDatabase, ref,onValue,runTransaction } from "firebase/database";
 import { db } from "./firebase";
 
-export async function toggleLikeUpdate(path: string, uid: string): Promise<void> {
+export async function LikeUpdate(path: string, uid: string): Promise<void> {
     const postRef = ref(db, 'posts/' + path);
-    //comment에도 사용가능하게 수정해야함
     await runTransaction(postRef, (post) => {
       if (post) {
         if (!post.likes) {

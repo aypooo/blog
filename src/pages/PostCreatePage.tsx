@@ -17,7 +17,7 @@ const PostCreateForm: React.FC = () => {
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user.uid.length) {
+        if (!user.uid.length) {
       return alert('로그인 후 작성 가능합니다.');
     }
     if (!title.length || !content.length) {
@@ -27,7 +27,7 @@ const PostCreateForm: React.FC = () => {
       const createdAt = new Date();
       let postId: string;
 
-      if (selectedpost) {
+      if (selectedpost && postid) {
         postId = selectedpost.postId;
         await updatePost(postId, title, content, imageUrls);
 
@@ -45,10 +45,10 @@ const PostCreateForm: React.FC = () => {
           comments: [],
           createAt: createdAt,
           likes: [],
+          imageUrls,
           postId,
           title,
-          uid: user.uid,
-          imageUrls,
+          postUid: user.uid,
         };
 
         if (posts) {
@@ -89,7 +89,7 @@ const PostCreateForm: React.FC = () => {
       </label>
       <Editor value={content} onChange={setContent} setImageUrls={setImageUrls} />
       <div className="post-create-form__buttons">
-        {selectedpost && selectedpost.postId ? (
+        {selectedpost && postid ? (
           <>
             <button type="submit" className="post-create-form__button">
               수정

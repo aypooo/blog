@@ -1,4 +1,4 @@
-import { atom, selector, useRecoilCallback } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export type User = {
   uid: string;
@@ -7,7 +7,7 @@ export type User = {
 };
 
 export type Post = {
-  uid: string;
+  postUid: string;
   postId: string;
   author: string;
   title: string;
@@ -18,7 +18,7 @@ export type Post = {
   createAt: Date;
 };
 export type Comment = {
-  uid: string;
+  commentUid: string;
   postId: string;
   author: string;
   comment: string;
@@ -45,15 +45,6 @@ export const postsState = atom<Post[]>({
 //   key: 'userPostsState',
 //   default: [],
 // })
-export const commentCountState = atom<number>({
-  key: 'commentCountState',
-  default: 0,
-});
-
-export const commentsState = atom<Comment[]>({
-  key: 'commentsState',
-  default: [],
-});
 
 export const selectedUserState = atom({
   key: 'selectedUserState',

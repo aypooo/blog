@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { postsState, selectedUserState, userPostsSelector, userState } from '../recoil';
 import Pagination from '../component/Pagination';
-import FetchPostData from '../hook/fetchPostData';
+import {fetchPostData} from '../hook/fetchData';
 
 
 const POSTS_PER_PAGE = 10; // 페이지당 포스트 수
@@ -20,7 +20,7 @@ const UserPostPage = () => {
     const indexOfLastPost = currentPage * POSTS_PER_PAGE;
     const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
     const postsArray = userPosts ? Object.values(userPosts) : [];
-    const currentPosts = postsArray.slice(indexOfFirstPost, indexOfLastPost);
+    const currentPosts = postsArray.reverse().slice(indexOfFirstPost, indexOfLastPost);
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -31,9 +31,9 @@ const UserPostPage = () => {
 
     useEffect(() => {
         //우선 적용, 여기서도 불러와야할지 아니면 다르게 처리 할지 고민요망
-        if(posts.length === 0){
+        if(posts.length === 0 ){
             console.log('userPostFetch')
-            FetchPostData(setPosts);
+            fetchPostData(setPosts);
         }
       }, [uid, setPosts]);
     

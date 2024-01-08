@@ -7,7 +7,7 @@ import CommentList from '../component/CommentList';
 import UserProfile from '../component/UserProfile';
 import SanitizedHTML from '../hook/SanitizedHTML';
 import { useToggleLike } from '../hook/useToggleLike';
-import { toggleLikeUpdate } from '../firebase/like';
+import { LikeUpdate } from '../firebase/like';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
@@ -22,13 +22,13 @@ const PostDetail: React.FC = () => {
     return null;
   }
   
-  const handlePostUpdate = () => {
+  const handleUpdatePost = () => {
     navigate(`/write/${selectedpost.postId}`)
   }
   const handleDeletePost = async () => {
     try {
       window.confirm("삭제하시겠습니까?")
-      await deletePost(selectedpost.postId, selectedpost.uid);
+      await deletePost(selectedpost.postId, selectedpost.postUid);
       setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setSelectedPost(null);
       alert('포스트가 성공적으로 삭제되었습니다.');
@@ -39,8 +39,7 @@ const PostDetail: React.FC = () => {
   };
   const handleLike = async () => {
     try {
-      await toggleLikeUpdate(selectedpost.postId, uid);
-    // const postRef = ref(db, 'posts/' + path + commentId);
+      await LikeUpdate(selectedpost.postId, uid);
       // 성공적으로 서버에서 좋아요 토글이 완료된 경우 Recoil 상태 업데이트
       toggleLike()
       setLiked(!liked)
@@ -52,7 +51,6 @@ const PostDetail: React.FC = () => {
   return (
     <div>
       <h2>Post Detail</h2>
-
       <UserProfile>{selectedpost.author}</UserProfile>
       <h3>{Object.values(selectedpost.title)}</h3>
       <SanitizedHTML html={Object.values(selectedpost.content).join('')}/>
@@ -64,19 +62,19 @@ const PostDetail: React.FC = () => {
           <div key={filteredPost.postId}>
             <div > {filteredPost? (filteredPost.likes ? (filteredPost.likes.length) : 0) : 0}</div>
             <button onClick={handleLike}>
-              <span>{filteredPost.likes.includes(uid) ? ('♥️') : '좋아요'}</span>
+              <span>{filteredPost.likes ? (filteredPost.likes?.includes(uid) ? ('♥️') : '좋아요'):'좋아요'}</span>
             </button>
           </div>
         ))}
-      {uid === selectedpost.uid ? (
+      {uid === selectedpost.postUid ? (
         <>
-          <button onClick={handlePostUpdate}>수정</button>
+          <button onClick={handleUpdatePost}>수정</button>
           <button onClick={handleDeletePost}>삭제</button>
         </>
       ):(
         <></>
       ) }
-      <CommentList postId={selectedpost.postId} postUid={selectedpost.uid}/>
+      <CommentList />
     </div>
   );
 };

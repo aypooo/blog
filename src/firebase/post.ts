@@ -6,15 +6,14 @@ import { Post } from "../recoil";
 export async function writeNewPost(uid: string, name: string, title: string, content: string, imageUrls: string[], createdAt: Date ): Promise<string> {
   const postData: Post = {
     author: name,
-    postId: "",
-    uid: uid,
     content: content,
+    createAt: createdAt,
     title: title,
     comments: [],
     likes: [],
-    createAt: createdAt,
     imageUrls: imageUrls,
-
+    postId: "",
+    postUid: uid,
   };
 
   const newPostRef = push(child(ref(db), 'posts'));

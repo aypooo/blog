@@ -3,23 +3,16 @@ import { useSetRecoilState } from 'recoil';
 import { Post, selectedPostState } from '../recoil';
 import { Link, useNavigate } from 'react-router-dom';
 import TimeAgoComponent from './TimeAgoComponent ';
-import SanitizedHTML from '../hook/SanitizedHTML';
+// import SanitizedHTML from '../hook/SanitizedHTML';
 
-type PostListProps = {
-  posts: Post[];
-  title: string;
-};
 
-const PostList: React.FC<PostListProps> = ({ posts, title }) => {
+const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
   const navigate = useNavigate();
   const setSelectedPost = useSetRecoilState(selectedPostState);
-
   const handlePostClick = (selectedPost: Post) => {
     setSelectedPost(selectedPost);
-    console.log(selectedPost)
     navigate(`/${selectedPost.author}/${selectedPost.postId}`);
   };
-  console.log(posts)
   return (
     <div className='container'>
       <ul className='post-list'>
