@@ -1,4 +1,4 @@
-import { ref,onValue,push,child,update,get } from "firebase/database";
+import { ref,onValue,push,child,update,get, query, limitToFirst, startAt, runTransaction } from "firebase/database";
 import { db } from "./firebase";
 import { Post } from "../recoil";
 
@@ -14,6 +14,7 @@ export async function writeNewPost(uid: string, name: string, title: string, con
     imageUrls: imageUrls,
     postId: "",
     postUid: uid,
+    views: 0,
   };
 
   const newPostRef = push(child(ref(db), 'posts'));
@@ -70,6 +71,28 @@ export async function writeNewPost(uid: string, name: string, title: string, con
       });
     });
   }
+
+  export function readLimitedPostData(lastPostKey?: string): Promise<Post[]> {
+    const postRef = ref(db, 'posts/');
+  
+    let limitedQuery = query(postRef, limitToFirst(10));
+  
+    if (lastPostKey) {
+      limitedQuery = query(postRef, startAt(lastPostKey), limitToFirst(11));
+    }
+  
+    return new Promise((resolve, reject) => {
+      onValue(limitedQuery, (snapshot) => {
+        const postData:Post[] = snapshot.val();
+        // const posts = Object.values(postData || {});
+        // const newPosts = posts.slice(0, 10);
+        resolve(postData);
+      }, (error) => {
+        console.error('포스트 데이터를 읽는 중 에러 발생:', error);
+        reject(error);
+      });
+    });
+  }
 //게시물 업데이트
 export async function updatePost(
   postKey: string,
@@ -82,7 +105,7 @@ export async function updatePost(
   try {
     const postSnapshot = await get(postRef);
     if (postSnapshot.exists()) {
-      const postData = postSnapshot.val();
+      // const postData = postSnapshot.val();
 
       // 새로운 제목 또는 내용이 제공된 경우에만 업데이트
       const updates: { [key: string]: any } = {};
@@ -129,4 +152,19 @@ export async function updatePost(
       console.error('포스트 삭제 오류:', error);
       throw error;
     }
+  }
+//조회수
+  export async function updateViews(postId: string): Promise<void> {
+    const postRef = ref(db, 'posts/' + postId);
+
+    await runTransaction(postRef, (post) => {
+      if (post) {
+        if (!post.views) {
+          post.views = 0;
+        }
+        post.views = post.views +1
+        console.log(post)
+        return post;
+      }
+    });
   }

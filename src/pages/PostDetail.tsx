@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Post, postsState, selectedPostState, userState } from '../recoil';
-import { deletePost } from '../firebase/post';
+import { deletePost, updateViews } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
 import CommentList from '../component/CommentList';
 import UserProfile from '../component/UserProfile';
@@ -17,10 +17,28 @@ const PostDetail: React.FC = () => {
   const [liked, setLiked] = useState(false)
   const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , uid);
 
+
+  useEffect(() => {
+    if (!selectedpost) {
+      navigate('/')
+    }
+    const handleUpdateViews = async ()=>{
+      await updateViews(selectedpost!.postId)
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+        post.postId === selectedpost!.postId ? { ...post, views: post.views + 1 } : post
+      ))}
+      const timeoutId = setTimeout(() => {
+        handleUpdateViews()
+      }, 10);
+    
+      return () => clearTimeout(timeoutId);
+  }, [selectedpost]);
+
   if (!selectedpost) {
     navigate('/')
     return null;
-  }
+  } 
   
   const handleUpdatePost = () => {
     navigate(`/write/${selectedpost.postId}`)
@@ -48,6 +66,7 @@ const PostDetail: React.FC = () => {
       console.error('좋아요 토글 중 오류 발생:', error);
     }
   };
+
   return (
     <div>
       <h2>Post Detail</h2>
@@ -61,6 +80,7 @@ const PostDetail: React.FC = () => {
         .map(filteredPost => (
           <div key={filteredPost.postId}>
             <div > {filteredPost? (filteredPost.likes ? (filteredPost.likes.length) : 0) : 0}</div>
+             <div> 조회수{filteredPost.views}</div>
             <button onClick={handleLike}>
               <span>{filteredPost.likes ? (filteredPost.likes?.includes(uid) ? ('♥️') : '좋아요'):'좋아요'}</span>
             </button>

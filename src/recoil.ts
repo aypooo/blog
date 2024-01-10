@@ -16,6 +16,7 @@ export type Post = {
   likes: string[];
   imageUrls: string[];
   createAt: Date;
+  views:number;
 };
 export type Comment = {
   commentUid: string;

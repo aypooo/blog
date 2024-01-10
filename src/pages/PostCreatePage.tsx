@@ -49,6 +49,7 @@ const PostCreateForm: React.FC = () => {
           postId,
           title,
           postUid: user.uid,
+          views:0,
         };
 
         if (posts) {

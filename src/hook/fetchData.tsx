@@ -1,6 +1,7 @@
 import { Post,Comment } from "../recoil";
-import { readPostData } from "../firebase/post";
+import { readLimitedPostData, readPostData } from "../firebase/post";
 import { readCommentData } from "../firebase/comment";
+
 
 export const fetchPostData = async (setPosts: (posts: Post[]) => void) => {
   try {
@@ -15,6 +16,7 @@ export const fetchPostData = async (setPosts: (posts: Post[]) => void) => {
       postId,
       postUid: post.postUid,
       title: post.title,
+      views:post.views,
 
     }));
     setPosts(postArray);
