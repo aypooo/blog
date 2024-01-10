@@ -66,3 +66,9 @@ export const selectedPostState = atom<Post | null>({
   key: 'selectedPostState',
   default: null
 });
+
+export const lastPostKeyState = atom<string | null>({
+  key: 'lastPostKeyState',
+  default: null
+});
+

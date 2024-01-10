@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { Post, selectedPostState } from '../recoil';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
     setSelectedPost(selectedPost);
     navigate(`/${selectedPost.author}/${selectedPost.postId}`);
   };
+
+
   return (
     <div className='container'>
       <ul className='post-list'>
@@ -31,16 +33,20 @@ const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
               {/* <SanitizedHTML html={Object.values(post.content).join('')} /> */}
                 </div>
                 <div className='post-list__footer'>
-                    <p className='post-list__footer__likes'>
+                    <div className='post-list__footer__likes'>
                       <span> ♥️ </span>
-                      {post.likes ? post.likes.length : 0}</p>
-                    <p className='post-list__footer__comments'>
+                      {post.likes ? post.likes.length : 0}
+                    </div>
+                    <div className='post-list__footer__comments'>
                     <span>댓글 </span>
                       {post.comments ? Object.keys(post.comments).length : 0}
-                    </p>
-                    <p className='post-list__footer__date'>
+                    </div>
+                    <div className='post-list__footer__date'>
                       <TimeAgoComponent timestamp={post.createAt} />
-                    </p>
+                    </div>
+                    <div className='post-list__footer__views'>
+                      조회수 {post.views}
+                    </div>
                   </div>
                 </div>
             <div className='post-list__right'>
@@ -53,10 +59,9 @@ const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
                     </>
                     )}
             </div>
-
-
           </li>
         ))}
+
       </ul>
     </div>
   );

@@ -31,10 +31,11 @@ const UserPostPage = () => {
 
     useEffect(() => {
         //우선 적용, 여기서도 불러와야할지 아니면 다르게 처리 할지 고민요망
-        if(posts.length === 0 ){
-            console.log('userPostFetch')
-            fetchPostData(setPosts);
-        }
+        // if(posts.length === 0 ){
+        //     console.log('userPostFetch')
+        //     fetchPostData(setPosts);
+        // }
+        console.log('user마다 게시글 따로 불러 올수 있게수정해야함')
       }, [uid, setPosts]);
     
     if(!uid) return <>로그인해주세요</>
@@ -47,7 +48,7 @@ const UserPostPage = () => {
             </div>
           ) : (
             <div>
-              <PostList posts={currentPosts} title='Your Post' />
+              <PostList posts={currentPosts} title={`${user} post`} />
               <Pagination
                 activePage={currentPage}
                 itemsCountPerPage={POSTS_PER_PAGE}

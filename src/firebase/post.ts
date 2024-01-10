@@ -1,4 +1,4 @@
-import { ref,onValue,push,child,update,get, query, limitToFirst, startAt, runTransaction } from "firebase/database";
+import { ref,onValue,push,child,update,get, query, limitToFirst, startAt, runTransaction, orderByKey, startAfter, limitToLast, endBefore } from "firebase/database";
 import { db } from "./firebase";
 import { Post } from "../recoil";
 
@@ -75,17 +75,16 @@ export async function writeNewPost(uid: string, name: string, title: string, con
   export function readLimitedPostData(lastPostKey?: string): Promise<Post[]> {
     const postRef = ref(db, 'posts/');
   
-    let limitedQuery = query(postRef, limitToFirst(10));
-  
+    let limitedQuery = query(postRef, orderByKey(), limitToLast(4));
+    console.log('lastPostKey',lastPostKey)
     if (lastPostKey) {
-      limitedQuery = query(postRef, startAt(lastPostKey), limitToFirst(11));
+
+      limitedQuery = query(postRef, orderByKey(), endBefore(lastPostKey), limitToLast(4));
     }
   
     return new Promise((resolve, reject) => {
       onValue(limitedQuery, (snapshot) => {
-        const postData:Post[] = snapshot.val();
-        // const posts = Object.values(postData || {});
-        // const newPosts = posts.slice(0, 10);
+        const postData: Post[] = snapshot.val() || []; 
         resolve(postData);
       }, (error) => {
         console.error('포스트 데이터를 읽는 중 에러 발생:', error);
