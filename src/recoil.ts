@@ -42,24 +42,33 @@ export const postsState = atom<Post[]>({
   key: 'postsState',
   default: [],
 });
-// export const userPostsState = atom<Post[]>({
-//   key: 'userPostsState',
-//   default: [],
-// })
+export const userPostsState = atom<Post[]>({
+  key: 'userPostsState',
+  default: [],
+})
 
 export const selectedUserState = atom({
   key: 'selectedUserState',
   default: "",
 });
-export const userPostsSelector = selector({
-  key: 'userPostsSelector',
-  get: ({ get }) => {
-    const allPosts = get(postsState);
-    const selectedUser = get(selectedUserState);
+// export const userPostsSelector = selector({
+//   key: 'userPostsSelector',
+//   get: ({ get }) => {
+//     const allPosts = get(postsState);
+//     const selectedUser = get(selectedUserState);
 
-    // 특정 사용자의 게시물만 필터링
-    const userPosts = Object.values(allPosts).filter(post => post.author === selectedUser);
-    return userPosts;
+//     // 특정 사용자의 게시물만 필터링
+//     const userPosts = Object.values(allPosts).filter(post => post.author === selectedUser);
+//     return userPosts;
+//   },
+// });
+export const uidSelector = selector<string | null>({
+  key: 'uidSelector',
+  get: ({ get }) => {
+    const userData:User = get(userState) || {}; // 사용자 데이터가 객체임을 확인
+    const userWithName = Object.values(userData).find((user) => user[2] === userData.name);
+
+    return userWithName ? userWithName[0] : null;
   },
 });
 export const selectedPostState = atom<Post | null>({
