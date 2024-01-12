@@ -14,9 +14,8 @@ const PostPage = () => {
   const [lastPostKey, setLastPostKey] = useRecoilState(lastPostKeyState);
   const [noMorePosts, setNoMorePosts] = useState(false);
   const reversedPosts = [...posts].reverse();
+
   // const { handleSortByLatest, handleSortByLikes, handleSortByComments } = useSortData(posts, setPosts);
-
-
   const handleFetchMorePosts = async () => {
     setLoading(true);
     const hasMorePosts = await fetchMorePosts(setPosts, setLastPostKey, lastPostKey!);
@@ -37,8 +36,8 @@ const PostPage = () => {
       <PostList posts={reversedPosts} title='Post' />
       <InfiniteScroll callback={handleFetchMorePosts} loading={loading}>
       <LoadingSpinner loading={loading} color={'#888'}/>
-      {noMorePosts && <div>게시물이 없습니다.</div>}
-              <div style={{width:'100%', height:'100px',}}/>
+        {noMorePosts && <div>게시물이 없습니다.</div>}
+          <div style={{width:'100%', height:'100px',}}/>
       </InfiniteScroll>
     </div>
   );

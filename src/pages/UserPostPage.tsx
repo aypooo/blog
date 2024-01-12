@@ -29,9 +29,8 @@ const UserPostPage = () => {
 
     useEffect(() => {
       fetchAuthorPostData(setUserPosts,user!)
-
       }, [user, setUserPosts]);
-    
+
     if(!uid) return <>로그인해주세요</>
     return (
         <div className="user-post-page">

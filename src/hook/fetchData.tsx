@@ -49,7 +49,6 @@ export const fetchAuthorPostData = async (setPosts: (posts: Post[]) => void,auth
   }
 };
 
-
 export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal: Post[]) => Post[])) => void,setLastPostKey:(postId:string)=>void, lastPostKey:string) => {
  
   try {
@@ -59,8 +58,10 @@ export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal
     if (userPostLength > 0) {
       // setLastPostKey(Object.keys(userPost)[userPostLength - 1]); //마지막 키
       setLastPostKey(Object.keys(userPost)[0]); //처음 키
+
     }else {
       return false;
+
     }
     const postArray = Object.entries(userPost).map(([postId, post]) => ({
       author: post.author,
@@ -81,6 +82,7 @@ export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal
     console.error('유저 포스트 불러오기에 실패', error);
     return false; 
   }
+
 };
 
 
