@@ -1,4 +1,4 @@
-import { getDatabase, ref,onValue,runTransaction } from "firebase/database";
+import { ref,onValue,runTransaction } from "firebase/database";
 import { db } from "./firebase";
 
 export async function LikeUpdate(path: string, uid: string): Promise<void> {
@@ -25,7 +25,6 @@ export async function LikeUpdate(path: string, uid: string): Promise<void> {
   
   // 좋아요 데이터 읽기
   export function readLikeData(postId: string): void {
-    const db = getDatabase();
     const postRef = ref(db, 'posts/' + postId + '/likes');
   
     onValue(postRef, (snapshot) => {
@@ -35,3 +34,4 @@ export async function LikeUpdate(path: string, uid: string): Promise<void> {
       // 여기서 likesData를 사용하여 필요한 작업 수행
     });
   }
+
