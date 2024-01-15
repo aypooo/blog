@@ -2,10 +2,9 @@
 
 .gnb {
     height: 100px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 15px;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     &__right{
         display: grid;
         align-items: center;

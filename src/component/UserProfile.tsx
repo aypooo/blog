@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const UserProfile = ({ children }: { children: React.ReactNode }) => {
     const navigate = useNavigate();
     return (
-        <span onClick={()=> navigate(`/${children}`)}>
+        <span  className='author' onClick={()=> navigate(`/${children}`)}>
             {children}
         </span>
     );

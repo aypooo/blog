@@ -1,0 +1,75 @@
+.postDetail {
+    width: 700px;
+    &__info{
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+    
+    &__author{
+        display: flex;
+        justify-content: flex-start;
+    }
+    &__views{
+        font-size:13px;
+        color: #888;
+        padding-left: 5px;
+    }
+    &__edit{
+        &__update {
+            // 수정 버튼 스타일 설정
+          }
+      
+          &__delete {
+            // 삭제 버튼 스타일 설정
+          }
+    }
+    }
+    &__title {
+      font-size: 40px;
+      text-align: left;
+    }
+    &__body{
+        padding: 10px 0;
+        min-height: 200px;
+    }
+    &__footer{
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+  
+      &__likes {
+        // 좋아요 수 스타일 설정
+      }
+  
+      &__views {
+        // 조회수 스타일 설정
+      }
+  
+      &__like-button {
+        background-color: #eee;
+        padding: 5px 10px;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #ddd;
+        }
+  
+        span {
+          // 하트 아이콘 스타일 설정
+        }
+      }
+    }
+  
+    &__footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+  
+
+    }
+  
+    &__comment-list {
+      // CommentList 컴포넌트 스타일 설정
+    }
+  }

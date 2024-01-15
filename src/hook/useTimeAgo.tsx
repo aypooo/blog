@@ -27,7 +27,7 @@ const useTimeAgo = (timestamp: Date) => {
         setTimeAgo(`${hours}시간 전`);
       } else {
         // 여기에 더 많은 경우를 추가할 수 있습니다.
-        setTimeAgo(createdDate.toLocaleString()); // 일정 시간 이상이 지났으면 날짜를 그대로 표시
+        setTimeAgo(createdDate.toLocaleDateString()); // 일정 시간 이상이 지났으면 날짜를 그대로 표시
       }
     };
 
