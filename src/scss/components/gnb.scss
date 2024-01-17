@@ -1,12 +1,17 @@
 /* Gnb.scss */
 
 .gnb {
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  justify-content: center;
+    &__layout{
+      display: flex;
+      height: 100px;
+      width: 700px;
+      align-items: center;
+      justify-content: space-between;
+ 
     &__right{
-        display: grid;
+        display: flex;
         align-items: center;
         justify-items: end;
     }
@@ -20,6 +25,7 @@
         text-decoration: underline;
       }
     }
+  }
   }
   
   /* LogoutButton.scss */

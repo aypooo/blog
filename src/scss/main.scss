@@ -1,10 +1,12 @@
 @import 'abstracts/reactQuill.scss';
+@import 'abstracts/button.scss';
 
 @import 'components/postList.scss';
 @import 'components/pagination.scss';
 @import 'components/gnb.scss';
 @import 'components/userProfile';
-
+@import 'components/comments';
+@import 'components/timeAgo';
 
 @import 'pages/postCreate.scss';
 @import 'pages/userPost.scss';

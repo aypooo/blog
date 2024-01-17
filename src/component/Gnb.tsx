@@ -9,18 +9,21 @@ const Gnb = () => {
 
   return (
     <div className="gnb">
-        <div className='gnb__left'>
+      <div className='gnb__layout'>
+        <div className='gnb__layout__left'>
             <Link to="/" className="gnb__link">홈</Link>
         </div>
       {isLoggedIn ? (
-        <div className='gnb__right'>
+        
+        <div className='gnb__layout__right'>
           <Logout />
         </div>
       ) : (
-        <div className='gnb__right'>
+        <div className='gnb__layout__right'>
         <Link to="/login" className="gnb__link">로그인</Link>
         </div>
       )}
+      </div>
     </div>
   );
 };

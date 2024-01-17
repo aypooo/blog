@@ -4,6 +4,7 @@ import { userState, isLoggedInState } from '../recoil';
 import { auth } from '../firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import UserProfile from './UserProfile';
+import Button from './Button';
 
 const Logout: React.FC = () => {
     const navgate = useNavigate()
@@ -26,7 +27,7 @@ const Logout: React.FC = () => {
     return (
         <div className='logout'>
             <div className='logout__name'><UserProfile>{user.name ? user.name : 'username'}</UserProfile></div>
-            <button className='logout__button' onClick={handleLogout}>로그아웃</button>
+            <Button className='logout' label='로그아웃' onClick={handleLogout} ></Button>
         </div>
     );
     };

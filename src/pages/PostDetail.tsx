@@ -3,11 +3,12 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { Post, postsState, selectedPostState, userState } from '../recoil';
 import { deletePost, updateViews } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
-import CommentList from '../component/CommentList';
+import Comments from '../component/Comments';
 import UserProfile from '../component/UserProfile';
 import SanitizedHTML from '../hook/SanitizedHTML';
 import { useToggleLike } from '../hook/useToggleLike';
 import { LikeUpdate } from '../firebase/like';
+import Button from '../component/Button';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
@@ -70,45 +71,41 @@ const PostDetail: React.FC = () => {
 
   return (
     <div className='container'>
-    {posts
-      .filter((post) => post.postId === selectedpost.postId)
-      .map((post) => (
-      <div className='postDetail'>
-        <div className='postDetail__title'>
-          {Object.values(post.title)}
-        </div>
-        <div className='postDetail__info'>
-          <div className='postDetail__info__author'>
-            <UserProfile >{post.author}</UserProfile>
-              <div className='postDetail__info__views'> 
-                조회수 {post.views}
+      <div className='layout-content'>
+      {posts
+        .filter((post) => post.postId === selectedpost.postId)
+        .map((post) => (
+        <div className='postDetail'>
+          <div className='postDetail__title'>
+            {Object.values(post.title)}
+          </div>
+          <div className='postDetail__info'>
+            <div className='postDetail__info__author'>
+              <UserProfile >{post.author}</UserProfile>
+                <div className='postDetail__info__views'> 
+                  조회수 {post.views}
+                </div>
               </div>
-            </div>
-          {uid === post.postUid ? (
-            <div className='postDetail__edit'>
-              <button className='postDetail__edit__update' onClick={handleUpdatePost}>
-                수정
-              </button>
-              <button className='postDetail__edit__delete' onClick={handleDeletePost}>
-                삭제
-              </button>
-            </div>
-          ) : (
-            <></>
-          )}
+            {uid === post.postUid ? (
+              <div className='postDetail__edit'>
+                <Button className='edit' label='수정' onClick={handleUpdatePost}/>
+                <Button className='edit' label='삭제' onClick={handleDeletePost}/>
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+          <div className='postDetail__body'>
+            <SanitizedHTML html={Object.values(post.content).join('')} />
+          </div>
+          <div className='postDetail__footer' key={post.postId}>
+            <div className='postDetail__footer__likes'> {post ? (post.likes ? post.likes.length : 0) : 0}</div>
+              <Button onClick={handleLike} label={post.likes ? (post.likes?.includes(uid) ? '♥' : '♡') : '♡'} className='like' size='s'/>
+          </div>
         </div>
-        <div className='postDetail__body'>
-          <SanitizedHTML html={Object.values(post.content).join('')} />
+        ))}
+        <Comments />
         </div>
-        <div className='postDetail__footer' key={post.postId}>
-          <div className='postDetail__footer__likes'> {post ? (post.likes ? post.likes.length : 0) : 0}</div>
-          <button className='postDetail__footer__like-button' onClick={handleLike}>
-            <span>{post.likes ? (post.likes?.includes(uid) ? '♥️' : '좋아요') : '좋아요'}</span>
-          </button>
-        </div>
-      </div>
-      ))}
-      <CommentList />
     </div>
   );
 };
