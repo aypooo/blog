@@ -1,38 +1,19 @@
 .button{
     background-color: white;
     border:1px solid #333;
-    border-radius: 5px;   
+    color: #333;
+    border-radius: 5px;
+    margin: 1px;
+    text-decoration:none;
     cursor: pointer;
-}
-.like{
-    &--liked{
-        &-s{
-            font-size: 13px;
-        }
-        &-m {
-            font-size: 13px;
-        }
-        &-l {
-            font-size: 15px;
-        
-        }
-    }
-}
-.logout{
-    &-s,
-    &-m,
-    &-l{
-        border-color:#888;
-    }
     &-s{
         font-size: 13px;
     }
     &-m {
-        font-size: 13px;
+        font-size: 15px;
     }
     &-l {
-        font-size: 15px;
+        font-size: 17px;
     
     }
-
 }

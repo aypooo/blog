@@ -8,7 +8,7 @@ import UserProfile from './UserProfile';
 // import SanitizedHTML from '../hook/SanitizedHTML';
 
 
-const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
+const PostList = ({ posts, title } : {posts: Post[],title?: string}) => {
   const navigate = useNavigate();
   const setSelectedPost = useSetRecoilState(selectedPostState);
   const handlePostClick = (selectedPost: Post) => {
@@ -19,16 +19,12 @@ const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
     const doc = new DOMParser().parseFromString(htmlString, 'text/html');
     return doc.body.textContent || "";
   };
-
+console.log('1',posts)
   return (
-    <div className='container'>
       <ul className='post-list'>
-      <h2 className='post-list__title'>{title}</h2>
-      <Link to="/write" className='write-link'>
-        글쓰기
-      </Link>
+      {/* <h2 className='post-list__title'>{title}</h2> */}
         {posts.map((post, index) => (
-          <li key={index} className='post-list__item' >
+          <li key={post.postId} className='post-list__item' >
             <div className='post-list__desc'>
               <div className='post-list__header'>
               <UserProfile>{post.author}</UserProfile>
@@ -41,16 +37,16 @@ const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
                 </div>
               </div>
               <div className='post-list__footer'>
-                <div className='post-list__footer__likes'>
-                    <span> ♥️ </span>
-                    {post.likes ? post.likes.length : 0}
+                <div className='like-box boder-none'>
+                    <span className='like--liked'></span>
+                      {post.likes ? post.likes.length : 0}
                 </div>
                   <div className='post-list__footer__comments'>
                   <span>댓글 </span>
                     {post.comments ? Object.keys(post.comments).length : 0}
                   </div>
                   <div className='post-list__footer__views'>
-                    조회수 {post.views}
+                    <span>조회수 {post.views}</span>
                   </div>
                   <div className='post-list__footer__date'>
                     <TimeAgoComponent timestamp={post.createAt} />
@@ -69,7 +65,6 @@ const PostList = ({ posts, title } : {posts: Post[],title: string}) => {
         ))}
 
       </ul>
-    </div>
   );
 };
 

@@ -9,6 +9,7 @@ import { LikeUpdate } from '../firebase/like';
 import { fetchCommentData } from '../hook/fetchData';
 import { useToggleLike } from '../hook/useToggleLike';
 import Button from './Button';
+import Dropdown from './DropDown';
 
 const Comments = () => {
   const navigate = useNavigate()
@@ -70,12 +71,12 @@ const Comments = () => {
         console.error('좋아요 업데이트 실패:', error);
       }
     };
-  useEffect(() => {
-    fetchCommentData(postId, setComment);
+    useEffect(() => {
+      fetchCommentData(postId, setComment);
 
-  }, [postId, commentKeys, setUpdatedCommentId, setComment]);
-  console.log(comment)
-  useEffect(() => {
+    }, [postId, commentKeys, setUpdatedCommentId, setComment]);
+    console.log(comment)
+    useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setSelectedCommentId(null);
@@ -105,53 +106,58 @@ const Comments = () => {
         {comment &&
           comment.map((comment: Comment) => (
             <li key={comment.commentId} className="comments__comment-list__item">
-              <div className='comments__comment-list__item__header'>
-                <UserProfile>{comment.author}</UserProfile>
                 {updatedCommentId === comment.commentId ? (
-                  <div className="comments__comment-list__item__input">
-                    <input
-                      type="text"
-                      value={updatedComment || comment.comment}
-                      onChange={(e) => setUpdatedComment(e.target.value)}
-                    />
-                    <Button className='edit' label='완료' onClick={() => handleUpdateComment(comment.commentId, updatedComment)}/>
-                  </div>
-                ) : (
                   <>
-                    {comment.commentUid === user.uid && (
-                      <div className="comments__comment-list__item__edit" ref={dropdownRef}>
-                        <Button className="edit" label='⋮' onClick={(event) => handleOptionButtonClick(event, comment.commentId)}
-                        />
-                        {selectedCommentId === comment.commentId && (
-                          <div className="comments__comment-list__item__options">
-                            <Button className="edit" label='수정' onClick={() => {
-                              setUpdatedCommentId(comment.commentId);
-                              setUpdatedComment(comment.comment);
-                              setSelectedCommentId(null);
-                            }} />
-                            <Button className="edit" label='삭제' onClick={() => {
-                              handleDeleteComment(comment.commentId);
-                              setSelectedCommentId(null);
-                            }} />
-                          </div>
-                        )}
+                    <div className='comments__comment-list__item__header'>
+                      <UserProfile>{comment.author}</UserProfile>
+                    </div>
+                    <div className="comments__comment-list__item__input">
+                      <input
+                        type="text"
+                        value={updatedComment || comment.comment}
+                        onChange={(e) => setUpdatedComment(e.target.value)}
+                      />
+                      <Button className='edit' label='완료' onClick={() => handleUpdateComment(comment.commentId, updatedComment)}/>
+                    </div>
+                  </>
+                ) : (
+                <>
+                  <div className='comments__comment-list__item__header'>
+                    <UserProfile>{comment.author}</UserProfile>
+                    <div className="comments__comment-list__item__edit">
+                      {comment.commentUid === user.uid && (
+                          <Dropdown label='⋮'>
+                            <div className="comments__comment-list__item__options">
+                              <Button className="drop-down__content__item" label='수정' onClick={() => {
+                                setUpdatedCommentId(comment.commentId);
+                                setUpdatedComment(comment.comment);
+                              }} />
+                              <Button className="drop-down__content__item" label='삭제' onClick={() => {
+                                handleDeleteComment(comment.commentId);
+                              }} />
+                            </div>
+                          </Dropdown>
+                      )}
+                    </div>
+                  </div>
+                  <p className="comments__comment-list__item__content">{comment.comment}</p>
+                  <div className='comments__comment-list__item__footer'> 
+                    <TimeAgoComponent timestamp={comment.createAt}/>
+                    <div className='like-box'>
+                      <Button
+                        className={`like${likedComments.includes(comment.commentId) ? '--liked' : ''}`}
+                        size='m'
+                        onClick={() => handleLikeComment(comment.commentId)}
+                        label=''
+                      />
+                      {likedComments.filter((id) => id === comment.commentId).length}            
                       </div>
-                    )}
+                  </div>
                   </>
                 )}
-              </div>
-              <p className="comments__comment-list__item__content">{comment.comment}</p>
-              <div className='comments__comment-list__item__like-count'> 
-                <Button
-                  // className={`like${likedComments.includes(comment.commentId) ? '--liked' : ''}`}
-                  className='like'
-                  size='s'
-                  onClick={() => handleLikeComment(comment.commentId)}
-                  label= {likedComments.includes(comment.commentId) ? '♥️' : '♡'}
-                />
-                {likedComments.filter((id) => id === comment.commentId).length}            
-              </div>
-                 <TimeAgoComponent timestamp={comment.createAt}/>
+              
+
+             
             </li>
           ))}
       </ul>

@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import PostList from '../component/PostList';
+import PostList from './PostList';
 import { useRecoilState } from 'recoil';
 import { lastPostKeyState, postsState } from '../recoil';
 import { fetchMorePosts } from '../hook/fetchData';
-import InfiniteScroll from '../component/InfiniteScroll';
-import LoadingSpinner from '../component/LoadingSpinner';
+import InfiniteScroll from './InfiniteScroll';
+import LoadingSpinner from './LoadingSpinner';
 
 
 const PostPage = () => {
@@ -27,7 +27,8 @@ const PostPage = () => {
   };
 // console.log(posts)
   return (
-    <div>
+    <div className='post-page'>
+      <div className='layout'>
       {/* <div>
         <button onClick={handleSortByLatest}>최신순</button>
         <button onClick={handleSortByLikes}>좋아요순</button>
@@ -39,6 +40,7 @@ const PostPage = () => {
         {noMorePosts && <div>게시물이 없습니다.</div>}
           <div style={{width:'100%', height:'100px',}}/>
       </InfiniteScroll>
+      </div>
     </div>
   );
 };

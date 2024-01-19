@@ -70,41 +70,43 @@ const PostDetail: React.FC = () => {
   };
 
   return (
-    <div className='container'>
-      <div className='layout-content'>
-      {posts
-        .filter((post) => post.postId === selectedpost.postId)
-        .map((post) => (
-        <div className='postDetail'>
-          <div className='postDetail__title'>
-            {Object.values(post.title)}
-          </div>
-          <div className='postDetail__info'>
-            <div className='postDetail__info__author'>
-              <UserProfile >{post.author}</UserProfile>
-                <div className='postDetail__info__views'> 
-                  조회수 {post.views}
+    <div className='postDetail'>
+      <div className='layout'>
+        {posts
+          .filter((post) => post.postId === selectedpost.postId)
+          .map((post) => (
+          <div key={post.postId} className='postDetail__content'>
+            <div className='postDetail__title'>
+              {Object.values(post.title)}
+            </div>
+            <div className='postDetail__info'>
+              <div className='postDetail__info__author'>
+                <UserProfile >{post.author}</UserProfile>
+                  <div className='postDetail__info__views'> 
+                    조회수 {post.views}
+                  </div>
                 </div>
+              {uid === post.postUid ? (
+                <div className='postDetail__edit'>
+                  <Button className='edit' label='수정' onClick={handleUpdatePost}/>
+                  <Button className='edit' label='삭제' onClick={handleDeletePost}/>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className='postDetail__body'>
+              <SanitizedHTML html={Object.values(post.content).join('')} />
+            </div>
+            <div className='postDetail__footer' key={post.postId}>
+              <div className='like-box'> 
+                <Button onClick={handleLike} label='' size='m' className={`like${post.likes?.includes(uid) ? '--liked' : ''}`}/>
+                {post ? (post.likes ? post.likes.length : 0) : 0}
               </div>
-            {uid === post.postUid ? (
-              <div className='postDetail__edit'>
-                <Button className='edit' label='수정' onClick={handleUpdatePost}/>
-                <Button className='edit' label='삭제' onClick={handleDeletePost}/>
-              </div>
-            ) : (
-              <></>
-            )}
+            </div>
           </div>
-          <div className='postDetail__body'>
-            <SanitizedHTML html={Object.values(post.content).join('')} />
-          </div>
-          <div className='postDetail__footer' key={post.postId}>
-            <div className='postDetail__footer__likes'> {post ? (post.likes ? post.likes.length : 0) : 0}</div>
-              <Button onClick={handleLike} label={post.likes ? (post.likes?.includes(uid) ? '♥' : '♡') : '♡'} className='like' size='s'/>
-          </div>
-        </div>
-        ))}
-        <Comments />
+          ))}
+          <Comments />
         </div>
     </div>
   );

@@ -163,7 +163,6 @@ export async function updatePost(
           post.views = 0;
         }
         post.views = post.views +1
-        console.log(post)
         return post;
       }
     });

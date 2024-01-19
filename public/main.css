@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .quill > .ql-container > .ql-editor.ql-blank::before {
   font-size: 15px;
   color: #666;
@@ -6,44 +7,109 @@
 .button {
   background-color: white;
   border: 1px solid #333;
+  color: #333;
   border-radius: 5px;
+  margin: 1px;
+  text-decoration: none;
   cursor: pointer;
 }
-
-.like--liked-s {
+.button-s {
   font-size: 13px;
+}
+.button-m {
+  font-size: 15px;
+}
+.button-l {
+  font-size: 17px;
+}
+
+.like-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #888;
+  border-radius: 3px;
+  width: 25px;
+  height: 21px;
+  padding: 2px 3px;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.boder-none {
+  border: none;
+}
+
+.like {
+  background-image: url("../../../images/heart-black.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  border: none;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+}
+.like-s {
+  width: 10px;
+  height: 10px;
+}
+.like-m {
+  width: 13px;
+  height: 13px;
+}
+.like-l {
+  width: 17px;
+  height: 17px;
+}
+.like--liked {
+  background-image: url("../../../images/heart-red.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  border: none;
+  width: 10px;
+  height: 10px;
+}
+.like--liked-s {
+  width: 10px;
+  height: 10px;
 }
 .like--liked-m {
-  font-size: 13px;
+  width: 13px;
+  height: 13px;
 }
 .like--liked-l {
-  font-size: 15px;
+  width: 17px;
+  height: 17px;
 }
 
-.logout-s, .logout-m, .logout-l {
-  border-color: #888;
+.drop-down {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
 }
-.logout-s {
-  font-size: 13px;
+.drop-down__content {
+  position: absolute;
+  z-index: 1; /*다른 요소들보다 앞에 배치*/
+  font-weight: 400;
+  background-color: #f9f9f9;
 }
-.logout-m {
-  font-size: 13px;
-}
-.logout-l {
-  font-size: 15px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.drop-down__content__item {
+  display: block;
+  text-decoration: none;
+  width: 120px;
+  color: rgb(37, 37, 37);
+  font-size: 12px;
+  padding: 5px 10px;
+  margin: 0;
+  border-radius: 0;
 }
 
 .post-list {
   display: flex;
   flex-direction: column;
-  padding: 0 25px;
-  width: 700px;
+  width: 100%;
 }
 .post-list__title {
   width: 100%;
@@ -107,11 +173,15 @@
 }
 .post-list__footer {
   display: flex;
+  align-items: center;
 }
 .post-list__footer__likes, .post-list__footer__date, .post-list__footer__comments, .post-list__footer__views {
   color: #888;
   font-size: 13px;
   padding: 0 5px;
+}
+.post-list__footer__likes {
+  display: flex;
 }
 .post-list__image {
   display: flex;
@@ -189,27 +259,6 @@
 }
 
 /* LogoutButton.scss */
-.logout {
-  display: flex;
-}
-.logout__name {
-  color: #3498db;
-  cursor: pointer;
-}
-.logout__name:hover {
-  text-decoration: underline;
-}
-.logout__button {
-  border: none;
-  background-color: none;
-  margin-left: 15px;
-  color: #e74c3c;
-  cursor: pointer;
-}
-.logout__button:hover {
-  text-decoration: underline;
-}
-
 .author {
   font-size: 14px;
   color: #333;
@@ -244,50 +293,72 @@
   justify-content: space-between;
 }
 .comments__comment-list__item__content {
+  display: flex;
+  min-height: 50px;
+  align-items: center;
   font: 12px;
+}
+.comments__comment-list__item__footer {
+  display: flex;
+  justify-content: space-between;
+}
+.comments__comment-list__item__footer__like-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #333;
+  font-size: 12px;
+  padding: 2px 3px;
+  width: 25px;
+  height: 21px;
 }
 .comments__comment-list__item p {
   margin: 0;
-}
-.comments__comment-list.like-button {
-  background-color: #4CAF50;
-  color: #fff;
-}
-.comments__comment-list.like-button:hover {
-  background-color: #45a049;
-}
-.comments__comment-list.update-button, .comments__comment-list.delete-button {
-  background-color: #ccc;
-}
-.comments__comment-list.update-button:hover, .comments__comment-list.delete-button:hover {
-  background-color: #aaa;
-}
-.comments__input {
-  margin-top: 10px;
-}
-.comments__input input {
-  width: 70%;
-  padding: 8px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-}
-.comments__input button {
-  padding: 8px 15px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.comments__input button:hover {
-  background-color: #45a049;
 }
 
 .time-ago {
   font-size: 12px;
   color: #888;
+}
+
+.logout-s, .logout-m, .logout-l {
+  border-color: #888;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logout__name {
+  color: #3498db;
+  cursor: pointer;
+}
+.logout__name:hover {
+  text-decoration: underline;
+}
+.logout-s {
+  font-size: 13px;
+}
+.logout-m {
+  font-size: 15px;
+}
+.logout-l {
+  font-size: 17px;
+}
+
+.user-post-page__no-posts {
+  margin-bottom: 10px;
+}
+
+.layout {
+  width: 700px;
+}
+
+.main-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .post-create-form {
@@ -335,19 +406,10 @@
   background-color: #2980b9;
 }
 
-.user-post-page {
-  padding: 20px;
-}
-.user-post-page__no-posts {
-  margin-bottom: 10px;
-}
-
-.layout-content {
-  width: 700px;
-}
-
 .postDetail {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .postDetail__info {
   display: flex;
@@ -389,6 +451,20 @@
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+}
+.user-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.user-page__profile {
+  display: flex;
+  flex-direction: column;
+}
+.user-page__profile__info {
+  display: flex;
+  justify-content: space-between;
 }
 
 /*# sourceMappingURL=main.css.map */

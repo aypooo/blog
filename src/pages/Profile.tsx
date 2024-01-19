@@ -2,7 +2,7 @@ import React from 'react';
 import UserDataUpdate from '../component/UserDataUpdate';
 
 
-const MyPage = () => {
+const Profile = () => {
     return (
         <div >
             <UserDataUpdate/>
@@ -10,4 +10,4 @@ const MyPage = () => {
     );
 };
 
-export default MyPage;
+export default Profile;

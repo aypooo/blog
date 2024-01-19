@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import PostList from '../component/PostList';
+import PostList from './PostList';
 import { Link, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedUserState, userPostsState, userState } from '../recoil';
-import Pagination from '../component/Pagination';
+import Pagination from './Pagination';
 import {fetchAuthorPostData} from '../hook/fetchData';
 
 
@@ -11,7 +11,7 @@ const POSTS_PER_PAGE = 10; // 페이지당 포스트 수
 
 const UserPostPage = () => {
     const { user } = useParams()
-    const { uid } = useRecoilValue(userState);
+    // const { uid } = useRecoilValue(userState);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
     const [userPosts, setUserPosts] = useRecoilState(userPostsState);
@@ -31,13 +31,13 @@ const UserPostPage = () => {
       fetchAuthorPostData(setUserPosts,user!)
       }, [user, setUserPosts]);
 
-    if(!uid) return <>로그인해주세요</>
+    // if(!uid) return <>로그인해주세요</>
     return (
         <div className="user-post-page">
           {(!userPosts || Object.keys(userPosts).length === 0) ? (
             <div className="user-post-page__no-posts">
               <span>작성한 글이 없습니다.</span>
-              <Link to="/write" className="write-link"> 글쓰기</Link>
+
             </div>
           ) : (
             <div>

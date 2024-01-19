@@ -1,8 +1,7 @@
-.layout-content{
-  width: 700px;
-}
 .postDetail {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     &__info{
         display: flex;
         justify-content: space-between;

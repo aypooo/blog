@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { isLoggedInState } from '../recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isLoggedInState, userState } from '../recoil';
 import Logout from './Logout';
+import UserProfile from './UserProfile';
+import Button from './Button';
 
 const Gnb = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState);
-
+  const [user, setUser] = useRecoilState(userState);
   return (
     <div className="gnb">
       <div className='gnb__layout'>
@@ -14,9 +16,11 @@ const Gnb = () => {
             <Link to="/" className="gnb__link">홈</Link>
         </div>
       {isLoggedIn ? (
-        
         <div className='gnb__layout__right'>
-          <Logout />
+          <UserProfile>{user.name ? user.name : 'username'}</UserProfile>
+          <Link to="/write">
+            <Button size="m" label="글쓰기" />
+          </Link>
         </div>
       ) : (
         <div className='gnb__layout__right'>

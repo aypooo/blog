@@ -1,5 +1,7 @@
 @import 'abstracts/reactQuill.scss';
 @import 'abstracts/button.scss';
+@import 'abstracts/like.scss';
+@import 'abstracts/dropDown.scss';
 
 @import 'components/postList.scss';
 @import 'components/pagination.scss';
@@ -7,7 +9,12 @@
 @import 'components/userProfile';
 @import 'components/comments';
 @import 'components/timeAgo';
+@import 'components/logOut';
+@import 'components/userPost.scss';
 
+@import 'layouts/layout.scss';
+
+@import 'pages/mainPage.scss';
 @import 'pages/postCreate.scss';
-@import 'pages/userPost.scss';
 @import 'pages/postDetail.scss';
+@import 'pages/userPage.scss';

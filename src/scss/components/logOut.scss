@@ -1,0 +1,32 @@
+.logout{
+    &-s,
+    &-m,
+    &-l{
+        border-color:#888;
+    }
+
+
+}
+.logout{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+      &__name{
+          color:#3498db;
+          cursor: pointer;
+          &:hover {
+              text-decoration: underline;
+          }
+      }
+     
+  &-s{
+    font-size: 13px;
+}
+&-m {
+    font-size: 15px;
+}
+&-l {
+    font-size: 17px;
+
+}
+  }
