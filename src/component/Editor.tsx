@@ -92,8 +92,9 @@ const Editor: React.FC<MyEditorProps> = ({ value, onChange, setImageUrls }) => {
           placeholder= "글을 작성해 주세요." 
           style={{
             width:"700px",
-            height:"700px",
-            padding:"20px",
+            height:"500px",
+            margin:"0 0 30px 0",
+            padding:"0px 0px 30px 0px",
             lineHeight:"0px",
           }}
       />

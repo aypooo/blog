@@ -89,18 +89,12 @@ const Comments = () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
-  const handleOptionButtonClick = (event: React.MouseEvent, commentId: string) => {
-    event.stopPropagation(); // 옵션 버튼 클릭 시 이벤트 전파 방지
-    setSelectedCommentId(selectedCommentId === commentId ? null : commentId);
-  };
   return (
     <div className="comments">
       <h3 className="comments__header">{comment ? Object.keys(comment).length : 0}개의 댓글</h3>
       <div className="comments__input-container">
-        <div>
-          <input type="text" value={newComment} onChange={(e) => setnewComment(e.target.value)} />
-          <Button label='작성하기' onClick={handleWriteComment}/>
-        </div>
+          <input className='comments__input' type="text" value={newComment} onChange={(e) => setnewComment(e.target.value)} />
+          <Button label='등록' className='comments-button' onClick={handleWriteComment}/>
       </div>
       <ul className="comments__comment-list">
         {comment &&
@@ -126,17 +120,17 @@ const Comments = () => {
                     <UserProfile>{comment.author}</UserProfile>
                     <div className="comments__comment-list__item__edit">
                       {comment.commentUid === user.uid && (
-                          <Dropdown label='⋮'>
-                            <div className="comments__comment-list__item__options">
-                              <Button className="drop-down__content__item" label='수정' onClick={() => {
-                                setUpdatedCommentId(comment.commentId);
-                                setUpdatedComment(comment.comment);
-                              }} />
-                              <Button className="drop-down__content__item" label='삭제' onClick={() => {
-                                handleDeleteComment(comment.commentId);
-                              }} />
-                            </div>
-                          </Dropdown>
+                        <Dropdown label='⋮'>
+                          <div className="comments__comment-list__item__options">
+                            <Button className="drop-down__content__item" label='수정' onClick={() => {
+                              setUpdatedCommentId(comment.commentId);
+                              setUpdatedComment(comment.comment);
+                            }} />
+                            <Button className="drop-down__content__item" label='삭제' onClick={() => {
+                              handleDeleteComment(comment.commentId);
+                            }} />
+                          </div>
+                        </Dropdown>
                       )}
                     </div>
                   </div>
@@ -146,7 +140,6 @@ const Comments = () => {
                     <div className='like-box'>
                       <Button
                         className={`like${likedComments.includes(comment.commentId) ? '--liked' : ''}`}
-                        size='m'
                         onClick={() => handleLikeComment(comment.commentId)}
                         label=''
                       />
@@ -155,9 +148,6 @@ const Comments = () => {
                   </div>
                   </>
                 )}
-              
-
-             
             </li>
           ))}
       </ul>

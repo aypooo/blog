@@ -19,7 +19,7 @@ const Gnb = () => {
         <div className='gnb__layout__right'>
           <UserProfile>{user.name ? user.name : 'username'}</UserProfile>
           <Link to="/write">
-            <Button size="m" label="글쓰기" />
+            <Button size="s" label="글쓰기" />
           </Link>
         </div>
       ) : (

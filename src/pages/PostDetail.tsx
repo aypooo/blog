@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { Post, postsState, selectedPostState, userState } from '../recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
 import { deletePost, updateViews } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
 import Comments from '../component/Comments';
@@ -14,8 +14,8 @@ const PostDetail: React.FC = () => {
   const navigate = useNavigate()
   const { uid } = useRecoilValue(userState);
   const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
-  const [posts, setPosts] = useRecoilState(postsState)
-  const [liked, setLiked] = useState(false)
+  const setPosts = useSetRecoilState(postsState)
+  const setUserPosts = useSetRecoilState(userPostsState);
   const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , uid);
 
 
@@ -29,13 +29,22 @@ const PostDetail: React.FC = () => {
       setPosts((prevPosts) =>
         prevPosts.map((post) =>
         post.postId === selectedpost!.postId ? { ...post, views: post.views + 1 } : post
-      ))}
+      ))
+      setUserPosts((prevPosts) =>
+        prevPosts.map((post) =>
+        post.postId === selectedpost!.postId ? { ...post, views: post.views + 1 } : post
+      ))
+      setSelectedPost((prevpost) => ({
+        ...(prevpost as Post),
+        views: (prevpost?.views || 0) + 1,
+      }));
+    }
       const timeoutId = setTimeout(() => {
         handleUpdateViews()
-      }, 10);
+      }, 1);
     
       return () => clearTimeout(timeoutId);
-  }, [selectedpost]);
+  }, [setSelectedPost]);
 
   if (!selectedpost) {
     navigate('/')
@@ -50,6 +59,7 @@ const PostDetail: React.FC = () => {
       window.confirm("삭제하시겠습니까?")
       await deletePost(selectedpost.postId, selectedpost.postUid);
       setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
+      setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setSelectedPost(null);
       alert('포스트가 성공적으로 삭제되었습니다.');
       navigate(`/${selectedpost.author}`)
@@ -62,32 +72,44 @@ const PostDetail: React.FC = () => {
       await LikeUpdate(selectedpost.postId, uid);
       // 성공적으로 서버에서 좋아요 토글이 완료된 경우 Recoil 상태 업데이트
       toggleLike()
-      setLiked(!liked)
-      console.log(liked)
+      setSelectedPost((prevpost) => {
+        if (prevpost) {
+          const currentLikes = prevpost.likes || [];
+          
+          // 이미 해당 사용자의 uid가 likes 배열에 존재한다면 제거
+          const updatedLikes = currentLikes.includes(uid)
+            ? currentLikes.filter((likeUid) => likeUid !== uid)
+            : [...currentLikes, uid];
+  
+          return {
+            ...(prevpost as Post),
+            likes: updatedLikes,
+          };
+        }
+  
+        return prevpost;
+      });
     } catch (error) {
       console.error('좋아요 토글 중 오류 발생:', error);
     }
   };
-
+console.log('select',selectedpost.postId)
   return (
     <div className='postDetail'>
       <div className='layout'>
-        {posts
-          .filter((post) => post.postId === selectedpost.postId)
-          .map((post) => (
-          <div key={post.postId} className='postDetail__content'>
+          <div className='postDetail__content'>
             <div className='postDetail__title'>
-              {Object.values(post.title)}
+              {Object.values(selectedpost.title)}
             </div>
             <div className='postDetail__info'>
               <div className='postDetail__info__author'>
-                <UserProfile >{post.author}</UserProfile>
+                <UserProfile >{selectedpost.author}</UserProfile>
                   <div className='postDetail__info__views'> 
-                    조회수 {post.views}
+                    조회수 {selectedpost.views}
                   </div>
                 </div>
-              {uid === post.postUid ? (
-                <div className='postDetail__edit'>
+              {uid === selectedpost.postUid ? (
+                <div className='postDetail__info__edit'>
                   <Button className='edit' label='수정' onClick={handleUpdatePost}/>
                   <Button className='edit' label='삭제' onClick={handleDeletePost}/>
                 </div>
@@ -96,16 +118,15 @@ const PostDetail: React.FC = () => {
               )}
             </div>
             <div className='postDetail__body'>
-              <SanitizedHTML html={Object.values(post.content).join('')} />
+              <SanitizedHTML html={Object.values(selectedpost.content).join('')} />
             </div>
-            <div className='postDetail__footer' key={post.postId}>
-              <div className='like-box'> 
-                <Button onClick={handleLike} label='' size='m' className={`like${post.likes?.includes(uid) ? '--liked' : ''}`}/>
-                {post ? (post.likes ? post.likes.length : 0) : 0}
+            <div className='postDetail__footer' key={selectedpost.postId}>
+              <div className='like-box like-box-m'> 
+                <Button onClick={handleLike} label='' size='l' className={`like${selectedpost.likes?.includes(uid) ? '--liked' : ''}`}/>
+                {selectedpost ? (selectedpost.likes ? selectedpost.likes.length : 0) : 0}
               </div>
             </div>
           </div>
-          ))}
           <Comments />
         </div>
     </div>

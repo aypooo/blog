@@ -17,13 +17,13 @@
         padding-left: 5px;
     }
     &__edit{
-        &__update {
-            // 수정 버튼 스타일 설정
-          }
-      
-          &__delete {
-            // 삭제 버튼 스타일 설정
-          }
+      display: flex;
+      justify-content: space-between;
+      :nth-child(1){
+        margin-right: 2px;
+      }
+
+
     }
     }
     &__title {

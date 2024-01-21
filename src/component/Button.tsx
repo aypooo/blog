@@ -8,7 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   const Button: React.FC<ButtonProps> = ({ onClick, label ,className, size, ...rest }) => {
   
     return (
-      <button className={size ? `button ${className} ${className}-${size}`:`button ${className}` } onClick={onClick} {...rest}>
+      <button className={`button ${size ? `button-${size}`:''} ${className ? (size ? `${className}-${size}`:className):('')} `} onClick={onClick} {...rest}>
         {label}
       </button>
     );

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Post, postsState, selectedPostState, userState } from '../recoil';
+import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
 import { updatePost, writeNewPost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '../component/Editor';
+import Button from '../component/Button';
 
 const PostCreateForm: React.FC = () => {
   const { postid } = useParams();
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
   const [posts, setPosts] = useRecoilState(postsState);
+  const [userPosts, setUserPosts] = useRecoilState(userPostsState);
   const [selectedpost, setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -36,6 +38,11 @@ const PostCreateForm: React.FC = () => {
             post.postId === postId ? { ...post, title, content, imageUrls } : post
           )
         );
+        setUserPosts((prevPosts) =>
+          prevPosts.map((post) =>
+            post.postId === postId ? { ...post, title, content, imageUrls } : post
+          )
+        )
       } else {
         postId = await writeNewPost(user.uid, user.name!, title, content, imageUrls, createdAt);
 
@@ -78,39 +85,34 @@ const PostCreateForm: React.FC = () => {
   }, [postid, selectedpost, setSelectedpost]);
   console.log(content)
   return (
-    <form className="post-create-form" onSubmit={handleCreateSubmit}>
-      <label className="post-create-form__label">
-        <input
-          placeholder="제목"
-          type="text"
-          className="post-create-form__input"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </label>
-      <Editor value={content} onChange={setContent} setImageUrls={setImageUrls} />
-      <div className="post-create-form__buttons">
-        {selectedpost && postid ? (
-          <>
-            <button type="submit" className="post-create-form__button">
-              수정
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate(-1)}
-              className="post-create-form__button"
-            >
-              취소
-            </button>
-          </>
-        ) : (
-          <>
-            <button type="submit" className="post-create-form__button">
-              글작성
-            </button>
-          </>
-        )}
+    <form className="post-create-page" onSubmit={handleCreateSubmit}>
+      <div className='layout'>
+        <label className="post-create-page__label">
+          <input
+            placeholder="제목"
+            type="text"
+            className="post-create-page__label__title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </label>
+        <div className="post-create-page__editor-container">
+          <Editor value={content} onChange={setContent} setImageUrls={setImageUrls} />
+        </div>
+        
       </div>
+      <div className="post-create-page__buttons-bar">
+          {selectedpost && postid ? (
+            <>
+              <Button label='수정'size='l'/>
+              <Button label='취소'size='l' onClick={() => navigate(-1)}/>
+            </>
+          ) : (
+            <>
+              <Button label='등록' size='l'/>
+            </>
+          )}
+        </div>
     </form>
   );
 };
