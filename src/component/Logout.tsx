@@ -29,7 +29,7 @@ type LogoutProps = {
   
     return (
       <>
-        <Button className={className} label='로그아웃' size='m' onClick={handleLogout} />
+        <Button className={className} label='로그아웃' onClick={handleLogout} />
       </>
     );
   };

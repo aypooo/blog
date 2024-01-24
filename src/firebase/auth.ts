@@ -27,3 +27,17 @@ export function readUserData(uid: string): Promise<User | null> {
     });
   });
 }
+
+export function readAllUserData(): Promise<User | null> {
+  const db = getDatabase();
+  const userRef = ref(db, 'users/' );
+
+  return new Promise((resolve, reject) => {
+    onValue(userRef, (snapshot) => {
+      const userData = snapshot.val();
+      resolve(userData);
+    }, (error) => {
+      reject(error);
+    });
+  });
+}
