@@ -492,6 +492,7 @@ a {
 .user-page__profile__info {
   display: flex;
   justify-content: space-between;
+  height: 150px;
 }
 
 /*# sourceMappingURL=main.css.map */
