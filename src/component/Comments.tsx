@@ -5,11 +5,11 @@ import { userState ,Comment, Post, selectedPostState} from '../recoil';
 import TimeAgoComponent from './TimeAgoComponent ';
 import { useNavigate } from 'react-router-dom';
 import UserProfile from './UserProfile';
-import { LikeUpdate } from '../firebase/like';
 import { fetchCommentData } from '../hook/fetchData';
 import { useToggleLike } from '../hook/useToggleLike';
 import Button from './Button';
 import Dropdown from './DropDown';
+import { LikeUpdate } from '../firebase/like';
 
 const Comments = () => {
   const navigate = useNavigate()
@@ -94,7 +94,7 @@ const Comments = () => {
       <h3 className="comments__header">{comment ? Object.keys(comment).length : 0}개의 댓글</h3>
       <div className="comments__input-container">
           <input className='comments__input' type="text" value={newComment} onChange={(e) => setnewComment(e.target.value)} />
-          <Button label='등록' className='comments-button' onClick={handleWriteComment}/>
+          <Button size='s' label='등록' onClick={handleWriteComment}/>
       </div>
       <ul className="comments__comment-list">
         {comment &&
@@ -111,7 +111,7 @@ const Comments = () => {
                         value={updatedComment || comment.comment}
                         onChange={(e) => setUpdatedComment(e.target.value)}
                       />
-                      <Button className='edit' label='완료' onClick={() => handleUpdateComment(comment.commentId, updatedComment)}/>
+                      <Button label='완료' onClick={() => handleUpdateComment(comment.commentId, updatedComment)}/>
                     </div>
                   </>
                 ) : (
@@ -122,11 +122,13 @@ const Comments = () => {
                       {comment.commentUid === user.uid && (
                         <Dropdown label='⋮'>
                           <div className="comments__comment-list__item__options">
-                            <Button className="drop-down__content__item" label='수정' onClick={() => {
+                            {/* className="drop-down__content__item" */}
+                            <Button  label='수정' onClick={() => {
                               setUpdatedCommentId(comment.commentId);
                               setUpdatedComment(comment.comment);
                             }} />
-                            <Button className="drop-down__content__item" label='삭제' onClick={() => {
+
+                            <Button  label='삭제' onClick={() => {
                               handleDeleteComment(comment.commentId);
                             }} />
                           </div>
@@ -138,10 +140,9 @@ const Comments = () => {
                   <div className='comments__comment-list__item__footer'> 
                     <TimeAgoComponent timestamp={comment.createAt}/>
                     <div className='like-box'>
-                      <Button
+                      <button
                         className={`like${likedComments.includes(comment.commentId) ? '--liked' : ''}`}
                         onClick={() => handleLikeComment(comment.commentId)}
-                        label=''
                       />
                       {likedComments.filter((id) => id === comment.commentId).length}            
                       </div>

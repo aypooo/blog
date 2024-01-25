@@ -53,7 +53,7 @@ console.log('1',posts)
                   </div>
               </div>
             </div>
-              {post.imageUrls ? (
+              {post.imageUrls && post.imageUrls.length > 0 ? (
                 <div className='post-list__image' onClick={() => handlePostClick(post)}>
                     <img src={post.imageUrls[0]} alt="postImage" />
                   </div>

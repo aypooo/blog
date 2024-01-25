@@ -5,11 +5,7 @@ import { auth } from '../firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 
-type LogoutProps = {
-    className?: string; // 클래스 이름을 받아올 수 있도록 정의
-  }
-  
-  const Logout: React.FC<LogoutProps> = ({ className }) => {
+  const Logout: React.FC = () => {
     const navigate = useNavigate();
     const setUser = useSetRecoilState(userState);
     const [isLoggedIn, setisLoggedIn] = useRecoilState(isLoggedInState);
@@ -29,7 +25,7 @@ type LogoutProps = {
   
     return (
       <>
-        <Button className={className} label='로그아웃' onClick={handleLogout} />
+        <Button label='로그아웃' onClick={handleLogout} />
       </>
     );
   };

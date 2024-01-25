@@ -5,32 +5,42 @@
 }
 
 .button {
-  display: inline;
-  background-color: white;
-  border: 1px solid #333;
-  color: #333;
-  border-radius: 5px;
-  text-decoration: none;
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  background-color: #fff;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-.button-s {
-  font-size: 13px;
+.button.s {
+  padding: 5px 10px;
+  font-size: 12px;
 }
-.button-m {
-  font-size: 15px;
+.button.m {
+  padding: 10px 20px;
+  font-size: 16px;
 }
-.button-l {
-  font-size: 17px;
+.button.l {
+  padding: 15px 30px;
+  font-size: 20px;
 }
-
-.comments-button {
-  display: inline;
-  border-radius: 0;
-  height: 100%;
+.button.xl {
+  padding: 20px 40px;
+  font-size: 24px;
 }
-
-a {
-  text-decoration: none;
+.button:hover {
+  background-color: #eee;
+}
+.button.loading {
+  cursor: not-allowed;
+  background-color: #ddd;
+}
+.button.loading:hover {
+  background-color: #ddd;
+}
+.button.full-width {
+  width: 100%;
 }
 
 .like-box, .like-box-s, .like-box-m, .like-box-l {
@@ -383,6 +393,79 @@ a {
 }
 .logout-l {
   font-size: 17px;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+.login__error {
+  color: red;
+  /* 에러 메시지 스타일링 */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 450px;
+}
+.login-form__title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.login-form__input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.login-form__sign-up-button {
+  text-align: right;
+}
+
+.sign-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign-up-form {
+  text-align: center;
+  width: 450px;
+}
+.sign-up-form__title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.sign-up-form__input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.sign-up-form__error {
+  height: 20px;
+  color: red;
+  margin-top: 5px;
+  text-align: left;
+}
+.sign-up-form__button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sign-up-form__button:hover {
+  background-color: #45a049;
 }
 
 .user-post-page__no-posts {

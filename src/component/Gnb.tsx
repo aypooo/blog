@@ -2,13 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isLoggedInState, userState } from '../recoil';
-import Logout from './Logout';
 import UserProfile from './UserProfile';
 import Button from './Button';
 
 const Gnb = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState);
-  const [user, setUser] = useRecoilState(userState);
+  const user = useRecoilValue(userState);
   return (
     <div className="gnb">
       <div className='gnb__layout'>

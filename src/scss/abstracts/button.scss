@@ -1,31 +1,45 @@
-.button{
-    display: inline;
-    background-color: white;
-    border:1px solid #333;
-    color: #333;
-    border-radius: 5px;
-
-    text-decoration:none;
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    background-color: #fff;
     cursor: pointer;
-    
-    &-s{
-        font-size: 13px;
+    transition: background-color 0.3s ease;
+  
+    &.s {
+      padding: 5px 10px;
+      font-size: 12px;
     }
-    &-m {
-        font-size: 15px;
+  
+    &.m {
+      padding: 10px 20px;
+      font-size: 16px;
     }
-    &-l {
-        font-size: 17px;
-    
+  
+    &.l {
+      padding: 15px 30px;
+      font-size: 20px;
     }
-}
-.comments-button{
-    display: inline;
-    border-radius: 0;
-    height: 100%;
-}
-
-
-a{
-    text-decoration: none;
-}
+  
+    &.xl {
+      padding: 20px 40px;
+      font-size: 24px;
+    }
+  
+    &:hover {
+      background-color: #eee;
+    }
+  
+    &.loading {
+      cursor: not-allowed;
+      background-color: #ddd;
+  
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+    &.full-width {
+        width: 100%;
+      }
+  }

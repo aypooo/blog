@@ -110,8 +110,8 @@ console.log('select',selectedpost.postId)
                 </div>
               {uid === selectedpost.postUid ? (
                 <div className='postDetail__info__edit'>
-                  <Button className='edit' label='수정' onClick={handleUpdatePost}/>
-                  <Button className='edit' label='삭제' onClick={handleDeletePost}/>
+                  <Button size='s' label='수정' onClick={handleUpdatePost}/>
+                  <Button size='s' label='삭제' onClick={handleDeletePost}/>
                 </div>
               ) : (
                 <></>
@@ -122,7 +122,7 @@ console.log('select',selectedpost.postId)
             </div>
             <div className='postDetail__footer' key={selectedpost.postId}>
               <div className='like-box like-box-m'> 
-                <Button onClick={handleLike} label='' size='l' className={`like${selectedpost.likes?.includes(uid) ? '--liked' : ''}`}/>
+                <button onClick={handleLike} className={`like${selectedpost.likes?.includes(uid) ? '--liked' : ''}`}/>
                 {selectedpost ? (selectedpost.likes ? selectedpost.likes.length : 0) : 0}
               </div>
             </div>

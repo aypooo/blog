@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Logout from '../component/Logout';
 import { useRecoilValue } from 'recoil';
@@ -10,7 +10,9 @@ import Dropdown from '../component/DropDown';
 const UserPage: React.FC = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState);
   const user = useRecoilValue(userState);
-
+  useEffect(()=>{
+    window.scroll(0,0)
+  },[user.name])
   return (
     <div className="user-page">
       <div className="layout">
@@ -20,9 +22,9 @@ const UserPage: React.FC = () => {
               <span>{user.name}</span>
               <Dropdown label="⋮">
                 <Link to="/profile">
-                  <Button className="drop-down__content__item" label="프로필 수정" />
+                  <Button label="프로필 수정" />
                 </Link>
-                <Logout className="drop-down__content__item" />
+                <Logout/>
               </Dropdown>
             </div>
           </div>

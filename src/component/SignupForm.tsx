@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { validateEmail, validateName, validatePassword } from "../hook/validation";
+import Button from "./Button";
 
 
 interface Props {
@@ -56,30 +57,33 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
   }, [email]);
 
   return (
-    <div>
-      <h2>회원가입</h2>
+<div className="sign-up-form">
+      <h2 className="sign-up-form__title">회원가입</h2>
       <input
         placeholder="이름"
         value={name}
         onChange={(e) => handleInputChange("name", e.target.value)}
+        className="sign-up-form__input"
       />
-      {nameError && <p style={{ color: 'red' }}>{nameError}</p>}
+      {nameError ? <p className="sign-up-form__error">{nameError}</p>:<p className="sign-up-form__error"></p> }
       <input
         type="email"
         placeholder="이메일"
         value={email}
         onChange={(e) => handleInputChange("email", e.target.value)}
+        className="sign-up-form__input"
       />
-      {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
+
+      {emailError ? <p className="sign-up-form__error">{emailError}</p>:<p className="sign-up-form__error"></p> }
       <input
         type="password"
         placeholder="비밀번호"
         value={password}
         onChange={(e) => handleInputChange("password", e.target.value)}
+        className="sign-up-form__input"
       />
-      {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
-      <button onClick={handleSignupClick}>가입</button>
-
+      {passwordError ? <p className="sign-up-form__error">{passwordError}</p>:<p className="sign-up-form__error"></p> }
+      <Button label="등록하기" fullWidth={true} onClick={handleSignupClick}/>
     </div>
   );
 };

@@ -20,7 +20,8 @@ const Dropdown: React.FC<DropdownProps> = ({ label, children }) => {
 
   return (
     <div className="dropdown">
-      <Button className="boder-none drop-down" label={label} onClick={handleButtonClick} />
+      {/* className="boder-none drop-down" */}
+      <span onClick={handleButtonClick}>{label}</span>
       {modalOpen ? (
         <div className="drop-down__content" ref={dropdownRef}>
           {children}

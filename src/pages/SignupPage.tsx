@@ -1,5 +1,5 @@
 import React from 'react';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import SignUpForm from '../component/SignupForm';
 import { auth } from '../firebase/firebase';
 import { writeUserData } from '../firebase/auth';
@@ -35,7 +35,7 @@ const SignupPage = () => {
       };
     }
       return (
-        <div>
+        <div className='sign-up'>
             <SignUpForm onSignup={handleSignup}/>
         </div>
       )
