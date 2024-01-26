@@ -7,6 +7,7 @@ import PageRoutes from './pageRoutes';
 import { isLoggedInState, userState } from './recoil';
 import { readUserData } from './firebase/auth';
 import Gnb from './component/Gnb';
+import Modal from './component/Modal';
 
 function App() {
   const setUser = useSetRecoilState(userState);
@@ -33,6 +34,7 @@ function App() {
     <div className="App">
       <Gnb />
       <PageRoutes />
+      <Modal/>
     </div>
   );
 }

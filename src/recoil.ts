@@ -28,6 +28,13 @@ export type Comment = {
   commentId: string;
 };
 
+type ModalType = {
+  isOpen: boolean;
+  title: string;
+  content: JSX.Element | string;
+  callBack?: () => any;
+};
+
 export const userState = atom<User>({
   key: 'userState',
   default: { uid: '',email: '', name:''},
@@ -81,3 +88,16 @@ export const lastPostKeyState = atom<string | null>({
   default: null
 });
 
+export const modalContentState = atom<(() => JSX.Element) | null>({
+  key: 'modalContentState',
+  default: null,
+});
+
+export const modalState = atom<ModalType>({
+  key: "modalState",
+  default: {
+    isOpen: false,
+    title: "",
+    content: ""
+  }
+});

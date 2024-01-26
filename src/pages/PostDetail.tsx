@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
+import { Post, modalContentState, postsState, selectedPostState, userPostsState, userState } from '../recoil';
 import { deletePost, updateViews } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
 import Comments from '../component/Comments';
@@ -9,6 +9,8 @@ import SanitizedHTML from '../hook/SanitizedHTML';
 import { useToggleLike } from '../hook/useToggleLike';
 import { LikeUpdate } from '../firebase/like';
 import Button from '../component/Button';
+import Modal from '../component/Modal';
+import { useModal } from '../hook/useModal';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
@@ -17,7 +19,7 @@ const PostDetail: React.FC = () => {
   const setPosts = useSetRecoilState(postsState)
   const setUserPosts = useSetRecoilState(userPostsState);
   const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , uid);
-
+  const { openModal,closeModal } = useModal();
 
   useEffect(() => {
     window.scroll(0,0)
@@ -54,15 +56,17 @@ const PostDetail: React.FC = () => {
   const handleUpdatePost = () => {
     navigate(`/write/${selectedpost.postId}`)
   }
-  const handleDeletePost = async () => {
+  // const handleDeletePost = async () => {
+  //   setConfirmModalOpen(true);
+  // };
+  const handleConfirmDelete = async () => {
     try {
-      window.confirm("삭제하시겠습니까?")
       await deletePost(selectedpost.postId, selectedpost.postUid);
       setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setSelectedPost(null);
-      alert('포스트가 성공적으로 삭제되었습니다.');
-      navigate(`/${selectedpost.author}`)
+      closeModal()
+      navigate(`/${selectedpost.author}`);
     } catch (error) {
       console.error('포스트 삭제 중 오류 발생:', error);
     }
@@ -93,6 +97,13 @@ const PostDetail: React.FC = () => {
       console.error('좋아요 토글 중 오류 발생:', error);
     }
   };
+  const modalData = {
+    content: '글을 삭제 하시겠습니까?',
+    callback: () => {
+      handleConfirmDelete()
+    }
+  };
+
 console.log('select',selectedpost.postId)
   return (
     <div className='postDetail'>
@@ -111,7 +122,8 @@ console.log('select',selectedpost.postId)
               {uid === selectedpost.postUid ? (
                 <div className='postDetail__info__edit'>
                   <Button size='s' label='수정' onClick={handleUpdatePost}/>
-                  <Button size='s' label='삭제' onClick={handleDeletePost}/>
+                  <Button size='s' label='삭제' onClick={() => openModal(modalData)}/>
+
                 </div>
               ) : (
                 <></>
@@ -129,6 +141,14 @@ console.log('select',selectedpost.postId)
           </div>
           <Comments />
         </div>
+        {/* <Modal isOpen={isConfirmModalOpen}>
+          <div>
+            <p>포스트를 삭제하시겠습니까?</p>
+            <Button label='삭제' size='s' onClick={handleConfirmDelete}/>
+            <Button label='취소' size='s' onClick={() => setConfirmModalOpen(false)}/>
+          </div>
+        </Modal> */}
+ 
     </div>
   );
 };
