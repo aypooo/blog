@@ -4,6 +4,8 @@ export type User = {
   uid: string;
   email: string;
   name: string;
+  follow?: string[];
+  follower?: string[];
 };
 
 export type Post = {

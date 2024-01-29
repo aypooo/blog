@@ -18,8 +18,8 @@ const PageRoutes = () => {
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/write" element={<PostCreatePage/>}/>
           <Route path="/write/:postid" element={<PostCreatePage/>}/>
-          <Route path="/:user" element={<UserPage/>}/>
-          <Route path="/:user/:postid" element={<PostDetail/>}/>
+          <Route path="/:author" element={<UserPage/>}/>
+          <Route path="/:author/:postid" element={<PostDetail/>}/>
         </Routes>
         </div>
     );

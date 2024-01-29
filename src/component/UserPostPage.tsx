@@ -10,7 +10,7 @@ import {fetchAuthorPostData} from '../hook/fetchData';
 const POSTS_PER_PAGE = 10; // 페이지당 포스트 수
 
 const UserPostPage = () => {
-    const { user } = useParams()
+    const { author } = useParams()
     // const { uid } = useRecoilValue(userState);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
@@ -23,13 +23,13 @@ const UserPostPage = () => {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     useEffect(() => {
-        setSelectedUser(user!)
+        setSelectedUser(author!)
         setCurrentPage(1);
-    }, [selectedUser, setSelectedUser, user]);
+    }, [selectedUser, setSelectedUser, author]);
 
     useEffect(() => {
-      fetchAuthorPostData(setUserPosts,user!)
-      }, [user, setUserPosts]);
+      fetchAuthorPostData(setUserPosts,author!)
+      }, [author, setUserPosts]);
 
     // if(!uid) return <>로그인해주세요</>
     return (
@@ -41,7 +41,7 @@ const UserPostPage = () => {
             </div>
           ) : (
             <div>
-              <PostList posts={currentPosts} title={`${user} post`} />
+              <PostList posts={currentPosts} title={`${author} post`} />
               <Pagination
                 activePage={currentPage}
                 itemsCountPerPage={POSTS_PER_PAGE}
