@@ -11,7 +11,7 @@
   border: 1px solid #ccc;
   background-color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  /* transition: background-color 0.3s ease; */
 }
 .button.s {
   padding: 5px 10px;
@@ -124,6 +124,10 @@
   position: relative;
   display: inline-block;
   font-size: 20px;
+  width: 15px;
+  height: 15px;
+  border-radius: 30px;
+  cursor: pointer;
 }
 .drop-down__content {
   position: absolute;
@@ -132,14 +136,23 @@
   background-color: #f9f9f9;
 }
 .drop-down__content__item {
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   width: 120px;
-  color: rgb(37, 37, 37);
-  font-size: 12px;
-  padding: 5px 10px;
+  color: #333;
+  font-size: 14px;
   margin: 0;
   border-radius: 0;
+}
+.drop-down__content__item a {
+  text-decoration: none;
+  color: #333;
+}
+.drop-down__content span {
+  border: 1px solid #333;
+  padding: 5px 0;
+  margin-top: -1px;
 }
 
 .post-list {

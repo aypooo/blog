@@ -110,7 +110,7 @@ console.log('select',selectedpost.postId)
       <div className='layout'>
           <div className='postDetail__content'>
             <div className='postDetail__title'>
-              {Object.values(selectedpost.title)}
+              {selectedpost.title}
             </div>
             <div className='postDetail__info'>
               <div className='postDetail__info__author'>

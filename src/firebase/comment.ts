@@ -3,7 +3,7 @@ import { Comment } from "../recoil";
 import { db } from "./firebase";
 
 // 댓글 쓰기
-export function writeNewComment(postId: string, postUid:string,  uid: string, name: string, comment: string) {
+export function writeNewComment(postId: string, uid: string, name: string, comment: string) {
   const commentData: Comment = {
     author: name,
     comment: comment,

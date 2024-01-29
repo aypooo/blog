@@ -31,7 +31,7 @@ const Comments = () => {
     }
     
     try {
-      const commentKey = writeNewComment(postId,postUid, user.uid, user.name, newComment);
+      const commentKey = writeNewComment(postId, user.uid, user.name, newComment);
       setCommentKeys(commentKey!)
       setnewComment('')
     } catch (error) {
