@@ -6,10 +6,20 @@
     &__profile{
         display: flex;
         flex-direction: column;
+        height: 150px;
         &__info{
             display: flex;
             justify-content: space-between;
-            height: 150px;
+            font-size: 28px;
+        }
+        &__follow{
+            display: flex;
+            font-size: 15px;
+        span{
+            margin-right: 5px;
+            margin-top: 10px;
+            color:#777;
+        }
         }
     }
 }

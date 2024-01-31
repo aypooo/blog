@@ -8,16 +8,18 @@
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
   background-color: #fff;
   cursor: pointer;
-  /* transition: background-color 0.3s ease; */
+  transition: background-color 0.3s ease;
 }
 .button.s {
+  min-width: 70px;
   padding: 5px 10px;
   font-size: 12px;
 }
 .button.m {
+  min-width: 89px;
   padding: 10px 20px;
   font-size: 16px;
 }
@@ -43,7 +45,7 @@
   width: 100%;
 }
 
-.like-box, .like-box-s, .like-box-m, .like-box-l {
+.like-box {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -54,18 +56,19 @@
   padding: 2px 3px;
   font-size: 12px;
   font-weight: normal;
+  cursor: pointer;
 }
-.like-box-s, .like-box-s-s, .like-box-m-s, .like-box-l-s {
+.like-box.s {
   width: 25px;
   height: 21px;
   font-size: 12px;
 }
-.like-box-m, .like-box-s-m, .like-box-m-m, .like-box-l-m {
+.like-box.m {
   width: 35px;
   height: 31px;
   font-size: 15px;
 }
-.like-box-l, .like-box-s-l, .like-box-m-l, .like-box-l-l {
+.like-box.l {
   width: 45px;
   height: 41px;
   font-size: 17px;
@@ -75,7 +78,7 @@
   border: none;
 }
 
-.like, .like-s, .like-m, .like-l {
+.like {
   background-image: url("../../../images/heart-black.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -85,19 +88,19 @@
   width: 10px;
   height: 10px;
 }
-.like-s, .like-s-s, .like-m-s, .like-l-s {
+.like.s {
   width: 10px;
   height: 10px;
 }
-.like-m, .like-s-m, .like-m-m, .like-l-m {
+.like.m {
   width: 13px;
   height: 13px;
 }
-.like-l, .like-s-l, .like-m-l, .like-l-l {
+.like.l {
   width: 17px;
   height: 17px;
 }
-.like--liked, .like--liked-s, .like--liked-m, .like--liked-l, .like-s--liked, .like-s--liked-s, .like-s--liked-m, .like-s--liked-l, .like-m--liked, .like-m--liked-s, .like-m--liked-m, .like-m--liked-l, .like-l--liked, .like-l--liked-s, .like-l--liked-m, .like-l--liked-l {
+.like--liked {
   background-image: url("../../../images/heart-red.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -107,15 +110,15 @@
   width: 10px;
   height: 10px;
 }
-.like--liked-s, .like--liked-s-s, .like--liked-m-s, .like--liked-l-s, .like-s--liked-s, .like-s--liked-s-s, .like-s--liked-m-s, .like-s--liked-l-s, .like-m--liked-s, .like-m--liked-s-s, .like-m--liked-m-s, .like-m--liked-l-s, .like-l--liked-s, .like-l--liked-s-s, .like-l--liked-m-s, .like-l--liked-l-s {
+.like--liked.s {
   width: 10px;
   height: 10px;
 }
-.like--liked-m, .like--liked-s-m, .like--liked-m-m, .like--liked-l-m, .like-s--liked-m, .like-s--liked-s-m, .like-s--liked-m-m, .like-s--liked-l-m, .like-m--liked-m, .like-m--liked-s-m, .like-m--liked-m-m, .like-m--liked-l-m, .like-l--liked-m, .like-l--liked-s-m, .like-l--liked-m-m, .like-l--liked-l-m {
+.like--liked.m {
   width: 13px;
   height: 13px;
 }
-.like--liked-l, .like--liked-s-l, .like--liked-m-l, .like--liked-l-l, .like-s--liked-l, .like-s--liked-s-l, .like-s--liked-m-l, .like-s--liked-l-l, .like-m--liked-l, .like-m--liked-s-l, .like-m--liked-m-l, .like-m--liked-l-l, .like-l--liked-l, .like-l--liked-s-l, .like-l--liked-m-l, .like-l--liked-l-l {
+.like--liked.l {
   width: 17px;
   height: 17px;
 }
@@ -602,11 +605,21 @@
 .user-page__profile {
   display: flex;
   flex-direction: column;
+  height: 150px;
 }
 .user-page__profile__info {
   display: flex;
   justify-content: space-between;
-  height: 150px;
+  font-size: 28px;
+}
+.user-page__profile__follow {
+  display: flex;
+  font-size: 15px;
+}
+.user-page__profile__follow span {
+  margin-right: 5px;
+  margin-top: 10px;
+  color: #777;
 }
 
 /*# sourceMappingURL=main.css.map */

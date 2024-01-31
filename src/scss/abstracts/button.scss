@@ -2,17 +2,19 @@
     display: inline-block;
     padding: 10px 20px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #333;
     background-color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
   
     &.s {
+      min-width: 70px;
       padding: 5px 10px;
       font-size: 12px;
     }
   
     &.m {
+      min-width: 89px;
       padding: 10px 20px;
       font-size: 16px;
     }
