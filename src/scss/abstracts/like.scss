@@ -1,4 +1,4 @@
-.like-box,.like-box-s,.like-box-m,.like-box-l{
+.like-box{
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -9,17 +9,18 @@
     padding: 2px 3px;
     font-size: 12px;
     font-weight: normal;
-    &-s{
+    cursor: pointer;
+    &.s{
         width: 25px;
         height: 21px;
         font-size: 12px;
     }
-    &-m{
+    &.m{
         width: 35px;
         height: 31px;
         font-size: 15px;   
     }
-    &-l{
+    &.l{
         width: 45px;
         height: 41px;
         font-size: 17px;
@@ -28,7 +29,7 @@
 .boder-none{
     border: none;
 }
-.like,.like-s,.like-m,.like-l{
+.like{
     background-image: url('../../../images/heart-black.png');
     background-repeat: no-repeat;
     background-size : contain;
@@ -38,22 +39,22 @@
     width: 10px;
     height: 10px;
 
-    &-s{
+    &.s{
         width: 10px;
         height: 10px;
     }
-    &-m{
+    &.m{
         
         width: 13px;
         height: 13px;
             
     }
-    &-l{
+    &.l{
         width: 17px;
         height: 17px;
             
     }
-    &--liked,&--liked-s,&--liked-m,&--liked-l{
+    &--liked{
         background-image: url('../../../images/heart-red.png');
         background-repeat: no-repeat;
         background-size : contain;
@@ -62,17 +63,17 @@
         border: none;
         width: 10px;
         height: 10px;
-        &-s{
+        &.s{
             width: 10px;
             height: 10px;
                 
         }
-        &-m{
+        &.m{
             width: 13px;
             height: 13px;
                 
         }
-        &-l{
+        &.l{
             width: 17px;
             height: 17px;
                 

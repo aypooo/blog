@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { isLoggedInState, userState } from '../recoil';
 
@@ -12,7 +12,8 @@ const Login: React.FC = () => {
   const navgate = useNavigate()
   const [user, setUser] = useRecoilState(userState);
   const  setisLoggedIn = useSetRecoilState(isLoggedInState);
-
+  const [error, setError] = useState<string | null>(null);
+  
   const handleLogin = async (email: string, password: string) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -25,6 +26,7 @@ const Login: React.FC = () => {
         navgate("/")
       }
     } catch (error) {
+      setError('로그인에 실패했습니다. 다시 시도해주세요.');
       console.error('로그인 에러:', error);
     }
   };
@@ -43,6 +45,7 @@ const Login: React.FC = () => {
   return (
    <div className='login'>
       <LoginForm onLogin={handleLogin} />
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };

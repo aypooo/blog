@@ -18,7 +18,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   }
   return (
     <div className='login-form'>
-    <h2 className='login-form__title'>Login</h2>
+    <h2 className='login-form__title'>로그인</h2>
     <input
       type="email"
       placeholder="Email"
@@ -33,7 +33,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
     />
     <span className='login-form__sign-up-button' onClick={handleSignupClick}>회원가입</span>
     <Button label='로그인' onClick={handleLoginClick}/>
-    
   </div>
   );
 };

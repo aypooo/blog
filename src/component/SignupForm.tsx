@@ -57,8 +57,9 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
   }, [email]);
 
   return (
-<div className="sign-up-form">
+    <div className="sign-up-form">
       <h2 className="sign-up-form__title">회원가입</h2>
+      <label>이름</label>
       <input
         placeholder="이름"
         value={name}
@@ -66,6 +67,7 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
         className="sign-up-form__input"
       />
       {nameError ? <p className="sign-up-form__error">{nameError}</p>:<p className="sign-up-form__error"></p> }
+      <label>이메일</label>
       <input
         type="email"
         placeholder="이메일"
@@ -75,6 +77,7 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
       />
 
       {emailError ? <p className="sign-up-form__error">{emailError}</p>:<p className="sign-up-form__error"></p> }
+      <label>비밀번호</label>
       <input
         type="password"
         placeholder="비밀번호"

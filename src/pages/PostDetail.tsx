@@ -133,22 +133,14 @@ console.log('select',selectedpost.postId)
               <SanitizedHTML html={Object.values(selectedpost.content).join('')} />
             </div>
             <div className='postDetail__footer' key={selectedpost.postId}>
-              <div className='like-box like-box-m'> 
-                <button onClick={handleLike} className={`like${selectedpost.likes?.includes(uid) ? '--liked' : ''}`}/>
+              <div onClick={handleLike} className='like-box m'> 
+                <button className={`like${selectedpost.likes?.includes(uid) ? '--liked' : ''}`}/>
                 {selectedpost ? (selectedpost.likes ? selectedpost.likes.length : 0) : 0}
               </div>
             </div>
           </div>
           <Comments />
         </div>
-        {/* <Modal isOpen={isConfirmModalOpen}>
-          <div>
-            <p>포스트를 삭제하시겠습니까?</p>
-            <Button label='삭제' size='s' onClick={handleConfirmDelete}/>
-            <Button label='취소' size='s' onClick={() => setConfirmModalOpen(false)}/>
-          </div>
-        </Modal> */}
- 
     </div>
   );
 };

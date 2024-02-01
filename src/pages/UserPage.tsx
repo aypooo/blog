@@ -8,34 +8,47 @@ import UserPostPage from '../component/UserPostPage';
 import Dropdown from '../component/DropDown';
 import { subscribeUser, unsubscribeUser } from '../firebase/subscription';
 import { readAuthorData } from '../firebase/auth';
-import { useToggleSubscribeUser } from '../hook/useToggleSubscribeUser';
 
 const UserPage: React.FC = () => {
   // const isLoggedIn = useRecoilValue(isLoggedInState);
   const user = useRecoilValue(userState);
   const [authorData, setAuthorData] = useState<User[]>([]);
   const { author } = useParams();
-  // const toggleSubscribeUser = useToggleSubscribeUser();
-
-  const handleSubscribe = async()=>{
-    if (authorData) {
-      subscribeUser(user.uid,authorData[0].uid);
-      // toggleSubscribeUser(authorData[0].uid);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  
+  const handleToggleSubscribe = async () => {
+    if (!authorData[0]) {
+      return; // authorData[0]가 없으면 아무 작업도 수행하지 않고 함수 종료
+    }
+  
+    const authorUid = authorData[0].uid;
+  
+    // user.uid를 follower에서 제거 또는 추가
+    const updatedFollowers = isSubscribed
+      ? Object.fromEntries(
+          Object.entries(authorData[0].follower || {}).filter(([key]) => key !== user.uid)
+        )
+      : { ...authorData[0].follower, [user.uid]: true };
+  
+    // 팔로워 수를 업데이트하고, user.uid를 follower에서 추가 또는 제거한 객체를 저장
+    setAuthorData((prevData) => {
+      const updatedData = { ...prevData[0], follower: updatedFollowers };
+      return [updatedData] as User[];
+    });
+  
+    // 구독 또는 구독 취소 로직
+    if (isSubscribed) {
+      unsubscribeUser(user.uid, authorUid);
+      console.log('구독 취소됨');
+    } else {
+      subscribeUser(user.uid, authorUid);
       console.log('구독됨');
-      // setAuthorData((prevAuthorData) => [
-      //   {
-      //     ...prevAuthorData[0],
-      //     follower: { ...(prevAuthorData[0]?.follower || {}), [user.uid]: true },
-      //   },
-      // ]);
-    } 
-  }
-  const handleUnSubscribe = async()=>{
-    if (authorData) {
-      unsubscribeUser(user.uid,authorData[0].uid);
-      console.log('구독취소됨');
-    } 
-  }
+    }
+  
+    // 구독 상태 업데이트
+    setIsSubscribed(!isSubscribed);
+  };
+
   useEffect(()=>{
     window.scroll(0,0)
   },[])
@@ -50,8 +63,17 @@ const UserPage: React.FC = () => {
     };
 
     fetchData();
-  }, [author]); // 이 훅은 author가 변경될 때마다 다시 실행됩니다.
-  console.log(authorData[0])
+  }, [author]);
+
+  useEffect(() => {
+    // 현재 사용자가 작성자에게 이미 구독 중인지 확인
+    if (authorData[0]?.follower) {
+      setIsSubscribed(
+        Object.keys(authorData[0]?.follower).includes(user.uid)
+      );
+    }
+  }, [authorData, user.uid]);
+
   return (
     <div className="user-page">
       <div className="layout">
@@ -59,10 +81,6 @@ const UserPage: React.FC = () => {
           <div className="user-page__profile">
             <div className="user-page__profile__info">
               <span>{authorData[0]?.name}</span>
-              <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
-              <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
-              {/* <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
-              <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span> */}
               <Dropdown label="⋮">
                 <span>
                   <Link to="/profile">
@@ -72,16 +90,27 @@ const UserPage: React.FC = () => {
                 <Logout/>
               </Dropdown>
             </div>
+            <div className="user-page__profile__follow">
+              <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
+              <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
+            </div>
           </div>
         ) : (
           <div className="user-page__profile">
             <div className="user-page__profile__info">
               <span>{authorData[0]?.name}</span>
+              <Button
+                onClick={handleToggleSubscribe}
+                size='s'
+                label={isSubscribed ? '구독중' : '구독'}
+              />
+            </div>
+            <div className="user-page__profile__follow">
               <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
               <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
-              <Button onClick={handleSubscribe} label='구독'></Button>
-              <Button onClick={handleUnSubscribe} label='구독취소'></Button>
             </div>
+          
+          
           </div>
         )}
         <UserPostPage />

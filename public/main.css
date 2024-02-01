@@ -301,7 +301,7 @@
   justify-items: end;
 }
 .gnb__layout__right :nth-child(1) {
-  margin-right: 3px;
+  margin-right: 5px;
 }
 .gnb__layout__link {
   margin-right: 15px;
@@ -331,14 +331,13 @@
 }
 .comments__input-container {
   display: flex;
-  align-items: center;
   width: 100%;
-  height: 45px;
+  min-height: 45px;
   padding: 2px;
+  margin: 20px 0;
 }
 .comments__input {
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
 }
 .comments__comment-list {
@@ -358,7 +357,7 @@
 }
 .comments__comment-list__item__content {
   display: flex;
-  min-height: 50px;
+  min-height: 70px;
   align-items: center;
   font: 12px;
 }
@@ -419,7 +418,6 @@
 }
 .login__error {
   color: red;
-  /* 에러 메시지 스타일링 */
 }
 
 .login-form {
@@ -441,7 +439,10 @@
   box-sizing: border-box;
 }
 .login-form__sign-up-button {
+  margin-bottom: 10px;
+  color: #777;
   text-align: right;
+  cursor: pointer;
 }
 
 .sign-up {
@@ -453,15 +454,17 @@
 .sign-up-form {
   text-align: center;
   width: 450px;
+  text-align: left;
 }
 .sign-up-form__title {
   font-size: 24px;
   margin-bottom: 20px;
+  text-align: center;
 }
 .sign-up-form__input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
@@ -469,19 +472,16 @@
 .sign-up-form__error {
   height: 20px;
   color: red;
-  margin-top: 5px;
+  margin: 0;
+  margin-bottom: 5px;
   text-align: left;
 }
-.sign-up-form__button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.sign-up-form label {
+  font-size: 12px;
+  font-weight: bold;
 }
-.sign-up-form__button:hover {
-  background-color: #45a049;
+.sign-up-form button {
+  margin-top: 30px;
 }
 
 .user-post-page__no-posts {

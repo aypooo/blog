@@ -29,7 +29,9 @@ const Comments = () => {
       navigate('/login')
       return alert('로그인해주세요')
     }
-    
+    if(newComment.length === 0){
+      return alert('댓글을 입력해주세요')
+    }
     try {
       const commentKey = writeNewComment(postId, user.uid, user.name, newComment);
       setCommentKeys(commentKey!)
@@ -39,6 +41,9 @@ const Comments = () => {
     }
     }
     const handleUpdateComment = async (commentId: string, updatedComment:string) => {
+      if(updatedComment.length === 0){
+        return alert('댓글을 입력해주세요')
+      }
       try {
         await updateComment(postUid, postId, commentId, updatedComment);
         setComment((prevComments) => {
@@ -105,13 +110,14 @@ const Comments = () => {
                     <div className='comments__comment-list__item__header'>
                       <UserProfile>{comment.author}</UserProfile>
                     </div>
-                    <div className="comments__comment-list__item__input">
+                    <div className="comments__input-container">
                       <input
+                      className='comments__input'
                         type="text"
                         value={updatedComment || comment.comment}
                         onChange={(e) => setUpdatedComment(e.target.value)}
                       />
-                      <Button label='완료' onClick={() => handleUpdateComment(comment.commentId, updatedComment)}/>
+                      <Button label='완료' size='s' onClick={() => handleUpdateComment(comment.commentId, updatedComment)}/>
                     </div>
                   </>
                 ) : (
@@ -123,12 +129,12 @@ const Comments = () => {
                         <Dropdown label='⋮'>
                           <div className="comments__comment-list__item__options">
                             {/* className="drop-down__content__item" */}
-                            <Button  label='수정' onClick={() => {
+                            <Button label='수정' size='s' onClick={() => {
                               setUpdatedCommentId(comment.commentId);
                               setUpdatedComment(comment.comment);
                             }} />
 
-                            <Button  label='삭제' onClick={() => {
+                            <Button label='삭제' size='s' onClick={() => {
                               handleDeleteComment(comment.commentId);
                             }} />
                           </div>
@@ -139,10 +145,9 @@ const Comments = () => {
                   <p className="comments__comment-list__item__content">{comment.comment}</p>
                   <div className='comments__comment-list__item__footer'> 
                     <TimeAgoComponent timestamp={comment.createAt}/>
-                    <div className='like-box'>
+                    <div onClick={() => handleLikeComment(comment.commentId)} className='like-box'>
                       <button
                         className={`like${likedComments.includes(comment.commentId) ? '--liked' : ''}`}
-                        onClick={() => handleLikeComment(comment.commentId)}
                       />
                       {likedComments.filter((id) => id === comment.commentId).length}            
                       </div>
