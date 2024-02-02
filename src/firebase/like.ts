@@ -24,7 +24,7 @@ export async function LikeUpdate(path: string, uid: string): Promise<void> {
   }
   
   // 좋아요 데이터 읽기
-  export function readLikeData(postId: string): void {
+  export async function readLikeData(postId: string): Promise<void> {
     const postRef = ref(db, 'posts/' + postId + '/likes');
   
     onValue(postRef, (snapshot) => {

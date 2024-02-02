@@ -139,12 +139,12 @@ export async function updatePost(
   }
 }
   //게시물 삭제
-  export async function deletePost (postId: string, uid: string): Promise<void> {
+  export async function deletePost (postId: string): Promise<void> {
     try {
       // 포스트가 속한 'posts'와 'user-posts' 경로에서 해당 포스트 삭제
       const updates: { [key: string]: any } = {};
       updates['/posts/' + postId] = null;
-      updates['/user-posts/' + uid + '/' + postId] = null;
+      // updates['/user-posts/' + uid + '/' + postId] = null;
   
       await update(ref(db), updates);
       console.log('포스트 삭제 성공');

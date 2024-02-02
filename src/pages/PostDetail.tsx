@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { Post, modalContentState, postsState, selectedPostState, userPostsState, userState } from '../recoil';
+import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
 import { deletePost, updateViews } from '../firebase/post';
 import { useNavigate } from 'react-router-dom';
 import Comments from '../component/Comments';
@@ -9,16 +9,16 @@ import SanitizedHTML from '../hook/SanitizedHTML';
 import { useToggleLike } from '../hook/useToggleLike';
 import { LikeUpdate } from '../firebase/like';
 import Button from '../component/Button';
-import Modal from '../component/Modal';
 import { useModal } from '../hook/useModal';
+import { bookMarkPost, removeBookmark } from '../firebase/bookmark';
 
 const PostDetail: React.FC = () => {
   const navigate = useNavigate()
-  const { uid } = useRecoilValue(userState);
+  const [user,setUser] = useRecoilState(userState);
   const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
   const setPosts = useSetRecoilState(postsState)
   const setUserPosts = useSetRecoilState(userPostsState);
-  const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , uid);
+  const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , user.uid);
   const { openModal,closeModal } = useModal();
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const PostDetail: React.FC = () => {
   // };
   const handleConfirmDelete = async () => {
     try {
-      await deletePost(selectedpost.postId, selectedpost.postUid);
+      await deletePost(selectedpost.postId);
       setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
       setSelectedPost(null);
@@ -73,7 +73,7 @@ const PostDetail: React.FC = () => {
   };
   const handleLike = async () => {
     try {
-      await LikeUpdate(selectedpost.postId, uid);
+      await LikeUpdate(selectedpost.postId, user.uid);
       // 성공적으로 서버에서 좋아요 토글이 완료된 경우 Recoil 상태 업데이트
       toggleLike()
       setSelectedPost((prevpost) => {
@@ -81,9 +81,9 @@ const PostDetail: React.FC = () => {
           const currentLikes = prevpost.likes || [];
           
           // 이미 해당 사용자의 uid가 likes 배열에 존재한다면 제거
-          const updatedLikes = currentLikes.includes(uid)
-            ? currentLikes.filter((likeUid) => likeUid !== uid)
-            : [...currentLikes, uid];
+          const updatedLikes = currentLikes.includes(user.uid)
+            ? currentLikes.filter((likeUid) => likeUid !== user.uid)
+            : [...currentLikes, user.uid];
   
           return {
             ...(prevpost as Post),
@@ -97,12 +97,45 @@ const PostDetail: React.FC = () => {
       console.error('좋아요 토글 중 오류 발생:', error);
     }
   };
+  const handleBookmarkToggle = async () => {
+    try {
+      if (user.bookmark?.includes(selectedpost.postId)) {
+        // If already bookmarked, remove the bookmark
+        await removeBookmark(user.uid, selectedpost.postId);
+        console.log('글담기 삭제')
+      } else {
+        // If not bookmarked, add the bookmark
+        await bookMarkPost(user.uid, selectedpost.postId);
+        console.log('글담기')
+      }
+  
+      // Toggle the local state
+      setUser((prevUser) => ({
+        ...prevUser,
+        bookmark: prevUser.bookmark?.includes(selectedpost.postId)
+          ? prevUser.bookmark?.filter((postId) => postId !== selectedpost.postId)
+          : [...(prevUser.bookmark || []), selectedpost.postId],
+      }));
+
+    } catch (error) {
+      console.error('Bookmark toggle error:', error);
+    }
+  };
+
   const modalData = {
     content: '글을 삭제 하시겠습니까?',
     callback: () => {
       handleConfirmDelete()
     }
   };
+
+  // useEffect(() => {
+  //   // Check if the post is bookmarked by the user (you may need to fetch this information from your data source)
+  //   // Set the initial state of isBookmarked accordingly
+  //   // For example:
+  //   const isPostBookmarked = /* Your logic to check if the post is bookmarked by the user */;
+  //   setIsBookmarked(isPostBookmarked);
+  // }, [selectedpost]);
 
 console.log('select',selectedpost.postId)
   return (
@@ -119,7 +152,7 @@ console.log('select',selectedpost.postId)
                     조회수 {selectedpost.views}
                   </div>
                 </div>
-              {uid === selectedpost.postUid ? (
+              {user.uid === selectedpost.postUid ? (
                 <div className='postDetail__info__edit'>
                   <Button size='s' label='수정' onClick={handleUpdatePost}/>
                   <Button size='s' label='삭제' onClick={() => openModal(modalData)}/>
@@ -134,9 +167,14 @@ console.log('select',selectedpost.postId)
             </div>
             <div className='postDetail__footer' key={selectedpost.postId}>
               <div onClick={handleLike} className='like-box m'> 
-                <button className={`like${selectedpost.likes?.includes(uid) ? '--liked' : ''}`}/>
+                <button className={`like${selectedpost.likes?.includes(user.uid) ? '--liked' : ''}`}/>
                 {selectedpost ? (selectedpost.likes ? selectedpost.likes.length : 0) : 0}
               </div>
+              {/* <div onClick={handleBookmarkToggle} className='bookmark-box m'>
+                <button className={`bookmark${user.bookmark?.includes(selectedpost.postId) ? '--bookmarked' : ''}`} >
+                  글담기
+                </button>
+              </div> */}
             </div>
           </div>
           <Comments />

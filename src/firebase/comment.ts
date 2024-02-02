@@ -29,7 +29,7 @@ export function writeNewComment(postId: string, uid: string, name: string, comme
   }
 }
   // 댓글 데이터 읽기
-  export function readCommentData(postId: string): Promise<Comment[]> {
+  export async function readCommentData(postId: string): Promise<Comment[]> {
     const commentsRef = ref(db, 'posts/' + postId + '/comments');
   
     return new Promise((resolve,reject) => {

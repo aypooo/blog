@@ -6,6 +6,7 @@ export type User = {
   name: string;
   follow?: string[];
   follower?: string[];
+  bookmark?:string[];
 };
 
 export type Post = {
@@ -56,10 +57,10 @@ export const userPostsState = atom<Post[]>({
   default: [],
 })
 
-export const selectedUserState = atom({
-  key: 'selectedUserState',
-  default: "",
-});
+// export const selectedUserState = atom({
+//   key: 'selectedUserState',
+//   default: "",
+// });
 // export const userPostsSelector = selector({
 //   key: 'userPostsSelector',
 //   get: ({ get }) => {

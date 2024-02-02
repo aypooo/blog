@@ -18,10 +18,10 @@ function App() {
     if (user) {
         const userData = await readUserData(user.uid!)
         console.log(userData)
-        setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name });
+        setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name, follow:userData!.follow,follower:userData!.follower,bookmark:userData!.bookmark });
         setisLoggedIn(true);
       } else {
-        setUser({ uid: '', email: '', name: '' });
+        setUser({ uid: '', email: '', name: '', follow:[], follower:[],bookmark:[] });
         setisLoggedIn(false);
       }
     });

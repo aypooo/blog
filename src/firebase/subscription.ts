@@ -2,7 +2,7 @@ import { ref, push, onValue, set, remove, update } from 'firebase/database';
 import { db } from './firebase';
 // import { subscribedUsersState } from '../recoil/atoms';
 
-export function subscribeUser(userId: string, subscriberId: string): void {
+export async function subscribeUser(userId: string, subscriberId: string): Promise<void> {
   const userRef: { [key: string]: any } = {};
   userRef['users/' + userId + '/follow/' + subscriberId] = true; 
   const subscriberRef: { [key: string]: any } = {};
@@ -16,7 +16,7 @@ export function subscribeUser(userId: string, subscriberId: string): void {
     throw error;
   }
 }
-export function unsubscribeUser(userId: string, subscriberId: string): void {
+export async function unsubscribeUser(userId: string, subscriberId: string): Promise<void>{
     const userRef: { [key: string]: any } = {};
     userRef['users/' + userId + '/follow/' + subscriberId] = null;
   

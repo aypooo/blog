@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Logout from '../component/Logout';
-import { useRecoilValue } from 'recoil';
-import { User, isLoggedInState, userState } from '../recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { Post, User, userPostsState, userState } from '../recoil';
 import Button from '../component/Button';
-import UserPostPage from '../component/UserPostPage';
 import Dropdown from '../component/DropDown';
 import { subscribeUser, unsubscribeUser } from '../firebase/subscription';
 import { readAuthorData } from '../firebase/auth';
+import { readBookmarkPostData } from '../firebase/bookmark';
+import UserPost from '../component/UserPost';
+import { fetchAuthorPostData } from '../hook/fetchData';
 
 const UserPage: React.FC = () => {
   // const isLoggedIn = useRecoilValue(isLoggedInState);
   const user = useRecoilValue(userState);
+  const [userPosts, setUserPosts] = useRecoilState(userPostsState);
   const [authorData, setAuthorData] = useState<User[]>([]);
+  const [bookmarkData, setBookmarkData] = useState<Post[]>([]);
   const { author } = useParams();
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [toggleContent, setToggleContent] = useState(false);
   
   const handleToggleSubscribe = async () => {
     if (!authorData[0]) {
-      return; // authorData[0]가 없으면 아무 작업도 수행하지 않고 함수 종료
+      return; 
     }
   
     const authorUid = authorData[0].uid;
@@ -48,12 +53,11 @@ const UserPage: React.FC = () => {
     // 구독 상태 업데이트
     setIsSubscribed(!isSubscribed);
   };
-
   useEffect(()=>{
     window.scroll(0,0)
   },[])
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAuthorData = async () => {
       try {
         const authorData = await readAuthorData(author!);
         setAuthorData(Object.values(authorData as unknown as User[]))
@@ -61,8 +65,21 @@ const UserPage: React.FC = () => {
         console.error('데이터 가져오기 실패:', error);
       }
     };
-
-    fetchData();
+    const fetchBookmarkData = async () => {
+      console.log('userbookmark',user)
+      try {
+        if (user.bookmark) {
+          const bookmarkData = await readBookmarkPostData(Object.keys(user.bookmark));
+          console.log('bookmark',bookmarkData)
+          setBookmarkData(bookmarkData);
+        }
+      } catch (error) {
+        console.error('데이터 가져오기 실패:', error);
+      }
+    };
+    fetchAuthorPostData(setUserPosts,author!)
+    fetchBookmarkData()
+    fetchAuthorData();
   }, [author]);
 
   useEffect(() => {
@@ -76,8 +93,8 @@ const UserPage: React.FC = () => {
 
   return (
     <div className="user-page">
-      <div className="layout">
         {user.name === author ? (
+          <div className="layout">
           <div className="user-page__profile">
             <div className="user-page__profile__info">
               <span>{authorData[0]?.name}</span>
@@ -95,7 +112,27 @@ const UserPage: React.FC = () => {
               <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
             </div>
           </div>
+                <div className="user-page__buttons">
+                <Button
+                  onClick={() => setToggleContent(false)}
+                  size="s"
+                  label="게시물"
+                />
+                <Button
+                  onClick={() => setToggleContent(true)}
+                  size="s"
+                  label="북마크"
+                />
+              </div>
+              <UserPost userPosts={userPosts} />
+                 {/* {toggleContent ? (
+                  <UserPost userPosts={bookmarkData} />
+                ) : (
+                  <UserPost userPosts={userPosts} />
+                )} */}
+                   </div>
         ) : (
+          <div className="layout">
           <div className="user-page__profile">
             <div className="user-page__profile__info">
               <span>{authorData[0]?.name}</span>
@@ -109,13 +146,12 @@ const UserPage: React.FC = () => {
               <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
               <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
             </div>
-          
-          
+          </div>
+          <UserPost userPosts={userPosts} />
           </div>
         )}
-        <UserPostPage />
       </div>
-    </div>
+
   );
 };
 

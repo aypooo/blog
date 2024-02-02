@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import PostList from './PostList';
-import { Link, useParams } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { selectedUserState, userPostsState, userState } from '../recoil';
+import { useParams } from 'react-router-dom';
 import Pagination from './Pagination';
-import {fetchAuthorPostData} from '../hook/fetchData';
+import { Post } from '../recoil';
 
+
+interface UserPostProps {
+  userPosts: Post[];
+}
 
 const POSTS_PER_PAGE = 10; // 페이지당 포스트 수
 
-const UserPostPage = () => {
+const UserPost: React.FC<UserPostProps> = ({ userPosts }) => {
     const { author } = useParams()
-    // const { uid } = useRecoilValue(userState);
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
-    const [userPosts, setUserPosts] = useRecoilState(userPostsState);
 
     const indexOfLastPost = currentPage * POSTS_PER_PAGE;
     const indexOfFirstPost = indexOfLastPost - POSTS_PER_PAGE;
@@ -23,13 +22,9 @@ const UserPostPage = () => {
 
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     useEffect(() => {
-        setSelectedUser(author!)
         setCurrentPage(1);
-    }, [selectedUser, setSelectedUser, author]);
+    }, [ author]);
 
-    useEffect(() => {
-      fetchAuthorPostData(setUserPosts,author!)
-      }, [author, setUserPosts]);
 
     // if(!uid) return <>로그인해주세요</>
     return (
@@ -55,4 +50,4 @@ const UserPostPage = () => {
     };
     
 
-export default UserPostPage;
+export default UserPost;

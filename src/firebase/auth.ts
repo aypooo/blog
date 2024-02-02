@@ -2,7 +2,7 @@ import { getDatabase, ref, set,onValue, query, orderByChild, equalTo } from "fir
 import { db } from "./firebase";
 import { User } from "../recoil";
 
-export function writeUserData(uid: string, email: string, name: string): void {
+export async function writeUserData(uid: string, email: string, name: string):Promise<void> {
   const userRef = ref(db, 'users/' + uid);
   
   set(userRef, {
@@ -14,7 +14,7 @@ export function writeUserData(uid: string, email: string, name: string): void {
 }
 
 // 사용자 데이터 읽기
-export function readUserData(uid: string): Promise<User | null> {
+export async function readUserData(uid: string): Promise<User | null> {
   const db = getDatabase();
   const userRef = ref(db, 'users/' + uid);
 
@@ -27,7 +27,7 @@ export function readUserData(uid: string): Promise<User | null> {
     });
   });
 }
-export function readAuthorData(name: string): Promise<User | null> {
+export async function readAuthorData(name: string): Promise<User | null> {
   const db = getDatabase();
   const userRef = query(ref(db, 'users/'), orderByChild('name'), equalTo(name));
 
@@ -41,7 +41,7 @@ export function readAuthorData(name: string): Promise<User | null> {
   });
 }
 
-export function readAllUserData(): Promise<User | null> {
+export async function readAllUserData(): Promise<User | null> {
   const db = getDatabase();
   const userRef = ref(db, 'users/' );
 
