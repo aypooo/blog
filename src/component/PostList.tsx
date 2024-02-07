@@ -1,30 +1,26 @@
-import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { Post, selectedPostState } from '../recoil';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import TimeAgoComponent from './TimeAgoComponent ';
-import SanitizedHTML from '../hook/SanitizedHTML';
 import UserProfile from './UserProfile';
-// import SanitizedHTML from '../hook/SanitizedHTML';
 
-
-const PostList = ({ posts, title } : {posts: Post[],title?: string}) => {
+const PostList = ({ posts,label } : {posts: Post[],label:string}) => {
   const navigate = useNavigate();
   const setSelectedPost = useSetRecoilState(selectedPostState);
-  const handlePostClick = (selectedPost: Post) => {
-    setSelectedPost(selectedPost);
-    navigate(`/${selectedPost.author}/${selectedPost.postId}`);
+  const handlePostClick = (post: Post) => {
+    console.log(post)
+    setSelectedPost(post);
+    navigate(`/${post.author}/${post.postId}`);
   };
   const extractTextFromHTML = (htmlString: string) => {
     const doc = new DOMParser().parseFromString(htmlString, 'text/html');
     return doc.body.textContent || "";
   };
-console.log('1',posts)
+// console.log('postList',posts)
   return (
       <ul className='post-list'>
-      {/* <h2 className='post-list__title'>{title}</h2> */}
         {posts.map((post, index) => (
-          <li key={post.postId} className='post-list__item' >
+          <li key={`${post.postId}-${label}-${index}`} className='post-list__item' >
             <div className='post-list__desc'>
               <div className='post-list__header'>
               <UserProfile>{post.author}</UserProfile>
@@ -60,7 +56,7 @@ console.log('1',posts)
                 ):(
                 <>
                 </>
-                )}
+              )}
           </li>
         ))}
 

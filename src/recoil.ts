@@ -57,6 +57,11 @@ export const userPostsState = atom<Post[]>({
   default: [],
 })
 
+
+export const userBookmarkState = atom<Post[]>({
+  key: 'userBookmarkState',
+  default: [],
+})
 // export const selectedUserState = atom({
 //   key: 'selectedUserState',
 //   default: "",

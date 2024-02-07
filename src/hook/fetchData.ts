@@ -1,23 +1,27 @@
-import { Post,Comment } from "../recoil";
+import { Post,Comment, User } from "../recoil";
 import { readAuthorPostData, readLimitedPostData, readPostData } from "../firebase/post";
 import { readCommentData } from "../firebase/comment";
+import { readAuthorData, readUidData } from "../firebase/auth";
+import { readBookmarkPostData } from "../firebase/bookmark";
 
 
 export const fetchPostData = async (setPosts: (posts: Post[]) => void) => {
   try {
     const userPost = await readPostData();
+    console.log(Object.entries(userPost))
     const postArray = Object.entries(userPost).map(([postId, post]) => ({
-      author: post.author,
-      content: post.content,
-      comments: post.comments,
-      createAt: post.createAt,
-      likes: post.likes,
-      imageUrls: post.imageUrls,
-      postId,
-      postUid: post.postUid,
-      title: post.title,
-      views:post.views,
-
+      // author: post.author,
+      // content: post.content,
+      // comments: post.comments,
+      // createAt: post.createAt,
+      // likes: post.likes,
+      // imageUrls: post.imageUrls,
+      // postId,
+      // postUid: post.postUid,
+      // title: post.title,
+      // views:post.views,
+      ...post,
+      postId
     }));
     setPosts(postArray);
     console.log('패치함=>',postArray)
@@ -30,17 +34,8 @@ export const fetchAuthorPostData = async (setPosts: (posts: Post[]) => void,auth
   try {
     const userPost = await readAuthorPostData(author);
     const postArray = Object.entries(userPost).map(([postId, post]) => ({
-      author: post.author,
-      content: post.content,
-      comments: post.comments,
-      createAt: post.createAt,
-      likes: post.likes,
-      imageUrls: post.imageUrls,
-      postId,
-      postUid: post.postUid,
-      title: post.title,
-      views:post.views,
-
+      ...post,
+      postId
     }));
     setPosts(postArray);
     console.log('패치함=>',postArray)
@@ -48,11 +43,37 @@ export const fetchAuthorPostData = async (setPosts: (posts: Post[]) => void,auth
     console.error('유저 포스트 불러오기에 실패', error);
   }
 };
+export const fetchAuthorData = async (setAuthorData: (user: User[]) => void,author:string) => {
+  try {
+    const authorData = await readAuthorData(author);
+    setAuthorData(Object.values(authorData as unknown as User[]))
+  } catch (error) {
+    console.error('데이터 가져오기 실패:', error);
+  }
+};
+export const fetchUidData = async (setAuthorData: (user: User[]) => void,uid:string) => {
+  try {
+    const authorData = await readUidData(uid);
+    setAuthorData(Object.values(authorData as unknown as User[]))
+  } catch (error) {
+    console.error('데이터 가져오기 실패:', error);
+  }
+};
+export const fetchBookmarkData = async (setBookmarkData: (bookmark: Post[]) => void,bookmark:string[]) => {
+  try {
+      const bookmarkData = await readBookmarkPostData(bookmark)
+      console.log(Object.values(bookmarkData))
+      const postArray = Object.values(bookmarkData);
+      setBookmarkData(postArray);
+  } catch (error) {
+    console.error('데이터 가져오기 실패:', error);
+  }
+};
 
 export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal: Post[]) => Post[])) => void,setLastPostKey:(postId:string)=>void, lastPostKey:string) => {
  
   try {
-    console.log('fetchMorePosts')
+    // console.log('fetchMorePosts')
     const userPost = await readLimitedPostData(lastPostKey);
     const userPostLength = Object.keys(userPost).length
     if (userPostLength > 0) {
@@ -64,19 +85,21 @@ export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal
 
     }
     const postArray = Object.entries(userPost).map(([postId, post]) => ({
-      author: post.author,
-      content: post.content,
-      comments: post.comments,
-      createAt: post.createAt,
-      likes: post.likes,
-      imageUrls: post.imageUrls,
-      postId,
-      postUid: post.postUid,
-      title: post.title,
-      views:post.views,
+      // author: post.author,
+      // content: post.content,
+      // comments: post.comments,
+      // createAt: post.createAt,
+      // likes: post.likes,
+      // imageUrls: post.imageUrls,
+      // postId,
+      // postUid: post.postUid,
+      // title: post.title,
+      // views:post.views,
+      ...post,
+      postId
     }));
     setPosts((prevPosts) => [...postArray, ...prevPosts]);
-    console.log('패치함=>',postArray)
+    // console.log('패치함=>',postArray)
     return true; 
   } catch (error) {
     console.error('유저 포스트 불러오기에 실패', error);
@@ -91,13 +114,15 @@ export const fetchCommentData = async (postId: string,  setComment: (comments: C
     const comments = await readCommentData(postId);
     if (comments) {
       const commentsArray = Object.entries(comments).map(([commentId, comment]) => ({
-        author: comment.author,
-        comment: comment.comment,
-        commentId,
-        createAt: comment.createAt,
-        likes: comment.likes,
-        postId: comment.postId,
-        commentUid: comment.commentUid,
+        // author: comment.author,
+        // comment: comment.comment,
+        // commentId,
+        // createAt: comment.createAt,
+        // likes: comment.likes,
+        // postId: comment.postId,
+        // commentUid: comment.commentUid,
+        ...comment,
+        commentId
       }));
       setComment(commentsArray || []); // 만약 comments가 null이면 빈 배열로 설정
     }

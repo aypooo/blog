@@ -14,21 +14,25 @@ export async function writeUserData(uid: string, email: string, name: string):Pr
 }
 
 // 사용자 데이터 읽기
-export async function readUserData(uid: string): Promise<User | null> {
+export async function readUserData(uid: string): Promise<User>  {
   const db = getDatabase();
   const userRef = ref(db, 'users/' + uid);
 
   return new Promise((resolve, reject) => {
     onValue(userRef, (snapshot) => {
       const userData = snapshot.val();
-      resolve(userData);
+      if (userData === null) {
+        // 사용자 데이터를 찾지 못한 경우, 기본값으로 빈 사용자 객체 반환
+        resolve({ uid: '', email: '', name: '', follow: [], follower: [], bookmark: [] });
+      } else {
+        resolve(userData);
+      }
     }, (error) => {
       reject(error);
     });
   });
 }
-export async function readAuthorData(name: string): Promise<User | null> {
-  const db = getDatabase();
+export async function readAuthorData(name: string): Promise<User>  {
   const userRef = query(ref(db, 'users/'), orderByChild('name'), equalTo(name));
 
   return new Promise((resolve, reject) => {
@@ -40,8 +44,21 @@ export async function readAuthorData(name: string): Promise<User | null> {
     });
   });
 }
+export async function readUidData(uid: string): Promise<User> {
+  const userRef = query(ref(db, 'users/'), orderByChild('uid'), equalTo(uid));
 
-export async function readAllUserData(): Promise<User | null> {
+  return new Promise((resolve, reject) => {
+    onValue(userRef, (snapshot) => {
+      const userData = snapshot.val();
+      resolve(userData);
+    }, (error) => {
+      reject(error);
+    });
+  });
+}
+
+
+export async function readAllUserData(): Promise<User>  {
   const db = getDatabase();
   const userRef = ref(db, 'users/' );
 

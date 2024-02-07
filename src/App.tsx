@@ -15,16 +15,30 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async(user) => {
-    if (user) {
+      if (user) {
         const userData = await readUserData(user.uid!)
         console.log(userData)
-        setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name, follow:userData!.follow,follower:userData!.follower,bookmark:userData!.bookmark });
+        if(userData){
+          setUser({ 
+            uid: userData.uid, 
+            email: userData.email, 
+            name: userData.name,
+            follow:userData.follow,
+            follower:userData.follower,
+            bookmark:userData.bookmark,
+          })
+          if (userData.bookmark) {
+            setUser((prevUser) => ({
+              ...prevUser,
+              bookmark: Object.keys(userData.bookmark!),
+            }));
+          }
         setisLoggedIn(true);
       } else {
-        setUser({ uid: '', email: '', name: '', follow:[], follower:[],bookmark:[] });
+        setUser({ uid: '', email: '', name: '' });
         setisLoggedIn(false);
       }
-    });
+    }});
 
     // 컴포넌트가 언마운트될 때 이벤트 리스너를 정리
     return () => unsubscribe();

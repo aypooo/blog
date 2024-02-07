@@ -19,13 +19,12 @@ const PostDetail: React.FC = () => {
   const setPosts = useSetRecoilState(postsState)
   const setUserPosts = useSetRecoilState(userPostsState);
   const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , user.uid);
+  const [isBookmarked,setIsBookmarked] = useState(false)
   const { openModal,closeModal } = useModal();
 
+  
   useEffect(() => {
     window.scroll(0,0)
-    if (!selectedpost) {
-      navigate('/')
-    }
     const handleUpdateViews = async ()=>{
       await updateViews(selectedpost!.postId)
       setPosts((prevPosts) =>
@@ -48,17 +47,21 @@ const PostDetail: React.FC = () => {
       return () => clearTimeout(timeoutId);
   }, [setSelectedPost]);
 
+  useEffect(() => {
+    if(user.bookmark){
+      setIsBookmarked(user.bookmark?.includes(selectedpost!.postId));
+    }
+      
+  }, [selectedpost, setIsBookmarked, user.bookmark]);
+
   if (!selectedpost) {
     navigate('/')
-    return null;
-  } 
+    return null
+  }
   
   const handleUpdatePost = () => {
     navigate(`/write/${selectedpost.postId}`)
   }
-  // const handleDeletePost = async () => {
-  //   setConfirmModalOpen(true);
-  // };
   const handleConfirmDelete = async () => {
     try {
       await deletePost(selectedpost.postId);
@@ -100,14 +103,16 @@ const PostDetail: React.FC = () => {
   const handleBookmarkToggle = async () => {
     try {
       if (user.bookmark?.includes(selectedpost.postId)) {
-        // If already bookmarked, remove the bookmark
         await removeBookmark(user.uid, selectedpost.postId);
-        console.log('글담기 삭제')
+        // setIsBookmarked(false)
+        console.log('글담기 삭제',isBookmarked)
       } else {
-        // If not bookmarked, add the bookmark
         await bookMarkPost(user.uid, selectedpost.postId);
-        console.log('글담기')
+        // setIsBookmarked(true)
+        console.log('글담기',isBookmarked)
+        
       }
+      
   
       // Toggle the local state
       setUser((prevUser) => ({
@@ -128,16 +133,8 @@ const PostDetail: React.FC = () => {
       handleConfirmDelete()
     }
   };
-
-  // useEffect(() => {
-  //   // Check if the post is bookmarked by the user (you may need to fetch this information from your data source)
-  //   // Set the initial state of isBookmarked accordingly
-  //   // For example:
-  //   const isPostBookmarked = /* Your logic to check if the post is bookmarked by the user */;
-  //   setIsBookmarked(isPostBookmarked);
-  // }, [selectedpost]);
-
-console.log('select',selectedpost.postId)
+// console.log('isBookmarked',  isBookmarked)
+// console.log('select',selectedpost)
   return (
     <div className='postDetail'>
       <div className='layout'>
@@ -159,7 +156,9 @@ console.log('select',selectedpost.postId)
 
                 </div>
               ) : (
-                <></>
+                <div onClick={handleBookmarkToggle} className='bookmark-box m'>
+                  <Button label={isBookmarked ? '글담기 취소':'글담기'} size='s' className={`bookmark${user.bookmark?.includes(selectedpost.postId) ? '--bookmarked' : ''}`} />
+                </div>
               )}
             </div>
             <div className='postDetail__body'>
@@ -167,14 +166,9 @@ console.log('select',selectedpost.postId)
             </div>
             <div className='postDetail__footer' key={selectedpost.postId}>
               <div onClick={handleLike} className='like-box m'> 
-                <button className={`like${selectedpost.likes?.includes(user.uid) ? '--liked' : ''}`}/>
+                <button className={`like${selectedpost.likes?.includes(user.uid) ? '--liked m' : ' m'}`}/>
                 {selectedpost ? (selectedpost.likes ? selectedpost.likes.length : 0) : 0}
               </div>
-              {/* <div onClick={handleBookmarkToggle} className='bookmark-box m'>
-                <button className={`bookmark${user.bookmark?.includes(selectedpost.postId) ? '--bookmarked' : ''}`} >
-                  글담기
-                </button>
-              </div> */}
             </div>
           </div>
           <Comments />
