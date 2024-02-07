@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { writeUserData } from '../firebase/auth';
 import { userState } from '../recoil';
 import { useRecoilState } from 'recoil';
+import Button from './Button';
 
 const UserDataUpdate = () => {
     const [user,setUser] = useRecoilState(userState);
@@ -25,7 +26,7 @@ const UserDataUpdate = () => {
         <div>
             <div>email: {user.email}</div>
             <input placeholder="name" value={name} onChange={(e) => setName(e.target.value)} />
-            <button onClick={handleUserData}>업데이트</button>
+            <Button label='업데이트' size='s' onClick={handleUserData}/>
         </div>
     );
 };

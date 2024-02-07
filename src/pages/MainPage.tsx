@@ -1,10 +1,10 @@
 import React from 'react';
-import PostPage from '../component/PostPage';
+import MainPost from '../component/MainPost';
 
 const MainPage = () => {
     return (
         <div className='main-page'>
-            <PostPage></PostPage>
+            <MainPost/>
         </div>
     );
 };

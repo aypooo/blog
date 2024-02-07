@@ -7,7 +7,7 @@ import InfiniteScroll from './InfiniteScroll';
 import LoadingSpinner from './LoadingSpinner';
 
 
-const PostPage = () => {
+const MainPost = () => {
   // const { uid } = useRecoilValue(userState)
   const [posts, setPosts] = useRecoilState(postsState);
   const [loading, setLoading] = useState(false);
@@ -34,7 +34,7 @@ const PostPage = () => {
         <button onClick={handleSortByLikes}>좋아요순</button>
         <button onClick={handleSortByComments}>댓글순</button>
       </div> */}
-      <PostList posts={reversedPosts} title='Post' />
+      <PostList posts={reversedPosts} label='mainpost' />
       <InfiniteScroll callback={handleFetchMorePosts} loading={loading}>
       <LoadingSpinner loading={loading} color={'#888'}/>
         {noMorePosts && <div>게시물이 없습니다.</div>}
@@ -45,4 +45,4 @@ const PostPage = () => {
   );
 };
 
-export default PostPage;
+export default MainPost;

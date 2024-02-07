@@ -80,7 +80,7 @@ const Comments = () => {
       fetchCommentData(postId, setComment);
 
     }, [postId, commentKeys, setUpdatedCommentId, setComment]);
-    console.log(comment)
+
     useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -94,12 +94,14 @@ const Comments = () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+
+  // console.log('comment:',comment)
   return (
     <div className="comments">
       <h3 className="comments__header">{comment ? Object.keys(comment).length : 0}개의 댓글</h3>
       <div className="comments__input-container">
           <input className='comments__input' type="text" value={newComment} onChange={(e) => setnewComment(e.target.value)} />
-          <Button size='s' label='등록' onClick={handleWriteComment}/>
+          <Button size='m' label='등록' onClick={handleWriteComment}/>
       </div>
       <ul className="comments__comment-list">
         {comment &&

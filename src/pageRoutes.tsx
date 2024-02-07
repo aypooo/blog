@@ -4,7 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PostCreatePage from "./pages/PostCreatePage";
 import PostDetail from "./pages/PostDetail";
-import PostPage from "./component/PostPage";
+import PostPage from "./component/MainPost";
 import UserPage from "./pages/UserPage";
 import Profile from "./pages/Profile";
 
