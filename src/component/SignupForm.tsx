@@ -25,36 +25,32 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
       setPassword(value);
     }
     const passwordError = inputName === "password" ? validatePassword(value) : "";
-    const nameError = inputName === "name" ? validateName(value) : "";
 
     if ( passwordError) {
       setPasswordError( passwordError);
     } else {
       setPasswordError(null);
     }
-    if (nameError) {
-      setNameError(nameError);
-    } else {
-      setNameError(null);
-    }
   };
 
   const handleSignupClick = () => {
-
     if (emailError && passwordError && nameError) {
       onSignup(email, password, name);
     }
   };
 
   useEffect(() => {
-    // Asynchronously validate the email
     const validateEmailAsync = async () => {
       const error = await validateEmail(email);
       setEmailError(error);
     };
-
+    const validateNameAsync = async () => {
+      const error = await validateName(name);
+      setNameError(error);
+    };
+    validateNameAsync()
     validateEmailAsync();
-  }, [email]);
+  }, [email, name]);
 
   return (
     <div className="sign-up-form">
