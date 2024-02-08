@@ -13,21 +13,32 @@ const Login: React.FC = () => {
   const [user, setUser] = useRecoilState(userState);
   const  setisLoggedIn = useSetRecoilState(isLoggedInState);
   const [error, setError] = useState<string | null>(null);
-  
+  const [loading, setloading] = useState(false);
   const handleLogin = async (email: string, password: string) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setloading(true)
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const user = userCredential.user;
-      
       if (user && user.email) {
-        const userData = await readUserData(user.uid!)
-        setUser({ uid: userData!.uid, email: userData!.email!, name: userData!.name });
+      //   const userData = await readUserData(user.uid!)
+      //   if(userData){
+      //     setUser({ 
+      //       uid: userData.uid, 
+      //       email: userData.email, 
+      //       name: userData.name,
+      //       follow:Object.keys(userData.follow!),
+      //       follower:Object.keys(userData.follower!),
+      //       bookmark:Object.keys(userData.bookmark!)
+      //     });
+      //   }
         setisLoggedIn(true);
-        navgate("/")
       }
+      setloading(false)
+      navgate("/")
     } catch (error) {
       setError('로그인에 실패했습니다. 다시 시도해주세요.');
       console.error('로그인 에러:', error);
+      setloading(false)
     }
   };
   useEffect(() => {
@@ -44,7 +55,7 @@ const Login: React.FC = () => {
   }, [setUser, user.email, user.uid]);
   return (
    <div className='login'>
-      <LoginForm onLogin={handleLogin} />
+      <LoginForm onLogin={handleLogin} loading={loading} />
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );

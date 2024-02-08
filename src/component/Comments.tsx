@@ -6,7 +6,6 @@ import TimeAgoComponent from './TimeAgoComponent ';
 import { useNavigate } from 'react-router-dom';
 import UserProfile from './UserProfile';
 import { fetchCommentData } from '../hook/fetchData';
-import { useToggleLike } from '../hook/useToggleLike';
 import Button from './Button';
 import Dropdown from './DropDown';
 import { LikeUpdate } from '../firebase/like';
@@ -22,8 +21,6 @@ const Comments = () => {
   const [updatedCommentId, setUpdatedCommentId] = useState<string | null>(null);
   const [updatedComment, setUpdatedComment] = useState<string>('');
   const [likedComments, setLikedComments] = useState<string[]>([]);
-  const [selectedCommentId, setSelectedCommentId] = useState<string | null>(null);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
   const handleWriteComment = async() => {
     if(!user.uid) {
       navigate('/login')
@@ -80,21 +77,6 @@ const Comments = () => {
       fetchCommentData(postId, setComment);
 
     }, [postId, commentKeys, setUpdatedCommentId, setComment]);
-
-    useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setSelectedCommentId(null);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   // console.log('comment:',comment)
   return (
     <div className="comments">

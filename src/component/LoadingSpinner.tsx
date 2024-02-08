@@ -1,10 +1,10 @@
 import React from 'react';
-import { FadeLoader } from 'react-spinners';
+import {  SyncLoader } from 'react-spinners';
 
-const LoadingSpinner = ({ loading, color='#666' }:{loading:boolean,color:string}) => {
+const LoadingSpinner = ({ loading, color='#666', size='15px' }:{loading:boolean,color?:string,size?:string}) => {
       return (
-        <div style={{ display: loading ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
-          <FadeLoader color={color} loading={loading} />
+        <div style={{ backgroundColor:'#ffffff', display: loading ? 'flex' : 'none', justifyContent: 'center', alignItems: 'center',}}>
+          <SyncLoader size={size} margin='5px' color={color} loading={loading} />
         </div>
       );
     };

@@ -25,7 +25,7 @@ const UserPage: React.FC = () => {
 
   // console.log('user.bookmark:',user.bookmark)
   // console.log('userPosts:',userPosts)
-  console.log('bookmarkData:',bookmarkData)
+  // console.log('bookmarkData:',bookmarkData)
   // console.log('authorData:',authorData)
   const handleToggleSubscribe = async () => {
     if (!authorData[0]) {
@@ -99,42 +99,49 @@ const UserPage: React.FC = () => {
     <div className="user-page">
         {user.name === author ? (
           <div className="layout">
-            
               <Suspense fallback={<LoadingSpinner loading={loadingBookmark}/>} >
               <div className="user-page__profile">
-                <div className="user-page__profile__info">
-                  <span>{authorData[0]?.name}</span>
-                  <Dropdown label="⋮">
-                    <span>
-                      <Link to="/profile">
-                        프로필 수정
-                      </Link>
-                    </span>
-                    <Logout/>
-                  </Dropdown>
-                </div>
-                <div className="user-page__profile__follow">
-                  <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
-                  <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
-                </div>
+                  <div className='user-page__profile'>
+                      <div className='user-page__profile__thumb'
+                      style={{ backgroundImage: `url(${authorData[0]?.profile_picture || '../../../images/profile_image.png' })`}}
+                      />
+                      <div className="user-page__profile__info">
+                        <span className="user-page__profile__info__author">{authorData[0]?.name}</span>
+                        <div className="user-page__profile__info__follower">
+                          <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
+                          <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
+                        </div>
+                    </div>
+                  </div>
+                  <div className='user-page__profile__edit'>
+                    <Dropdown label="⋮">
+                      <span>
+                        <Link to="/profile">
+                          프로필 수정
+                        </Link>
+                      </span>
+                      <Logout/>
+                    </Dropdown>
+                  </div>
             </div>
             </Suspense>
-  
-                <div className="user-page__buttons">
+                <div className="user-page__tabs">
                 <Button
                   fullWidth={true}
                   onClick={() => setToggleContent(false)}
-                  size="l"
-                  label="게시물"
+                  size="xl"
+                  label="글"
+                  className={!toggleContent ? 'selected' : ''}
                 />
                 <Button
                   fullWidth={true}
                   onClick={() => setToggleContent(true)}
-                  size="l"
-                  label="북마크"
+                  size="xl"
+                  label="담은 글"
+                  className={!toggleContent ? '' : 'selected'}
                 />
               </div>
-            
+              {}
               {toggleContent ? (
                 <>
                   {loadingBookmark ? (

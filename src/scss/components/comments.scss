@@ -13,6 +13,9 @@
       min-height: 45px;
       padding: 2px;
       margin: 20px 0;
+      button{
+        border-left: 1px;
+      }
     }
     &__input{
       width: 100%;
@@ -36,7 +39,7 @@
           display: flex;
           min-height: 70px;
           align-items: center;
-          font:12px;
+          font-size:12px;
         }
         &__footer{
           display: flex;

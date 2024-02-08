@@ -5,41 +5,32 @@
 }
 
 .button {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid #333;
-  background-color: #fff;
+  background-color: #ffffff;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 .button.s {
-  min-width: 70px;
   padding: 5px 10px;
   font-size: 12px;
 }
 .button.m {
-  min-width: 89px;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .button.l {
   padding: 15px 30px;
-  font-size: 20px;
+  font-size: 16px;
 }
 .button.xl {
   padding: 20px 40px;
-  font-size: 24px;
-}
-.button:hover {
-  background-color: #eee;
+  font-size: 18px;
 }
 .button.loading {
   cursor: not-allowed;
-  background-color: #ddd;
-}
-.button.loading:hover {
-  background-color: #ddd;
 }
 .button.full-width {
   width: 100%;
@@ -91,14 +82,17 @@
 .like.s {
   width: 10px;
   height: 10px;
+  font-size: 12px;
 }
 .like.m {
   width: 13px;
   height: 13px;
+  font-size: 15px;
 }
 .like.l {
   width: 17px;
   height: 17px;
+  font-size: 17px;
 }
 .like--liked {
   background-image: url("../../../images/heart-red.png");
@@ -300,20 +294,22 @@
   align-items: center;
   justify-items: end;
 }
+.gnb__layout__right a {
+  text-decoration: none;
+}
 .gnb__layout__right :nth-child(1) {
   margin-right: 5px;
 }
-.gnb__layout__link {
+.gnb__link {
   margin-right: 15px;
   color: #333;
   text-decoration: none;
   font-weight: bold;
 }
-.gnb__layout__link:hover {
-  text-decoration: underline;
+.gnb__link a {
+  text-decoration: none;
 }
 
-/* LogoutButton.scss */
 .author {
   font-size: 14px;
   color: #333;
@@ -335,6 +331,9 @@
   min-height: 45px;
   padding: 2px;
   margin: 20px 0;
+}
+.comments__input-container button {
+  border-left: 1px;
 }
 .comments__input {
   width: 100%;
@@ -359,7 +358,7 @@
   display: flex;
   min-height: 70px;
   align-items: center;
-  font: 12px;
+  font-size: 12px;
 }
 .comments__comment-list__item__footer {
   display: flex;
@@ -506,6 +505,42 @@
   border-radius: 8px;
 }
 
+.user-data-update {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-data-update__title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+.user-data-update__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+.user-data-update__input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.user-data-update__input__profile-picture {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  border-radius: 50px;
+}
+.user-data-update__input--file {
+  display: none;
+}
+.user-data-update__button {
+  align-self: flex-start;
+}
+
 .layout {
   width: 700px;
   min-height: 700px;
@@ -604,22 +639,55 @@
 }
 .user-page__profile {
   display: flex;
-  flex-direction: column;
-  height: 150px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.user-page__profile__thumb {
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  background-color: #999;
+  margin-right: 20px;
 }
 .user-page__profile__info {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.user-page__profile__info__author {
   font-size: 28px;
+  font-weight: bold;
 }
-.user-page__profile__follow {
-  display: flex;
-  font-size: 15px;
-}
-.user-page__profile__follow span {
-  margin-right: 5px;
-  margin-top: 10px;
+.user-page__profile__info__follower {
   color: #777;
+}
+.user-page__profile__info__follower :nth-child(1) {
+  margin-right: 10px;
+}
+.user-page__profile__edit {
+  padding-bottom: 74px;
+}
+.user-page__tabs {
+  display: flex;
+  height: 50px;
+}
+.user-page__tabs button {
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  color: #777;
+  font-weight: 200;
+}
+.user-page__tabs button.selected {
+  color: #000;
+  font-weight: 400;
+  border-bottom-color: #000; /* 선택된 탭의 밑줄 색상 */
+}
+.user-page__tabs :nth-child(2) {
+  margin-left: -1px;
 }
 
 /*# sourceMappingURL=main.css.map */

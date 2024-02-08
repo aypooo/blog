@@ -1,45 +1,35 @@
 .button {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid #333;
-    background-color: #fff;
+    background-color: #ffffff;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-  
+    text-decoration: none;
+
     &.s {
-      min-width: 70px;
       padding: 5px 10px;
       font-size: 12px;
     }
   
     &.m {
-      min-width: 89px;
       padding: 10px 20px;
-      font-size: 16px;
+      font-size: 14px;
     }
   
     &.l {
       padding: 15px 30px;
-      font-size: 20px;
+      font-size: 16px;
     }
   
     &.xl {
       padding: 20px 40px;
-      font-size: 24px;
-    }
-  
-    &:hover {
-      background-color: #eee;
+      font-size: 18px;
     }
   
     &.loading {
       cursor: not-allowed;
-      background-color: #ddd;
-  
-      &:hover {
-        background-color: #ddd;
-      }
+    
     }
     &.full-width {
         width: 100%;

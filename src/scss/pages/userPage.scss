@@ -5,21 +5,56 @@
     align-items: center;
     &__profile{
         display: flex;
-        flex-direction: column;
-        height: 150px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        &__thumb{
+            // background-image: url('../../../images/profile_image.png');
+            background-repeat: no-repeat;
+            background-size : contain;
+            background-position:center;
+            width: 100px;
+            height: 100px;
+            border-radius: 50px;
+            background-color: #999;
+            margin-right: 20px;
+        }
         &__info{
             display: flex;
-            justify-content: space-between;
-            font-size: 28px;
+            flex-direction: column;
+            align-items: flex-start;
+            &__author{
+                font-size: 28px;
+                font-weight: bold;
+            }
+            &__follower{
+                color:#777;
+                :nth-child(1){
+                    margin-right: 10px;
+                }
+            }
         }
-        &__follow{
-            display: flex;
-            font-size: 15px;
-        span{
-            margin-right: 5px;
-            margin-top: 10px;
-            color:#777;
+        &__edit{
+            padding-bottom: 74px;
         }
+    }
+
+    &__tabs{
+        display: flex;
+        height: 50px;
+        button{
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            color: #777;
+            font-weight:200;
+            &.selected {
+                color: #000;
+                font-weight: 400;
+                border-bottom-color: #000; /* 선택된 탭의 밑줄 색상 */
         }
+    }
+        :nth-child(2){
+            margin-left: -1px;
+          }
     }
 }

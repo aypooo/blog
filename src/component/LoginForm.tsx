@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Button from './Button';
 interface LoginFormProps {
   onLogin: (email: string, password: string) => void;
+  loading:boolean;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin,loading }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,7 +33,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
       onChange={(e) => setPassword(e.target.value)}
     />
     <span className='login-form__sign-up-button' onClick={handleSignupClick}>회원가입</span>
-    <Button label='로그인' onClick={handleLoginClick}/>
+    <Button isLoading={loading} label='로그인' onClick={handleLoginClick}/>
   </div>
   );
 };
