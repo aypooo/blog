@@ -5,6 +5,13 @@ import { Post } from "../recoil";
 
 
 export async function writeNewPost(uid: string, name: string, title: string, content: string, imageUrls: string[], createdAt: Date ): Promise<string> {
+
+  const newPostRef = push(child(ref(db), 'posts'));
+  const newPostKey = newPostRef.key;
+  
+  if (!newPostKey) {
+    throw new Error("포스트 키를 생성하는 데 문제가 발생했습니다.");
+  }
   const postData: Post = {
     author: name,
     content: content,
@@ -13,17 +20,10 @@ export async function writeNewPost(uid: string, name: string, title: string, con
     comments: [],
     likes: [],
     imageUrls: imageUrls,
-    postId: "",
+    postId: newPostKey,
     postUid: uid,
     views: 0,
   };
-
-  const newPostRef = push(child(ref(db), 'posts'));
-  const newPostKey = newPostRef.key;
-  
-  if (!newPostKey) {
-    throw new Error("포스트 키를 생성하는 데 문제가 발생했습니다.");
-  }
 
   const updates: { [key: string]: any } = {};
   updates["/posts/" + newPostKey] = postData;
@@ -77,8 +77,8 @@ export async function writeNewPost(uid: string, name: string, title: string, con
   export function readLimitedPostData(lastPostKey?: string): Promise<Post[]> {
     const postRef = ref(db, 'posts/');
   
-    let limitedQuery = query(postRef, orderByKey(), limitToLast(4));
-    console.log('lastPostKey',lastPostKey)
+    let limitedQuery = query(postRef, orderByKey(), limitToLast(10));
+    // console.log('lastPostKey',lastPostKey)
     if (lastPostKey) {
 
       limitedQuery = query(postRef, orderByKey(), endBefore(lastPostKey), limitToLast(4));

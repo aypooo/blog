@@ -4,6 +4,7 @@ export type User = {
   uid: string;
   email: string;
   name: string;
+  profile_picture?:string;
   follow?: string[];
   follower?: string[];
   bookmark?:string[];

@@ -1,4 +1,4 @@
-import { getDatabase, ref, set,onValue, query, orderByChild, equalTo } from "firebase/database";
+import { getDatabase, ref, set,onValue, query, orderByChild, equalTo, update } from "firebase/database";
 import { db } from "./firebase";
 import { User } from "../recoil";
 
@@ -9,9 +9,28 @@ export async function writeUserData(uid: string, email: string, name: string):Pr
     uid: uid,
     email: email,
     name: name,
-    // profile_picture: imageUrl
   });
 }
+export async function updateUserData(uid: string, email: string, name: string,imageUrl:string): Promise<void> {
+  const userDataRef: { [key: string]: any } = {};
+  const userData: User = {
+    uid: uid,
+    email: email, 
+    name: name,
+    profile_picture: imageUrl
+  };
+
+  userDataRef['users/' + uid] = userData; 
+
+  try {
+    update(ref(db), userDataRef);
+  } catch (error) {
+    console.error('유저정보 업데이트 실패: ', error);
+    throw error;
+  }
+}
+
+// 
 
 // 사용자 데이터 읽기
 export async function readUserData(uid: string): Promise<User>  {

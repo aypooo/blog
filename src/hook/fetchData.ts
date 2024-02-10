@@ -60,6 +60,9 @@ export const fetchUidData = async (setAuthorData: (user: User[]) => void,uid:str
   }
 };
 export const fetchBookmarkData = async (setBookmarkData: (bookmark: Post[]) => void,bookmark:string[]) => {
+  if(!bookmark){
+    return console.log('담은글 없음')
+  }
   try {
       const bookmarkData = await readBookmarkPostData(bookmark)
       console.log(Object.values(bookmarkData))

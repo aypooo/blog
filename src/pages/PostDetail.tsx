@@ -48,7 +48,7 @@ const PostDetail: React.FC = () => {
   }, [setSelectedPost]);
 
   useEffect(() => {
-    if(user.bookmark){
+    if(user.bookmark && selectedpost){
       setIsBookmarked(user.bookmark?.includes(selectedpost!.postId));
     }
       

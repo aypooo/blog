@@ -2,12 +2,12 @@ import { ref as storageRef, uploadBytesResumable, getDownloadURL } from 'firebas
 import { storage } from '../firebase/firebase';
 import Resizer from 'react-image-file-resizer';
 
-const resizeImage = (image:File) =>
+const resizeImage = (image:File,size:number) =>
 new Promise<Blob>((resolve) => {
   Resizer.imageFileResizer(
     image,
-    700, // 원하는 가로 크기로 조절
-    700, // 원하는 세로 크기로 조절
+    size, // 원하는 가로 크기로 조절
+    size, // 원하는 세로 크기로 조절
     'JPEG',
     80, // 이미지 품질 (0 ~ 100)
     0,
@@ -19,11 +19,11 @@ new Promise<Blob>((resolve) => {
   );
 });
 
-const uploadImages = async (images:File[],name:string) => {
+const uploadImages = async (images:File[],name:string,path:string,size:number) => {
     const uploadPromises = images.map(async (image, index) => {
       const imageName = `${name}_${index}`;
-      const imageStorageRef = storageRef(storage, `postImages/${imageName}`);
-      const resizedImage = await resizeImage(image);
+      const imageStorageRef = storageRef(storage, `${path}/${imageName}`);
+      const resizedImage = await resizeImage(image,size);
       await uploadBytesResumable(imageStorageRef, resizedImage);
       const imageUrl = await getDownloadURL(imageStorageRef);
       return imageUrl;

@@ -1,0 +1,37 @@
+.user-data-update {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &__title{
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+    &__form{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+    }
+    &__input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        &__profile-picture{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50px;
+        }
+      &--file {
+        display: none; // 파일 업로드 input은 숨김
+      }
+    }
+  
+    &__button {
+      align-self: flex-start; // 버튼을 왼쪽 정렬
+    }
+
+  }
