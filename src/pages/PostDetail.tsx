@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
 import { deletePost, updateViews } from '../firebase/post';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Comments from '../component/Comments';
 import UserProfile from '../component/UserProfile';
 import SanitizedHTML from '../hook/SanitizedHTML';
@@ -11,72 +11,89 @@ import { LikeUpdate } from '../firebase/like';
 import Button from '../component/Button';
 import { useModal } from '../hook/useModal';
 import { bookMarkPost, removeBookmark } from '../firebase/bookmark';
+import { fetchPostDataById } from '../hook/fetchData';
+import LoadingSpinner from '../component/LoadingSpinner';
 
 const PostDetail: React.FC = () => {
+  const { postid } = useParams();
   const navigate = useNavigate()
   const [user,setUser] = useRecoilState(userState);
   const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
+  const [postdata,setPostdata] = useState<Post>()
   const setPosts = useSetRecoilState(postsState)
   const setUserPosts = useSetRecoilState(userPostsState);
   const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , user.uid);
   const [isBookmarked,setIsBookmarked] = useState(false)
+  const [loading, setLoading] = useState(false);
   const { openModal,closeModal } = useModal();
-
   
+  useEffect(() => {
+    setLoading(true)
+    if(selectedpost){
+      setPostdata(selectedpost)
+      console.log(postdata)
+    }else{
+      fetchPostDataById(setPostdata,postid!)
+      console.log(postdata)
+    }
+    setLoading(false) 
+  }, [postid, selectedpost]);
+
   useEffect(() => {
     window.scroll(0,0)
     const handleUpdateViews = async ()=>{
-      await updateViews(selectedpost!.postId)
-      setPosts((prevPosts) =>
-        prevPosts.map((post) =>
-        post.postId === selectedpost!.postId ? { ...post, views: post.views + 1 } : post
-      ))
-      setUserPosts((prevPosts) =>
-        prevPosts.map((post) =>
-        post.postId === selectedpost!.postId ? { ...post, views: post.views + 1 } : post
-      ))
-      setSelectedPost((prevpost) => ({
-        ...(prevpost as Post),
-        views: (prevpost?.views || 0) + 1,
-      }));
+      try{
+        if(postdata){
+          await updateViews(postdata!.postId)
+          setPosts((prevPosts) =>
+            prevPosts.map((post) =>
+            post.postId === postdata!.postId ? { ...post, views: post.views + 1 } : post
+          ))
+          setUserPosts((prevPosts) =>
+            prevPosts.map((post) =>
+            post.postId === post!.postId ? { ...post, views: post.views + 1 } : post
+          ))
+          setSelectedPost((prevpost) => ({
+            ...(prevpost as Post),
+            views: (prevpost?.views || 0) + 1,
+          }));
+        }
+    }catch(error){
+      console.log(error)
+    }
     }
       const timeoutId = setTimeout(() => {
         handleUpdateViews()
       }, 1);
     
       return () => clearTimeout(timeoutId);
-  }, [setSelectedPost]);
 
+  }, [setSelectedPost]);
   useEffect(() => {
     if(user.bookmark && selectedpost){
       setIsBookmarked(user.bookmark?.includes(selectedpost!.postId));
     }
       
   }, [selectedpost, setIsBookmarked, user.bookmark]);
-
-  if (!selectedpost) {
-    navigate('/')
-    return null
-  }
   
   const handleUpdatePost = () => {
-    navigate(`/write/${selectedpost.postId}`)
+    navigate(`/write/${postdata!.postId}`)
   }
   const handleConfirmDelete = async () => {
     try {
-      await deletePost(selectedpost.postId);
-      setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
-      setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== selectedpost.postId));
+      await deletePost(postdata!.postId);
+      setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== postdata!.postId));
+      setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== postdata!.postId));
       setSelectedPost(null);
       closeModal()
-      navigate(`/${selectedpost.author}`);
+      navigate(`/${postdata!.author}`);
     } catch (error) {
       console.error('포스트 삭제 중 오류 발생:', error);
     }
   };
   const handleLike = async () => {
     try {
-      await LikeUpdate(selectedpost.postId, user.uid);
+      await LikeUpdate(postdata!.postId, user.uid);
       // 성공적으로 서버에서 좋아요 토글이 완료된 경우 Recoil 상태 업데이트
       toggleLike()
       setSelectedPost((prevpost) => {
@@ -102,24 +119,21 @@ const PostDetail: React.FC = () => {
   };
   const handleBookmarkToggle = async () => {
     try {
-      if (user.bookmark?.includes(selectedpost.postId)) {
-        await removeBookmark(user.uid, selectedpost.postId);
+      if (user.bookmark?.includes(postdata!.postId)) {
+        await removeBookmark(user.uid, postdata!.postId);
         // setIsBookmarked(false)
         console.log('글담기 삭제',isBookmarked)
       } else {
-        await bookMarkPost(user.uid, selectedpost.postId);
+        await bookMarkPost(user.uid, postdata!.postId);
         // setIsBookmarked(true)
         console.log('글담기',isBookmarked)
         
       }
-      
-  
-      // Toggle the local state
       setUser((prevUser) => ({
         ...prevUser,
-        bookmark: prevUser.bookmark?.includes(selectedpost.postId)
-          ? prevUser.bookmark?.filter((postId) => postId !== selectedpost.postId)
-          : [...(prevUser.bookmark || []), selectedpost.postId],
+        bookmark: prevUser.bookmark?.includes(postdata!.postId)
+          ? prevUser.bookmark?.filter((postId) => postId !== postdata!.postId)
+          : [...(prevUser.bookmark || []), postdata!.postId],
       }));
 
     } catch (error) {
@@ -133,50 +147,51 @@ const PostDetail: React.FC = () => {
       handleConfirmDelete()
     }
   };
-// console.log('isBookmarked',  isBookmarked)
-// console.log('select',selectedpost)
-  return (
-    <div className='postDetail'>
+return (
+  <div className='postDetail'>
+    {loading ? (
+      <LoadingSpinner loading={loading} />
+    ) : (
       <div className='layout'>
+        {postdata ? (
           <div className='postDetail__content'>
             <div className='postDetail__title'>
-              {selectedpost.title}
+              {postdata?.title}
             </div>
             <div className='postDetail__info'>
               <div className='postDetail__info__author'>
-                <UserProfile >{selectedpost.author}</UserProfile>
-                  <div className='postDetail__info__views'> 
-                    조회수 {selectedpost.views}
-                  </div>
+                <UserProfile>{postdata?.author}</UserProfile>
+                <div className='postDetail__info__views'> 
+                  조회수 {postdata?.views}
                 </div>
-              {user.uid === selectedpost.postUid ? (
+              </div>
+              {user.uid === postdata?.postUid ? (
                 <div className='postDetail__info__edit'>
                   <Button size='s' label='수정' onClick={handleUpdatePost}/>
                   <Button size='s' label='삭제' onClick={() => openModal(modalData)}/>
-
                 </div>
               ) : (
                 <div onClick={handleBookmarkToggle} className='bookmark-box m'>
-                  <Button label={isBookmarked ? '글담기 취소':'글담기'} size='s' className={`bookmark${user.bookmark?.includes(selectedpost.postId) ? '--bookmarked' : ''}`} />
+                  <Button label={isBookmarked ? '글담기 취소' : '글담기'} size='s' className={`bookmark${user.bookmark?.includes(postdata!.postId) ? '--bookmarked' : ''}`} />
                 </div>
               )}
             </div>
             <div className='postDetail__body'>
-              <SanitizedHTML html={Object.values(selectedpost.content).join('')} />
+              <SanitizedHTML html={Object.values(postdata!.content).join('')} />
             </div>
-            <div className='postDetail__footer' key={selectedpost.postId}>
+            <div className='postDetail__footer' key={postdata!.postId}>
               <div onClick={handleLike} className='like-box m'> 
-                <button className={`like${selectedpost.likes?.includes(user.uid) ? '--liked m' : ' m'}`}/>
-                {selectedpost ? (selectedpost.likes ? selectedpost.likes.length : 0) : 0}
+                <button className={`like${postdata?.likes?.includes(user.uid) ? '--liked m' : ' m'}`}/>
+                {postdata ? (postdata.likes ? postdata.likes.length : 0) : 0}
               </div>
             </div>
+            <Comments commentProps={postdata!.comments} postId={postdata!.postId} postUid={postdata!.postUid}/>
           </div>
-          <Comments />
-        </div>
-    </div>
-  );
-};
-
-
+        ) : null}
+      
+      </div>
+    )}
+  </div>
+)
+}
 export default PostDetail;
-

@@ -1,5 +1,5 @@
 import { Post,Comment, User } from "../recoil";
-import { readAuthorPostData, readLimitedPostData, readPostData } from "../firebase/post";
+import { readAuthorPostData, readLimitedPostData, readPostData, readPostDataById } from "../firebase/post";
 import { readCommentData } from "../firebase/comment";
 import { readAuthorData, readUidData } from "../firebase/auth";
 import { readBookmarkPostData } from "../firebase/bookmark";
@@ -29,6 +29,17 @@ export const fetchPostData = async (setPosts: (posts: Post[]) => void) => {
     console.error('유저 포스트 불러오기에 실패', error);
   }
 };
+export const fetchPostDataById = async (setPost: (post: Post) => void,postId:string) => {
+  try {
+    const userPost = await readPostDataById(postId);
+    console.log(userPost)
+    // const postArray = Object.entries(userPost);
+    setPost(userPost!);
+    console.log('패치함=>',userPost)
+  } catch (error) {
+    console.error('유저 포스트 불러오기에 실패', error);
+  }
+};
 
 export const fetchAuthorPostData = async (setPosts: (posts: Post[]) => void,author:string) => {
   try {
@@ -47,6 +58,8 @@ export const fetchAuthorData = async (setAuthorData: (user: User[]) => void,auth
   try {
     const authorData = await readAuthorData(author);
     setAuthorData(Object.values(authorData as unknown as User[]))
+    console.log('authorData=>',authorData)
+    console.log('author=>',author)
   } catch (error) {
     console.error('데이터 가져오기 실패:', error);
   }

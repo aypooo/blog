@@ -73,7 +73,23 @@ export async function writeNewPost(uid: string, name: string, title: string, con
       });
     });
   }
-
+  export function readPostDataById(postId: string): Promise<Post | null> {
+    const postRef = ref(db, `posts/${postId}`);
+  
+    return new Promise((resolve, reject) => {
+      onValue(postRef, (snapshot) => {
+        const postData = snapshot.val();
+        if (postData) {
+          resolve(postData);
+        } else {
+          resolve(null); // 해당 postId에 해당하는 포스트가 없는 경우 null 반환
+        }
+      }, (error) => {
+        console.error(`포스트 데이터를 읽는 중 에러 발생: postId=${postId}`, error);
+        reject(error);
+      });
+    });
+  }
   export function readLimitedPostData(lastPostKey?: string): Promise<Post[]> {
     const postRef = ref(db, 'posts/');
   

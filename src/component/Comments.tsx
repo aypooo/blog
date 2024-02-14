@@ -10,13 +10,19 @@ import Button from './Button';
 import Dropdown from './DropDown';
 import { LikeUpdate } from '../firebase/like';
 
-const Comments = () => {
+interface CommentsProps {
+  commentProps: Comment[];
+  postId:string, 
+  postUid:string
+}
+
+const Comments: React.FC<CommentsProps> = ({ commentProps,postId,postUid }) => {
   const navigate = useNavigate()
   const user = useRecoilValue(userState)
-  const selectedpost = useRecoilValue<Post | null>(selectedPostState);
-  const {postId, postUid} = selectedpost as Post
-  const [comment, setComment] = useState<Comment[]>([]);
-  const [commentKeys,setCommentKeys] = useState('')
+  // const selectedpost = useRecoilValue<Post | null>(selectedPostState);
+  // const {postId, postUid} = selectedpost as Post
+  const [comment, setComment] = useState<Comment[]>(commentProps);
+  // const [commentKeys,setCommentKeys] = useState('')
   const [newComment, setnewComment] = useState('');
   const [updatedCommentId, setUpdatedCommentId] = useState<string | null>(null);
   const [updatedComment, setUpdatedComment] = useState<string>('');
@@ -31,7 +37,7 @@ const Comments = () => {
     }
     try {
       const commentKey = writeNewComment(postId, user.uid, user.name, newComment);
-      setCommentKeys(commentKey!)
+      // setCommentKeys(commentKey!)
       setnewComment('')
     } catch (error) {
       console.error('댓글 작성 실패:', error);
@@ -73,10 +79,10 @@ const Comments = () => {
         console.error('좋아요 업데이트 실패:', error);
       }
     };
-    useEffect(() => {
-      fetchCommentData(postId, setComment);
+    // useEffect(() => {
+    //   fetchCommentData(postId, setComment);
 
-    }, [postId, commentKeys, setUpdatedCommentId, setComment]);
+    // }, [postId, commentKeys, setUpdatedCommentId, setComment]);
   // console.log('comment:',comment)
   return (
     <div className="comments">
@@ -87,7 +93,7 @@ const Comments = () => {
       </div>
       <ul className="comments__comment-list">
         {comment &&
-          comment.map((comment: Comment) => (
+          Object.values(comment).map((comment: Comment) => (
             <li key={comment.commentId} className="comments__comment-list__item">
                 {updatedCommentId === comment.commentId ? (
                   <>
