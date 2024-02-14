@@ -14,6 +14,7 @@ const SignupPage = () => {
           writeUserData(user.uid, user.email!, name)
           alert('회원가입이 완료되었습니다.')
           navigate('/')
+          window.location.reload();
         } catch (error: any) {
           const errorCode = error.code;
           const errorMessage = error.message;

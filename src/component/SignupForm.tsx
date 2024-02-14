@@ -34,8 +34,11 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
   };
 
   const handleSignupClick = () => {
-    if (emailError && passwordError && nameError) {
-      onSignup(email, password, name);
+    console.log(emailError)
+    console.log(passwordError)
+    console.log(nameError)
+    if (!emailError && !passwordError && !nameError) {
+     onSignup(email, password, name);
     }
   };
 
