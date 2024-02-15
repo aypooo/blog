@@ -19,14 +19,7 @@ function App() {
         const userData = await readUserData(user.uid!)
         console.log(userData)
         if(userData){
-          setUser({ 
-            uid: userData.uid, 
-            email: userData.email, 
-            name: userData.name,
-            follow:userData.follow,
-            follower:userData.follower,
-            bookmark:userData.bookmark,
-          })
+          setUser(userData)
           if (userData.bookmark) {
             setUser((prevUser) => ({
               ...prevUser,

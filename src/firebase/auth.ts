@@ -11,13 +11,14 @@ export async function writeUserData(uid: string, email: string, name: string):Pr
     name: name,
   });
 }
-export async function updateUserData(uid: string, email: string, name: string,imageUrl:string): Promise<void> {
+export async function updateUserData(uid: string, email: string, name: string,imageUrl?:string,description?:string): Promise<void> {
   const userDataRef: { [key: string]: any } = {};
   const userData: User = {
     uid: uid,
     email: email, 
     name: name,
-    profile_picture: imageUrl
+    profile_picture: imageUrl,
+    description:description,
   };
 
   userDataRef['users/' + uid] = userData; 

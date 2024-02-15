@@ -5,19 +5,40 @@ import { useRecoilState } from 'recoil';
 import Button from './Button';
 import uploadImages from '../hook/uploadImages';
 import LoadingSpinner from './LoadingSpinner';
-
+import { useNavigate } from 'react-router-dom';
+interface UpdatedData {
+    name?: string;
+    profile_picture?: string;
+    description?: string;
+}
 const UserDataUpdate = () => {
+    const navigate = useNavigate()
     const [user,setUser] = useRecoilState(userState);
     const [name, setName] = useState('')
     const [image, setImage] = useState<File | null>(null);
     const [imageUrl, setImageUrl] = useState<string | undefined>(user.profile_picture);
     const [loading, setLoading] = useState(false)
+    const [description, setDescription] = useState('')
     const handleUserData = async () => {
         try {
-
-            const userRef = updateUserData(user.uid, user.email, name, imageUrl!); // 이미지 URL을 포함하여 사용자 정보 업데이트
+            // 현재 상태와 이전 상태를 비교하여 변경된 필드만 업데이트할 객체를 생성합니다.
+            const updatedData:UpdatedData = {};
+            updatedData.name = name !== user.name ? name : user.name ;
+            updatedData.profile_picture = imageUrl !== user.profile_picture ? imageUrl : user.profile_picture;
+            updatedData.description = description !== user.description ? description : user.description;
+            console.log(updatedData)
+            // 사용자 데이터 업데이트 함수를 호출하기 전에 변경 사항이 있는지 확인합니다.
+            const userRef = await updateUserData(user.uid, user.email, updatedData.name!, updatedData.profile_picture, updatedData.description);
             console.log('유저정보 저장', userRef);
-            setUser({ uid: user.uid, email: user.email, name: name, profile_picture: imageUrl ?? undefined }); // 업데이트된 사용자 정보 설정
+    
+            // Recoil 상태를 업데이트할 때, 변경된 필드만 업데이트합니다.
+            setUser(prevUser => ({
+                ...prevUser,
+                ...updatedData
+            }));
+    
+            alert('업데이트 되었습니다.');
+            navigate(`/${user.name}`);
         } catch (error) {
             console.log(error);
         }
@@ -34,7 +55,16 @@ const UserDataUpdate = () => {
         }
 
     }
-
+    useEffect(()=>{
+        if(user.description){
+            setDescription(user.description)
+        }
+    },[user])
+    // useEffect(()=>{
+    //     if(user.profile_picture){
+    //         setImageUrl(user.description)
+    //     }
+    // },[user])
     useEffect(()=>{
         if(user.name){
             setName(user.name)
@@ -47,31 +77,50 @@ const UserDataUpdate = () => {
             setImageUrl('')
         }
     },[image])
+console.log('profile_picture',user.profile_picture)
+// console.log('description',user.description)
+// console.log('name',user.name)
+// console.log('user',user)
 
+console.log('imageUrl',imageUrl)
     return (
         <div className="user-data-update">
-            <div className='layout'>
+            <div className='input-layout'>
                 <div className='user-data-update__form'>
                     <span className='user-data-update__title'>프로필 편집</span>
-                    <div className="user-data-update__input__email">email: {user.email}</div>
-                    <input className="user-data-update__input" placeholder="name" value={name} onChange={(e) => setName(e.target.value)} />
-                    {loading ? (
-                        <>
-                        <div className="user-data-update__input__profile-picture"></div>
-                        <LoadingSpinner loading={loading}/>
-                        </>
-                    ):( 
-                        <>
-                        {imageUrl ?(
-                          <img src={imageUrl} alt="프로필 사진" className="user-data-update__input__profile-picture" />  
-                        ):(
-                            <div className="user-data-update__input__profile-picture"></div>
+                    
+                    <div className="user-data-update__profile-picture">
+                        {loading ? (
+                            <div className="user-data-update__profile-picture__wrapper">
+                                <LoadingSpinner loading={loading}/>
+             
+                                <img src={ user.profile_picture ? (user.profile_picture) : ('../../../images/profile_image.png')}   alt="프로필 사진" className="user-data-update__profile-picture__thumb" /> 
+                                <label className="user-data-update__profile-picture__input-file" htmlFor="file-input"/>
+                                <input id="file-input" type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} />
+                            </div>
+                        ):( 
+                            <div className="user-data-update__profile-picture__wrapper">
+                                <img src={ imageUrl ? imageUrl : (user.profile_picture ? (user.profile_picture) : ('../../../images/profile_image.png'))}   alt="프로필 사진" className="user-data-update__profile-picture__thumb" /> 
+                                <label className="user-data-update__profile-picture__input-file" htmlFor="file-input"/>
+                                <input id="file-input" type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} />
+                                {imageUrl ? <Button onClick={()=>setImageUrl('')} label='X'></Button>: null}
+                            </div>
                         )}
-                        </>
-                    )}
-                    <input id="fileInput" className="user-data-update__input" type="file" accept="image/*" onChange={(e) => setImage(e.target.files?.[0] || null)} />
-    
-                    <Button className="user-data-update__button" label='업데이트' size='s' onClick={handleUserData} />
+                      
+                    </div>
+                    <label className="user-data-update__label">이메일</label>
+                    <div className="user-data-update__input__email"> 
+                        {user.email}
+                    </div>
+                    <label className="user-data-update__label">작가명</label>
+                    <div className="user-data-update__ahthor">
+                        <input className="user-data-update__input" placeholder="작가명" value={name} onChange={(e) => setName(e.target.value)} />
+                        <Button fullWidth={false} label={'중복확인'}></Button>
+                    </div>
+                      
+                        <input className="user-data-update__input" placeholder="소개글" value={description} onChange={(e) => setDescription(e.target.value)} />
+                        
+                    <Button className="user-data-update__button" label='업데이트' size='m' fullWidth={true} onClick={handleUserData} />
                 </div>
             </div>
         </div>

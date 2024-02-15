@@ -15,7 +15,6 @@ const UserPage: React.FC = () => {
   const user = useRecoilValue(userState);
   const [userPosts, setUserPosts] = useRecoilState(userPostsState);
   const [bookmarkData, setBookmarkData] = useRecoilState(userBookmarkState);
-  // const [bookmarkData, setBookmarkData] = useState<Post[]>([]);
   const [authorData, setAuthorData] = useState<User[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [toggleContent, setToggleContent] = useState(false);
@@ -71,7 +70,7 @@ const UserPage: React.FC = () => {
       await fetchAuthorData(setAuthorData, author!);
       if(authorData){
       setLoadingAuthorData(false);
-      
+      }
       await fetchAuthorPostData(setUserPosts, author!);
       if(userPosts){
         setLoadingAuthorPost(false);
@@ -81,7 +80,7 @@ const UserPage: React.FC = () => {
       setLoadingBookmark(false);
       }
       
-      }
+    
     };
     fetchData();
   }, [author, setBookmarkData, setUserPosts,setAuthorData]);
@@ -125,7 +124,7 @@ const UserPage: React.FC = () => {
                   </div>
             </div>
             </Suspense>
-                <div className="user-page__tabs">
+              <div className="user-page__tabs">
                 <Button
                   fullWidth={true}
                   onClick={() => setToggleContent(false)}
@@ -141,7 +140,6 @@ const UserPage: React.FC = () => {
                   className={!toggleContent ? '' : 'selected'}
                 />
               </div>
-              {}
               {toggleContent ? (
                 <>
                   {loadingBookmark ? (
@@ -162,24 +160,32 @@ const UserPage: React.FC = () => {
                    </div>
         ) : (
           <div className="layout">
+              <Logout/>
           {loadingAuthorData ? (
               <LoadingSpinner loading={loadingBookmark} />
             ):(
-            <div className="user-page__profile">
+              <div className='user-page__profile'>
+            <div className='user-page__profile'>
+              <div className='user-page__profile__thumb'
+              style={{ backgroundImage: `url(${authorData[0]?.profile_picture || '../../../images/profile_image.png' })`}}
+              />
               <div className="user-page__profile__info">
-                <span>{authorData[0]?.name}</span>
-                <Button
+                <span className="user-page__profile__info__author">{authorData[0]?.name}</span>
+                <div className="user-page__profile__info__follower">
+                  <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
+                  <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
+                </div>
+   
+            </div>
+            </div>
+            <Button
                   onClick={handleToggleSubscribe}
                   size='s'
                   label={isSubscribed ? '구독중' : '구독'}
                 />
-              </div>
-              <div className="user-page__profile__follow">
-                <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
-                <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
-              </div>
             </div>
             )}
+  
             <UserPost label='userpost' userPosts={userPosts} />
           </div>
         )}

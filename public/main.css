@@ -523,18 +523,40 @@
 .user-data-update__input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
 }
-.user-data-update__input__profile-picture {
+.user-data-update__label {
+  text-align: left;
+}
+.user-data-update__profile-picture {
+  margin-bottom: 20px;
+}
+.user-data-update__profile-picture__wrapper {
+  position: relative;
   width: 100px;
   height: 100px;
-  background-color: red;
+}
+.user-data-update__profile-picture__thumb {
+  width: 100%;
+  height: 100%;
   border-radius: 50px;
 }
-.user-data-update__input--file {
+.user-data-update__profile-picture__input-file {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: blue;
+  border-radius: 50px;
+  cursor: pointer;
+  bottom: -5px;
+  right: -5px;
+}
+.user-data-update__ahthor {
+  display: flex;
+}
+.user-data-update #file-input {
   display: none;
 }
 .user-data-update__button {
@@ -544,6 +566,10 @@
 .layout {
   width: 700px;
   min-height: 700px;
+}
+
+.input-layout {
+  width: 450px;
 }
 
 .main-page {
