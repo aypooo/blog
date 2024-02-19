@@ -65,7 +65,7 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
         onChange={(e) => handleInputChange("name", e.target.value)}
         className="sign-up-form__input"
       />
-      {nameError ? <p className="sign-up-form__error">{nameError}</p>:<p className="sign-up-form__error"></p> }
+      {nameError ? <p className="error">{nameError}</p>:<p className="error"></p> }
       <label>이메일</label>
       <input
         type="email"
@@ -75,7 +75,7 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
         className="sign-up-form__input"
       />
 
-      {emailError ? <p className="sign-up-form__error">{emailError}</p>:<p className="sign-up-form__error"></p> }
+      {emailError ? <p className="error">{emailError}</p>:<p className="error"></p> }
       <label>비밀번호</label>
       <input
         type="password"
@@ -84,7 +84,7 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
         onChange={(e) => handleInputChange("password", e.target.value)}
         className="sign-up-form__input"
       />
-      {passwordError ? <p className="sign-up-form__error">{passwordError}</p>:<p className="sign-up-form__error"></p> }
+      {passwordError ? <p className="error">{passwordError}</p>:<p className="error"></p> }
       <Button label="등록하기" fullWidth={true} onClick={handleSignupClick}/>
     </div>
   );

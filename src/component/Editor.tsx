@@ -29,8 +29,7 @@ const Editor: React.FC<MyEditorProps> = ({ value, onChange, setImageUrls }) => {
 
       try {
         // 서버에 업로드 한뒤 이미지 태그에 삽입할 url을 반환받도록 구현하면 된다 
-        const filePath = `${Date.now()}`;
-        const url = await uploadImages([file], filePath, 'postImage', 700); 
+        const url = await uploadImages([file], 'postImage', 700); 
         setImageUrls(url)
         // 정상적으로 업로드 됐다면 로딩 placeholder 삭제
         quillObj!.deleteText(range.index, 1);

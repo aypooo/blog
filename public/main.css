@@ -8,10 +8,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #333;
+  border: 1px solid #777;
   background-color: #ffffff;
   cursor: pointer;
   text-decoration: none;
+  word-break: keep-all;
 }
 .button.s {
   padding: 5px 10px;
@@ -115,6 +116,14 @@
 .like--liked.l {
   width: 17px;
   height: 17px;
+}
+
+.error {
+  height: 20px;
+  color: red;
+  margin: 0;
+  margin-bottom: 5px;
+  text-align: left;
 }
 
 .drop-down {
@@ -298,7 +307,7 @@
   text-decoration: none;
 }
 .gnb__layout__right :nth-child(1) {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 .gnb__link {
   margin-right: 15px;
@@ -312,6 +321,7 @@
 
 .author {
   font-size: 14px;
+  font-weight: bold;
   color: #333;
   margin: 0;
   cursor: pointer;
@@ -468,13 +478,6 @@
   border-radius: 4px;
   box-sizing: border-box;
 }
-.sign-up-form__error {
-  height: 20px;
-  color: red;
-  margin: 0;
-  margin-bottom: 5px;
-  text-align: left;
-}
 .sign-up-form label {
   font-size: 12px;
   font-weight: bold;
@@ -484,7 +487,13 @@
 }
 
 .user-post-page__no-posts {
-  margin-bottom: 10px;
+  padding: 10px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-weight: 200;
 }
 
 .modal-overlay {
@@ -523,12 +532,20 @@
 .user-data-update__input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #777;
   box-sizing: border-box;
+  margin-right: -1px;
+}
+.user-data-update__email {
+  text-align: left;
+  padding-bottom: 15px;
+  font-weight: bold;
 }
 .user-data-update__label {
   text-align: left;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: bold;
 }
 .user-data-update__profile-picture {
   margin-bottom: 20px;
@@ -544,14 +561,35 @@
   border-radius: 50px;
 }
 .user-data-update__profile-picture__input-file {
+  border: 2px solid #d3d3d3;
   position: absolute;
   width: 40px;
   height: 40px;
-  background-color: blue;
+  background-color: white;
+  background-image: url("../../../images/camera.png");
+  background-repeat: no-repeat;
+  background-size: 22px;
+  background-position: center;
   border-radius: 50px;
   cursor: pointer;
   bottom: -5px;
   right: -5px;
+}
+.user-data-update__profile-picture__button {
+  position: absolute;
+  background: none;
+  border: none;
+  height: 30px;
+  width: 10px;
+  border-radius: 50px;
+  top: -5px;
+  right: -20px;
+}
+.user-data-update__description {
+  resize: none;
+  min-height: 30px;
+  padding: 20px 10px;
+  margin-bottom: 30px;
 }
 .user-data-update__ahthor {
   display: flex;
@@ -690,9 +728,17 @@
 }
 .user-page__profile__info__follower {
   color: #777;
+  font-size: 14px;
+  font-weight: 200;
 }
 .user-page__profile__info__follower :nth-child(1) {
   margin-right: 10px;
+}
+.user-page__profile__info__description {
+  margin-top: 20px;
+  color: #777;
+  font-size: 14px;
+  font-weight: 200;
 }
 .user-page__profile__edit {
   padding-bottom: 74px;

@@ -29,9 +29,17 @@
             }
             &__follower{
                 color:#777;
+                font-size: 14px;
+                font-weight: 200;
                 :nth-child(1){
                     margin-right: 10px;
                 }
+            }
+            &__description{
+                margin-top: 20px;
+                color:#777;
+                font-size: 14px;
+                font-weight: 200;
             }
         }
         &__edit{

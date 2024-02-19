@@ -2,10 +2,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid #333;
+    border: 1px solid #777;
     background-color: #ffffff;
     cursor: pointer;
     text-decoration: none;
+    word-break: keep-all;
 
     &.s {
       padding: 5px 10px;

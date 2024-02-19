@@ -19,9 +19,9 @@ new Promise<Blob>((resolve) => {
   );
 });
 
-const uploadImages = async (images:File[],name:string,path:string,size:number) => {
+const uploadImages = async (images:File[],path:string,size:number) => {
     const uploadPromises = images.map(async (image, index) => {
-      const imageName = `${name}_${index}`;
+      const imageName = `${Date.now()}_${index}`;
       const imageStorageRef = storageRef(storage, `${path}/${imageName}`);
       const resizedImage = await resizeImage(image,size);
       await uploadBytesResumable(imageStorageRef, resizedImage);

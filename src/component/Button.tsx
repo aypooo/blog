@@ -11,7 +11,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ label, size = 'm', isLoading = false, fullWidth = false, className, onClick }) => {
-  const classNames = `button ${className ? className: ''} ${size} ${fullWidth ? 'full-width' : ''} ${isLoading ? 'loading' : ''}`;
+  const classNames = `button ${size} ${fullWidth ? 'full-width' : ''} ${className ? className: ''} ${isLoading ? 'loading' : ''}`;
 
   return (
     <button className={classNames} onClick={onClick} disabled={isLoading}>
