@@ -42,7 +42,7 @@ export const validateName = async (name: string): Promise<string | null> => {
         return '이미 존재하는 이름입니다.';
       }
     } else {
-      return null;
+      return null
     }
   } catch (error) {
     console.error('사용자 데이터를 가져오는 중 오류 발생:', error);
