@@ -18,9 +18,7 @@ const UserPage: React.FC = () => {
   const [authorData, setAuthorData] = useState<User[]>([]);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [toggleContent, setToggleContent] = useState(false);
-  const [loadingAuthorPost, setLoadingAuthorPost] = useState(false);
-  const [loadingBookmark, setLoadingBookmark] = useState(false);
-  const [loadingAuthorData, setLoadingAuthorData] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // console.log('user.bookmark:',user.bookmark)
   // console.log('userPosts:',userPosts)
@@ -63,27 +61,17 @@ const UserPage: React.FC = () => {
   },[])
   useEffect(() => {
     const fetchData = async () => {
-      setLoadingAuthorPost(true);
-      setLoadingBookmark(true);
-      setLoadingAuthorData(true);
+      setLoading(true);
 
       await fetchAuthorData(setAuthorData, author!);
-      if(authorData){
-      setLoadingAuthorData(false);
-      }
       await fetchAuthorPostData(setUserPosts, author!);
-      if(userPosts){
-        setLoadingAuthorPost(false);
-      }
       await fetchBookmarkData(setBookmarkData, user.bookmark!);
-      if(bookmarkData){
-      setLoadingBookmark(false);
-      }
-      
+
+      setLoading(false);
     
     };
     fetchData();
-  }, [author, setBookmarkData, setUserPosts,setAuthorData]);
+  }, [author]);
 
   useEffect(() => {
     // 현재 사용자가 작성자에게 이미 구독 중인지 확인
@@ -96,9 +84,10 @@ const UserPage: React.FC = () => {
 
   return (
     <div className="user-page">
+          <Suspense fallback={<LoadingSpinner loading={loading}/>} >
         {user.name === author ? (
           <div className="layout">
-              <Suspense fallback={<LoadingSpinner loading={loadingBookmark}/>} >
+        
               <div className="user-page__profile">
                   <div className='user-page__profile'>
                       <div className='user-page__profile__thumb'
@@ -110,6 +99,7 @@ const UserPage: React.FC = () => {
                           <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
                           <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
                         </div>
+                        <div className="user-page__profile__info__description"> {authorData[0]?.description}</div>
                     </div>
                   </div>
                   <div className='user-page__profile__edit'>
@@ -122,8 +112,7 @@ const UserPage: React.FC = () => {
                       <Logout/>
                     </Dropdown>
                   </div>
-            </div>
-            </Suspense>
+              </div>
               <div className="user-page__tabs">
                 <Button
                   fullWidth={true}
@@ -142,28 +131,17 @@ const UserPage: React.FC = () => {
               </div>
               {toggleContent ? (
                 <>
-                  {loadingBookmark ? (
-                    <LoadingSpinner loading={loadingBookmark} />
-                  ) : (
                     <UserPost label='bookmark' userPosts={bookmarkData} />
-                  )}
                 </>
               ) : (
                 <>
-                  {loadingAuthorPost ? (
-                    <LoadingSpinner loading={loadingAuthorPost} />
-                  ) : (
                     <UserPost label='userpost' userPosts={userPosts} />
-                  )}
                 </>
               )}
-                   </div>
+            </div>
         ) : (
           <div className="layout">
-              <Logout/>
-          {loadingAuthorData ? (
-              <LoadingSpinner loading={loadingBookmark} />
-            ):(
+              {/* <Logout/> */}
               <div className='user-page__profile'>
             <div className='user-page__profile'>
               <div className='user-page__profile__thumb'
@@ -175,6 +153,7 @@ const UserPage: React.FC = () => {
                   <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
                   <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
                 </div>
+                <div className="user-page__profile__info__description"> {authorData[0]?.description}</div>
    
             </div>
             </div>
@@ -184,11 +163,12 @@ const UserPage: React.FC = () => {
                   label={isSubscribed ? '구독중' : '구독'}
                 />
             </div>
-            )}
+    
   
             <UserPost label='userpost' userPosts={userPosts} />
           </div>
         )}
+        </Suspense>
       </div>
 
   );

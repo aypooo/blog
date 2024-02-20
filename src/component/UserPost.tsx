@@ -46,11 +46,11 @@ const UserPost: React.FC<UserPostProps> = ({ userPosts, label }) => {
             {(currentPosts.length === 0) ? (
               <>
               {label === 'bookmark' ?(
-                <div>
+                <div className='user-post-page__no-posts'>
                   <span>담은 글이 없습니다.</span>
                 </div>
                 ):(
-                  <div>
+                <div className='user-post-page__no-posts'>
                   <span>작성한 글이 없습니다.</span>
                 </div>
                 )}

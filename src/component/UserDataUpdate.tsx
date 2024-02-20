@@ -122,6 +122,7 @@ const UserDataUpdate = () => {
                         <Button onClick={validateNameAsync} size='s' fullWidth={false} label={'중복확인'}></Button>
                     </div>
                     {nameError ? <p className="error">{nameError}</p>:<p className="error"></p> }
+                    <label className="user-data-update__label">소개글</label>
                     <textarea className="user-data-update__description" maxLength={30} placeholder="소개글을 작성해주세요." value={description} onChange={(e) => setDescription(e.target.value)} />
                         
                     <Button className="user-data-update__button" label='업데이트' size='m' fullWidth={true} onClick={handleUserData} />

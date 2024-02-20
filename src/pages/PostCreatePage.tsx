@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
 import { updatePost, writeNewPost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +11,7 @@ const PostCreateForm: React.FC = () => {
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
   const [posts, setPosts] = useRecoilState(postsState);
-  const [userPosts, setUserPosts] = useRecoilState(userPostsState);
+  const setUserPosts = useSetRecoilState(userPostsState);
   const [selectedpost, setSelectedpost] = useRecoilState<Post | null>(selectedPostState);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');

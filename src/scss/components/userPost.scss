@@ -1,6 +1,12 @@
 .user-post-page {
     &__no-posts {
-      margin-bottom: 10px;
+      padding: 10px;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-weight: 200;
     }
   }
   
