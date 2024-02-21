@@ -20,43 +20,49 @@ const UserPage: React.FC = () => {
   const [toggleContent, setToggleContent] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // 구독 토글 핸들러
   const handleToggleSubscribe = async () => {
     if (!authorData[0]) {
       return; 
     }
-  
     const authorUid = authorData[0].uid;
   
-    // user.uid를 follower에서 제거 또는 추가
+    // 구독 여부에 따라 팔로워 목록 업데이트
     const updatedFollowers = isSubscribed
-      ? Object.fromEntries(
+      ? // 이미 구독 중인 경우, 사용자 UID를 제외하고 팔로워 목록 업데이트
+        Object.fromEntries(
           Object.entries(authorData[0].follower || {}).filter(([key]) => key !== user.uid)
         )
-      : { ...authorData[0].follower, [user.uid]: true };
+      : // 구독하지 않은 경우, 사용자 UID를 추가하여 팔로워 목록 업데이트
+        { ...authorData[0].follower, [user.uid]: true };
   
-    // 팔로워 수를 업데이트하고, user.uid를 follower에서 추가 또는 제거한 객체를 저장
+    // 작가 데이터 업데이트
     setAuthorData((prevData) => {
       const updatedData = { ...prevData[0], follower: updatedFollowers };
       return [updatedData] as User[];
     });
   
-    // 구독 또는 구독 취소 로직
+    // 구독 상태에 따라 Firebase에 구독 또는 구독 취소 요청
     if (isSubscribed) {
+      // 이미 구독 중인 경우, 구독 취소 요청
       unsubscribeUser(user.uid, authorUid);
       console.log('구독 취소됨');
     } else {
+      // 구독하지 않은 경우, 구독 요청
       subscribeUser(user.uid, authorUid);
       console.log('구독됨');
     }
   
-    // 구독 상태 업데이트
+    // 구독 상태를 토글
     setIsSubscribed(!isSubscribed);
   };
 
+  // 페이지 이동시 화면 맨 위로 스크롤
   useEffect(()=>{
     window.scroll(0,0)
-  },[])
+  },[]);
 
+  // 작가 데이터 및 작가의 글, 사용자의 북마크 데이터 가져오기
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -66,13 +72,12 @@ const UserPage: React.FC = () => {
       await fetchBookmarkData(setBookmarkData, user.bookmark!);
 
       setLoading(false);
-    
     };
     fetchData();
   }, [author]);
 
+  // 작가를 구독 중인지 확인
   useEffect(() => {
-    // 현재 사용자가 작성자에게 이미 구독 중인지 확인
     if (authorData[0]?.follower) {
       setIsSubscribed(
         Object.keys(authorData[0]?.follower).includes(user.uid)
