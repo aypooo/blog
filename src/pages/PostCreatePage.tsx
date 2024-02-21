@@ -100,6 +100,7 @@ const PostCreateForm: React.FC = () => {
     }
     console.log(title)
   }, [postid, selectedpost, setSelectedpost]);
+
   return (
     <form className="post-create-page" onSubmit={handleCreateSubmit}>
       <div className='layout'>
@@ -115,19 +116,18 @@ const PostCreateForm: React.FC = () => {
         <div className="post-create-page__editor-container">
           <Editor value={content} onChange={setContent} setImageUrls={setImageUrls} />
         </div>
-        
       </div>
       <div className="post-create-page__buttons-bar">
-          {selectedpost && postid ? (
-            <>
-              <Button label='수정'/>
-              <Button label='취소' onClick={handleCancel}/>
-            </>
-          ) : (
-            <>
-              <Button label='등록' size='l'/>
-            </>
-          )}
+        {selectedpost && postid ? (
+          <>
+            <Button label='수정'/>
+            <Button label='취소' onClick={handleCancel}/>
+          </>
+        ) : (
+          <>
+            <Button label='등록' size='l'/>
+          </>
+        )}
         </div>
     </form>
   );

@@ -1,14 +1,14 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import Logout from '../component/Logout';
+import { useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Post, User, userBookmarkState, userPostsState, userState } from '../recoil';
+import { User, userBookmarkState, userPostsState, userState } from '../recoil';
 import Button from '../component/Button';
-import Dropdown from '../component/DropDown';
 import { subscribeUser, unsubscribeUser } from '../firebase/subscription';
 import UserPost from '../component/UserPost';
 import { fetchAuthorData, fetchAuthorPostData, fetchBookmarkData } from '../hook/fetchData';
 import LoadingSpinner from '../component/LoadingSpinner';
+import UserPageProfile from '../component/UserPageProfile';
+
 
 const UserPage: React.FC = () => {
   const { author } = useParams();
@@ -20,10 +20,6 @@ const UserPage: React.FC = () => {
   const [toggleContent, setToggleContent] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // console.log('user.bookmark:',user.bookmark)
-  // console.log('userPosts:',userPosts)
-  // console.log('bookmarkData:',bookmarkData)
-  // console.log('authorData:',authorData)
   const handleToggleSubscribe = async () => {
     if (!authorData[0]) {
       return; 
@@ -56,9 +52,11 @@ const UserPage: React.FC = () => {
     // 구독 상태 업데이트
     setIsSubscribed(!isSubscribed);
   };
+
   useEffect(()=>{
     window.scroll(0,0)
   },[])
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -84,93 +82,33 @@ const UserPage: React.FC = () => {
 
   return (
     <div className="user-page">
-          <Suspense fallback={<LoadingSpinner loading={loading}/>} >
-        {user.name === author ? (
-          <div className="layout">
-        
-              <div className="user-page__profile">
-                  <div className='user-page__profile'>
-                      <div className='user-page__profile__thumb'
-                      style={{ backgroundImage: `url(${authorData[0]?.profile_picture || '../../../images/profile_image.png' })`}}
-                      />
-                      <div className="user-page__profile__info">
-                        <span className="user-page__profile__info__author">{authorData[0]?.name}</span>
-                        <div className="user-page__profile__info__follower">
-                          <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
-                          <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
-                        </div>
-                        <div className="user-page__profile__info__description"> {authorData[0]?.description}</div>
-                    </div>
-                  </div>
-                  <div className='user-page__profile__edit'>
-                    <Dropdown label="⋮">
-                      <span>
-                        <Link to="/profile">
-                          프로필 수정
-                        </Link>
-                      </span>
-                      <Logout/>
-                    </Dropdown>
-                  </div>
-              </div>
-              <div className="user-page__tabs">
-                <Button
-                  fullWidth={true}
-                  onClick={() => setToggleContent(false)}
-                  size="xl"
-                  label="글"
-                  className={!toggleContent ? 'selected' : ''}
-                />
-                <Button
-                  fullWidth={true}
-                  onClick={() => setToggleContent(true)}
-                  size="xl"
-                  label="담은 글"
-                  className={!toggleContent ? '' : 'selected'}
-                />
-              </div>
-              {toggleContent ? (
-                <>
-                    <UserPost label='bookmark' userPosts={bookmarkData} />
-                </>
-              ) : (
-                <>
-                    <UserPost label='userpost' userPosts={userPosts} />
-                </>
-              )}
-            </div>
-        ) : (
-          <div className="layout">
-              {/* <Logout/> */}
-              <div className='user-page__profile'>
-            <div className='user-page__profile'>
-              <div className='user-page__profile__thumb'
-              style={{ backgroundImage: `url(${authorData[0]?.profile_picture || '../../../images/profile_image.png' })`}}
-              />
-              <div className="user-page__profile__info">
-                <span className="user-page__profile__info__author">{authorData[0]?.name}</span>
-                <div className="user-page__profile__info__follower">
-                  <span>팔로워 {authorData[0]?.follower ? Object.keys(authorData[0].follower).length : 0}</span>
-                  <span>팔로잉 {authorData[0]?.follow ? Object.keys(authorData[0].follow).length : 0}</span>
-                </div>
-                <div className="user-page__profile__info__description"> {authorData[0]?.description}</div>
-   
-            </div>
-            </div>
+      <Suspense fallback={<LoadingSpinner loading={loading}/>}>
+        <div className="layout">
+          <UserPageProfile authorData={authorData[0]} isOwnProfile={user.name === author} toggleSubscribe={handleToggleSubscribe} isSubscribed={isSubscribed} />
+          <div className="user-page__tabs">
             <Button
-                  onClick={handleToggleSubscribe}
-                  size='s'
-                  label={isSubscribed ? '구독중' : '구독'}
-                />
-            </div>
-    
-  
-            <UserPost label='userpost' userPosts={userPosts} />
+              fullWidth={true}
+              onClick={() => setToggleContent(false)}
+              size="xl"
+              label="글"
+              className={!toggleContent ? 'selected' : ''}
+            />
+            <Button
+              fullWidth={true}
+              onClick={() => setToggleContent(true)}
+              size="xl"
+              label="담은 글"
+              className={!toggleContent ? '' : 'selected'}
+            />
           </div>
-        )}
-        </Suspense>
-      </div>
-
+          {toggleContent ? (
+            <UserPost label='bookmark' userPosts={bookmarkData} />
+          ) : (
+            <UserPost label='userpost' userPosts={userPosts} />
+          )}
+        </div>
+      </Suspense>
+    </div>
   );
 };
 

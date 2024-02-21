@@ -1,68 +1,82 @@
-.user-page{
+.user-page {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    &__profile{
+
+    &__profile {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 25px;
-        &__thumb{
-            // background-image: url('../../../images/profile_image.png');
+        &__content{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        &__thumb {
             background-repeat: no-repeat;
             background-size : contain;
-            background-position:center;
+            background-position: center;
             width: 100px;
             height: 100px;
             border-radius: 50px;
             background-color: #999;
             margin-right: 20px;
         }
-        &__info{
+
+        &__info {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            &__author{
+
+            &__author {
                 font-size: 28px;
                 font-weight: bold;
             }
-            &__follower{
-                color:#777;
+
+            &__follower {
+                color: #777;
                 font-size: 14px;
                 font-weight: 200;
-                :nth-child(1){
+
+                &:nth-child(1) {
                     margin-right: 10px;
                 }
             }
-            &__description{
+
+            &__description {
                 margin-top: 20px;
-                color:#777;
+                color: #777;
                 font-size: 14px;
                 font-weight: 200;
             }
         }
-        &__edit{
+
+        &__edit {
             padding-bottom: 74px;
         }
     }
 
-    &__tabs{
+    &__tabs {
         display: flex;
         height: 50px;
-        button{
+
+        button {
             border: none;
             border-bottom: 1px solid #e0e0e0;
             color: #777;
-            font-weight:200;
+            font-weight: 200;
+
             &.selected {
                 color: #000;
                 font-weight: 400;
                 border-bottom-color: #000; /* 선택된 탭의 밑줄 색상 */
+            }
         }
-    }
-        :nth-child(2){
+
+        &:nth-child(2) {
             margin-left: -1px;
-          }
+        }
     }
 }

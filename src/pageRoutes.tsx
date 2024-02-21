@@ -4,9 +4,8 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import PostCreatePage from "./pages/PostCreatePage";
 import PostDetail from "./pages/PostDetail";
-import PostPage from "./component/MainPost";
 import UserPage from "./pages/UserPage";
-import Profile from "./pages/Profile";
+import ProfileUpdate from "./pages/ProfileUpdate";
 
 const PageRoutes = () => {
     return (
@@ -15,7 +14,7 @@ const PageRoutes = () => {
           <Route path="/" element={<MainPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/signup" element={<SignupPage/>}/>
-          <Route path="/profile" element={<Profile/>}/>
+          <Route path="/profileupdate" element={<ProfileUpdate/>}/>
           <Route path="/write" element={<PostCreatePage/>}/>
           <Route path="/write/:postid" element={<PostCreatePage/>}/>
           <Route path="/:author" element={<UserPage/>}/>

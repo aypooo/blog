@@ -72,7 +72,3 @@ export const validatePassword = (password: string): string | null => {
   return null;
 };
   
-// export const validateName = (name: string): string | null => {
-//   return name.trim() !== '' ? null : '이름을 입력해주세요.';
-// };
-

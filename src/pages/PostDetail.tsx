@@ -31,10 +31,8 @@ const PostDetail: React.FC = () => {
     setLoading(true)
     if(selectedpost){
       setPostdata(selectedpost)
-      console.log(postdata)
     }else{
       fetchPostDataById(setPostdata,postid!)
-      console.log(postdata)
     }
     setLoading(false) 
   }, [postid, selectedpost]);
@@ -147,51 +145,54 @@ const PostDetail: React.FC = () => {
       handleConfirmDelete()
     }
   };
-return (
-  <div className='postDetail'>
-    {loading ? (
-      <LoadingSpinner loading={loading} />
-    ) : (
-      <div className='layout'>
-        {postdata ? (
-          <div className='postDetail__content'>
-            <div className='postDetail__title'>
-              {postdata?.title}
-            </div>
-            <div className='postDetail__info'>
-              <div className='postDetail__info__author'>
-                <UserProfile>{postdata?.author}</UserProfile>
-                <div className='postDetail__info__views'> 
-                  조회수 {postdata?.views}
+  return (
+    <div className='postDetail'>
+      {loading ? (
+        <LoadingSpinner loading={loading} />
+      ) : (
+        <div className='layout'>
+          {postdata ? (
+            <div className='postDetail__content'>
+              <div className='postDetail__title'>
+                {postdata?.title}
+              </div>
+              <div className='postDetail__info'>
+                <div className='postDetail__info__author'>
+                  <UserProfile>{postdata?.author}</UserProfile>
+                  <div className='postDetail__info__views'> 
+                    조회수 {postdata?.views}
+                  </div>
+                </div>
+                {user.uid === postdata?.postUid ? (
+                  <div className='postDetail__info__edit'>
+                    <Button size='s' label='수정' onClick={handleUpdatePost} />
+                    <Button size='s' label='삭제' onClick={() => openModal(modalData)} />
+                  </div>
+                ) : (
+                  <div onClick={handleBookmarkToggle} className='bookmark-box m'>
+                    <Button
+                      label={isBookmarked ? '글담기 취소' : '글담기'}
+                      size='s'
+                      className={`bookmark${user.bookmark?.includes(postdata!.postId) ? '--bookmarked' : ''}`}
+                    />
+                  </div>
+                )}
+              </div>
+              <div className='postDetail__body'>
+                <SanitizedHTML html={Object.values(postdata!.content).join('')} />
+              </div>
+              <div className='postDetail__footer' key={postdata!.postId}>
+                <div onClick={handleLike} className='like-box m'> 
+                  <button className={`like${postdata?.likes?.includes(user.uid) ? '--liked m' : ' m'}`} />
+                  {postdata ? (postdata.likes ? postdata.likes.length : 0) : 0}
                 </div>
               </div>
-              {user.uid === postdata?.postUid ? (
-                <div className='postDetail__info__edit'>
-                  <Button size='s' label='수정' onClick={handleUpdatePost}/>
-                  <Button size='s' label='삭제' onClick={() => openModal(modalData)}/>
-                </div>
-              ) : (
-                <div onClick={handleBookmarkToggle} className='bookmark-box m'>
-                  <Button label={isBookmarked ? '글담기 취소' : '글담기'} size='s' className={`bookmark${user.bookmark?.includes(postdata!.postId) ? '--bookmarked' : ''}`} />
-                </div>
-              )}
+              <Comments commentProps={postdata!.comments} postId={postdata!.postId} postUid={postdata!.postUid} />
             </div>
-            <div className='postDetail__body'>
-              <SanitizedHTML html={Object.values(postdata!.content).join('')} />
-            </div>
-            <div className='postDetail__footer' key={postdata!.postId}>
-              <div onClick={handleLike} className='like-box m'> 
-                <button className={`like${postdata?.likes?.includes(user.uid) ? '--liked m' : ' m'}`}/>
-                {postdata ? (postdata.likes ? postdata.likes.length : 0) : 0}
-              </div>
-            </div>
-            <Comments commentProps={postdata!.comments} postId={postdata!.postId} postUid={postdata!.postUid}/>
-          </div>
-        ) : null}
-      
-      </div>
-    )}
-  </div>
-)
+          ) : null}
+        </div>
+      )}
+    </div>
+  );  
 }
 export default PostDetail;

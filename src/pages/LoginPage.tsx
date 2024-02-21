@@ -20,17 +20,6 @@ const Login: React.FC = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password)
       const user = userCredential.user;
       if (user && user.email) {
-      //   const userData = await readUserData(user.uid!)
-      //   if(userData){
-      //     setUser({ 
-      //       uid: userData.uid, 
-      //       email: userData.email, 
-      //       name: userData.name,
-      //       follow:Object.keys(userData.follow!),
-      //       follower:Object.keys(userData.follower!),
-      //       bookmark:Object.keys(userData.bookmark!)
-      //     });
-      //   }
         setisLoggedIn(true);
       }
       setloading(false)
