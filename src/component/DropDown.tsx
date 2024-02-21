@@ -1,6 +1,5 @@
-import React, { ReactNode, useRef, useEffect, useState } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import useClickOutside from '../hook/useClickOutside';
-import Button from './Button';
 
 interface DropdownProps {
   label: string;
@@ -20,7 +19,6 @@ const Dropdown: React.FC<DropdownProps> = ({ label, children }) => {
 
   return (
     <div className="drop-down">
-      {/* className="boder-none drop-down" */}
       <span onClick={handleButtonClick}>{label}</span>
       {modalOpen ? (
         <div className="drop-down__content" ref={dropdownRef}>

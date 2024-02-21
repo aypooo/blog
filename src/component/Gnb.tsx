@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { isLoggedInState, userState } from '../recoil';
 import UserProfile from './UserProfile';
 import Button from './Button';

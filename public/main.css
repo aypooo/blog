@@ -126,6 +126,16 @@
   text-align: left;
 }
 
+.no-posts {
+  padding: 10px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-weight: 200;
+}
+
 .drop-down {
   position: relative;
   display: inline-block;
@@ -484,16 +494,6 @@
 }
 .sign-up-form button {
   margin-top: 30px;
-}
-
-.user-post-page__no-posts {
-  padding: 10px;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #333;
-  font-weight: 200;
 }
 
 .modal-overlay {

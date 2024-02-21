@@ -36,7 +36,7 @@ const UserPost: React.FC<UserPostProps> = ({ userPosts, label }) => {
       setLoading(false); 
       setCurrentPage(1);
     }, [author, userPosts]);
-    // console.log('userPost:',userPosts)
+
     return (
       <div className="user-post-page">
         {loading ? (
@@ -46,11 +46,11 @@ const UserPost: React.FC<UserPostProps> = ({ userPosts, label }) => {
             {(currentPosts.length === 0) ? (
               <>
               {label === 'bookmark' ?(
-                <div className='user-post-page__no-posts'>
+                <div className='no-posts'>
                   <span>담은 글이 없습니다.</span>
                 </div>
                 ):(
-                <div className='user-post-page__no-posts'>
+                <div className='no-posts'>
                   <span>작성한 글이 없습니다.</span>
                 </div>
                 )}

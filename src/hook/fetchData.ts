@@ -10,16 +10,6 @@ export const fetchPostData = async (setPosts: (posts: Post[]) => void) => {
     const userPost = await readPostData();
     console.log(Object.entries(userPost))
     const postArray = Object.entries(userPost).map(([postId, post]) => ({
-      // author: post.author,
-      // content: post.content,
-      // comments: post.comments,
-      // createAt: post.createAt,
-      // likes: post.likes,
-      // imageUrls: post.imageUrls,
-      // postId,
-      // postUid: post.postUid,
-      // title: post.title,
-      // views:post.views,
       ...post,
       postId
     }));
@@ -89,7 +79,6 @@ export const fetchBookmarkData = async (setBookmarkData: (bookmark: Post[]) => v
 export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal: Post[]) => Post[])) => void,setLastPostKey:(postId:string)=>void, lastPostKey:string) => {
  
   try {
-    // console.log('fetchMorePosts')
     const userPost = await readLimitedPostData(lastPostKey);
     const userPostLength = Object.keys(userPost).length
     if (userPostLength > 0) {
@@ -101,21 +90,11 @@ export const fetchMorePosts = async (setPosts: (valOrUpdater: Post[] | ((currVal
 
     }
     const postArray = Object.entries(userPost).map(([postId, post]) => ({
-      // author: post.author,
-      // content: post.content,
-      // comments: post.comments,
-      // createAt: post.createAt,
-      // likes: post.likes,
-      // imageUrls: post.imageUrls,
-      // postId,
-      // postUid: post.postUid,
-      // title: post.title,
-      // views:post.views,
       ...post,
       postId
     }));
     setPosts((prevPosts) => [...postArray, ...prevPosts]);
-    // console.log('패치함=>',postArray)
+
     return true; 
   } catch (error) {
     console.error('유저 포스트 불러오기에 실패', error);
@@ -130,13 +109,6 @@ export const fetchCommentData = async (postId: string,  setComment: (comments: C
     const comments = await readCommentData(postId);
     if (comments) {
       const commentsArray = Object.entries(comments).map(([commentId, comment]) => ({
-        // author: comment.author,
-        // comment: comment.comment,
-        // commentId,
-        // createAt: comment.createAt,
-        // likes: comment.likes,
-        // postId: comment.postId,
-        // commentUid: comment.commentUid,
         ...comment,
         commentId
       }));
