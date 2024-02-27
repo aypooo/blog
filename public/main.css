@@ -184,18 +184,17 @@
 .post-list__item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 150px;
   width: 100%;
   padding: 25px 0;
   border: none;
   border-bottom: 1px solid #bcbcbc;
-  transition: background-color 0.3s;
 }
 .post-list__desc {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  align-items: flex-start;
+  width: 100%;
   justify-content: center;
   flex: auto;
 }
@@ -207,7 +206,6 @@
   flex-direction: column;
   align-items: flex-start;
   text-overflow: ellipsis;
-  min-width: 550px;
   padding: 14px 0;
   cursor: pointer;
 }
@@ -250,29 +248,19 @@
 }
 .post-list__image {
   display: flex;
-  min-width: 150px;
-  height: 150px;
+  min-width: 100px;
+  height: 100px;
   justify-content: center;
   object-fit: cover;
   cursor: pointer;
 }
 .post-list__image img {
-  max-width: 100%;
-  max-height: 100%;
   object-fit: cover;
 }
 
-.write-link {
-  display: block;
-  margin-top: 20px;
-  color: #3498db;
-  text-decoration: none;
-  font-weight: bold;
-}
-.write-link:hover {
-  text-decoration: underline;
-}
-
+/* 모바일 */
+/* 태블릿 */
+/* PC */
 .pagination {
   display: flex;
   justify-content: center;
@@ -602,20 +590,32 @@
 }
 
 .layout {
-  width: 700px;
-  min-height: 700px;
+  margin: 0 auto;
 }
 
 .input-layout {
   width: 450px;
 }
 
-.main-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* 모바일 */
+@media only screen and (max-width: 767px) {
+  .layout {
+    width: auto;
+    min-width: 320px;
+  }
 }
-
+/* 태블릿 */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .layout {
+    width: 700px;
+  }
+}
+/* PC */
+@media only screen and (min-width: 1024px) {
+  .layout {
+    width: 700px;
+  }
+}
 .post-create-page {
   display: flex;
   flex-direction: column;
@@ -633,6 +633,8 @@
   box-sizing: border-box;
 }
 .post-create-page__buttons-bar {
+  justify-content: center;
+  display: flex;
   z-index: 1;
   position: fixed;
   width: 100%;
@@ -642,11 +644,6 @@
   border: 1px solid #333;
 }
 
-.postDetail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 .postDetail__info {
   display: flex;
   justify-content: space-between;
@@ -694,12 +691,6 @@
   align-items: center;
   justify-content: center;
   margin-top: 10px;
-}
-.user-page {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 .user-page__profile {
   display: flex;

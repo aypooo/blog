@@ -18,6 +18,8 @@
   
   
   &__buttons-bar {
+    justify-content: center;
+    display: flex;
     z-index: 1;
     position: fixed;
     width: 100%;

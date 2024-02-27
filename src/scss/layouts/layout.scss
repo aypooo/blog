@@ -1,8 +1,29 @@
 .layout{
-    width: 700px;
-    min-height: 700px;
+    margin: 0 auto;
 }
 
 .input-layout{
     width: 450px;
+}
+
+/* 모바일 */
+@media only screen and (max-width: 767px) {
+    .layout{
+        width: auto;
+        min-width: 320px;
+    }
+}
+
+/* 태블릿 */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .layout{
+        width: 700px;
+    }
+}
+
+/* PC */
+@media only screen and (min-width: 1024px) {
+    .layout{
+        width: 700px;
+    }
 }
