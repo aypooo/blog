@@ -145,6 +145,7 @@ const PostDetail: React.FC = () => {
       handleConfirmDelete()
     }
   };
+
   return (
     <div className='postDetail'>
       {loading ? (
@@ -187,7 +188,7 @@ const PostDetail: React.FC = () => {
                   {postdata ? (postdata.likes ? postdata.likes.length : 0) : 0}
                 </div>
               </div>
-              <Comments commentProps={postdata!.comments} postId={postdata!.postId} postUid={postdata!.postUid} />
+              <Comments postId={postdata.postId} postUid={postdata.postUid} />
             </div>
           ) : null}
         </div>

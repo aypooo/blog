@@ -4,17 +4,17 @@ import { db } from "./firebase";
 
 // 댓글 쓰기
 export function writeNewComment(postId: string, uid: string, name: string, comment: string) {
+
+  const newCommentKey = push(child(ref(db), 'comments/' + postId)).key;
   const commentData: Comment = {
     author: name,
     comment: comment,
-    commentId:'',
+    commentId:newCommentKey!,
     postId: postId,
     createAt: new Date(),
     likes: [],
     commentUid: uid,
   };
-
-  const newCommentKey = push(child(ref(db), 'comments/' + postId)).key;
 
   const updates: { [key: string]: any } = {};
   updates['posts/' + postId + '/' + 'comments/' + newCommentKey] = commentData;
