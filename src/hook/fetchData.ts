@@ -1,5 +1,5 @@
 import { Post,Comment, User } from "../recoil";
-import { readAuthorPostData, readLimitedPostData, readPostData, readPostDataById } from "../firebase/post";
+import { readAuthorPostData, readLimitedPostData, readPostData, readPostDataByNumber } from "../firebase/post";
 import { readCommentData } from "../firebase/comment";
 import { readAuthorData, readUidData } from "../firebase/auth";
 import { readBookmarkPostData } from "../firebase/bookmark";
@@ -19,11 +19,10 @@ export const fetchPostData = async (setPosts: (posts: Post[]) => void) => {
     console.error('유저 포스트 불러오기에 실패', error);
   }
 };
-export const fetchPostDataById = async (setPost: (post: Post) => void,postId:string) => {
+export const fetchPostDataByNumber = async (setPost: (post: Post) => void,postNumber:string) => {
+
   try {
-    const userPost = await readPostDataById(postId);
-    console.log(userPost)
-    // const postArray = Object.entries(userPost);
+    const userPost = await readPostDataByNumber(postNumber);
     setPost(userPost!);
     console.log('패치함=>',userPost)
   } catch (error) {

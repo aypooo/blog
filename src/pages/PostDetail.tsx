@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
-import { deletePost, updateViews } from '../firebase/post';
+import { deletePost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom';
 import Comments from '../component/Comments';
 import UserProfile from '../component/UserProfile';
@@ -11,121 +11,90 @@ import { LikeUpdate } from '../firebase/like';
 import Button from '../component/Button';
 import { useModal } from '../hook/useModal';
 import { bookMarkPost, removeBookmark } from '../firebase/bookmark';
-import { fetchPostDataById } from '../hook/fetchData';
+import { fetchPostDataByNumber } from '../hook/fetchData';
 import LoadingSpinner from '../component/LoadingSpinner';
 
 const PostDetail: React.FC = () => {
-  const { postid } = useParams();
-  const navigate = useNavigate()
-  const [user,setUser] = useRecoilState(userState);
-  const [selectedpost,setSelectedPost] = useRecoilState<Post | null>(selectedPostState);
-  const [postdata,setPostdata] = useState<Post>()
-  const setPosts = useSetRecoilState(postsState)
-  const setUserPosts = useSetRecoilState(userPostsState);
-  const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "" , user.uid);
-  const [isBookmarked,setIsBookmarked] = useState(false)
-  const [loading, setLoading] = useState(false);
-  const { openModal,closeModal } = useModal();
-  
-  useEffect(() => {
-    setLoading(true)
-    if(selectedpost){
-      setPostdata(selectedpost)
-    }else{
-      fetchPostDataById(setPostdata,postid!)
-    }
-    setLoading(false) 
-  }, [postid, selectedpost]);
+  const { postnumber } = useParams(); 
+  const navigate = useNavigate(); 
+  const [user, setUser] = useRecoilState(userState); 
+  const [selectedpost, setSelectedPost] = useRecoilState(selectedPostState); 
+  const setPosts = useSetRecoilState(postsState); 
+  const setUserPosts = useSetRecoilState(userPostsState); 
+  const [postdata, setPostdata] = useState<Post>(); 
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [loading, setLoading] = useState(false); 
+  const toggleLike = useToggleLike(selectedpost ? selectedpost.postId : "", user.uid); // 좋아요 토글 훅 사용
+  const { openModal, closeModal } = useModal(); // 모달 관리 훅 사용
 
+  // 포스트 데이터 로딩 및 상태 업데이트
   useEffect(() => {
-    window.scroll(0,0)
-    const handleUpdateViews = async ()=>{
-      try{
-        if(postdata){
-          await updateViews(postdata!.postId)
-          setPosts((prevPosts) =>
-            prevPosts.map((post) =>
-            post.postId === postdata!.postId ? { ...post, views: post.views + 1 } : post
-          ))
-          setUserPosts((prevPosts) =>
-            prevPosts.map((post) =>
-            post.postId === post!.postId ? { ...post, views: post.views + 1 } : post
-          ))
-          setSelectedPost((prevpost) => ({
-            ...(prevpost as Post),
-            views: (prevpost?.views || 0) + 1,
-          }));
-        }
-    }catch(error){
-      console.log(error)
+    setLoading(true);
+    if (selectedpost) {
+      setPostdata(selectedpost);
+    } else {
+      fetchPostDataByNumber(setSelectedPost, postnumber!);
+      setPostdata(selectedpost!);
     }
-    }
-      const timeoutId = setTimeout(() => {
-        handleUpdateViews()
-      }, 1);
-    
-      return () => clearTimeout(timeoutId);
+    setLoading(false);
+  }, [postdata, postnumber, selectedpost, setSelectedPost]);
 
-  }, [setSelectedPost]);
+  // 북마크 상태 업데이트
   useEffect(() => {
-    if(user.bookmark && selectedpost){
+    if (user.bookmark && selectedpost) {
       setIsBookmarked(user.bookmark?.includes(selectedpost!.postId));
     }
-      
   }, [selectedpost, setIsBookmarked, user.bookmark]);
-  
+
+  // 포스트 수정 페이지로 이동
   const handleUpdatePost = () => {
-    navigate(`/write/${postdata!.postId}`)
-  }
+    navigate(`/write/${postdata?.postNumber}`);
+  };
+
+  // 포스트 삭제 확인
   const handleConfirmDelete = async () => {
     try {
       await deletePost(postdata!.postId);
       setPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== postdata!.postId));
       setUserPosts((prevUserPosts) => prevUserPosts.filter((post) => post.postId !== postdata!.postId));
       setSelectedPost(null);
-      closeModal()
+      closeModal();
       navigate(`/${postdata!.author}`);
     } catch (error) {
       console.error('포스트 삭제 중 오류 발생:', error);
     }
   };
+
+  // 좋아요 토글
   const handleLike = async () => {
     try {
       await LikeUpdate(postdata!.postId, user.uid);
-      // 성공적으로 서버에서 좋아요 토글이 완료된 경우 Recoil 상태 업데이트
-      toggleLike()
+      toggleLike();
       setSelectedPost((prevpost) => {
         if (prevpost) {
           const currentLikes = prevpost.likes || [];
-          
-          // 이미 해당 사용자의 uid가 likes 배열에 존재한다면 제거
           const updatedLikes = currentLikes.includes(user.uid)
             ? currentLikes.filter((likeUid) => likeUid !== user.uid)
             : [...currentLikes, user.uid];
-  
           return {
             ...(prevpost as Post),
             likes: updatedLikes,
           };
         }
-  
         return prevpost;
       });
     } catch (error) {
       console.error('좋아요 토글 중 오류 발생:', error);
     }
   };
+
+  // 북마크 토글
   const handleBookmarkToggle = async () => {
     try {
       if (user.bookmark?.includes(postdata!.postId)) {
         await removeBookmark(user.uid, postdata!.postId);
-        // setIsBookmarked(false)
-        console.log('글담기 삭제',isBookmarked)
       } else {
         await bookMarkPost(user.uid, postdata!.postId);
-        // setIsBookmarked(true)
-        console.log('글담기',isBookmarked)
-        
       }
       setUser((prevUser) => ({
         ...prevUser,
@@ -133,67 +102,65 @@ const PostDetail: React.FC = () => {
           ? prevUser.bookmark?.filter((postId) => postId !== postdata!.postId)
           : [...(prevUser.bookmark || []), postdata!.postId],
       }));
-
     } catch (error) {
       console.error('Bookmark toggle error:', error);
     }
   };
 
+  // 삭제 모달 데이터
   const modalData = {
     content: '글을 삭제 하시겠습니까?',
     callback: () => {
-      handleConfirmDelete()
-    }
+      handleConfirmDelete();
+    },
   };
 
   return (
     <div className='postDetail'>
-      {loading ? (
+      {loading ? ( // 데이터 로딩 중일 때 로딩 스피너 표시
         <LoadingSpinner loading={loading} />
       ) : (
         <div className='layout'>
-          {postdata ? (
+          {postdata && ( // 포스트 데이터가 있을 때
             <div className='postDetail__content'>
-              <div className='postDetail__title'>
-                {postdata?.title}
-              </div>
+              <div className='postDetail__title'>{postdata?.title}</div> {/* 포스트 제목 표시 */}
               <div className='postDetail__info'>
                 <div className='postDetail__info__author'>
-                  <UserProfile>{postdata?.author}</UserProfile>
-                  <div className='postDetail__info__views'> 
-                    조회수 {postdata?.views}
-                  </div>
+                  <UserProfile>{postdata?.author}</UserProfile> {/* 포스트 작성자 프로필 표시 */}
+                  <div className='postDetail__info__views'>조회수 {postdata?.views}</div> {/* 조회수 표시 */}
                 </div>
-                {user.uid === postdata?.postUid ? (
+                {user.uid === postdata?.postUid ? ( // 현재 사용자가 포스트 작성자일 때
                   <div className='postDetail__info__edit'>
-                    <Button size='s' label='수정' onClick={handleUpdatePost} />
-                    <Button size='s' label='삭제' onClick={() => openModal(modalData)} />
+                    <Button size='s' label='수정' onClick={handleUpdatePost} /> {/* 수정 버튼 */}
+                    <Button size='s' label='삭제' onClick={() => openModal(modalData)} /> {/* 삭제 버튼 */}
                   </div>
                 ) : (
                   <div onClick={handleBookmarkToggle} className='bookmark-box m'>
                     <Button
                       label={isBookmarked ? '글담기 취소' : '글담기'}
                       size='s'
-                      className={`bookmark${user.bookmark?.includes(postdata!.postId) ? '--bookmarked' : ''}`}
-                    />
+                      className={`bookmark${user.bookmark?.includes(postdata?.postId) ? '--bookmarked' : ''}`}
+                    /> {/* 북마크 버튼 */}
                   </div>
                 )}
               </div>
               <div className='postDetail__body'>
-                <SanitizedHTML html={Object.values(postdata!.content).join('')} />
+                <SanitizedHTML html={postdata ? Object.values(postdata.content).join('') : ('')} /> {/* 포스트 내용 */}
               </div>
-              <div className='postDetail__footer' key={postdata!.postId}>
-                <div onClick={handleLike} className='like-box m'> 
+              <div className='postDetail__footer' key={postdata?.postId}>
+                <div onClick={handleLike} className='like-box m'>
                   <button className={`like${postdata?.likes?.includes(user.uid) ? '--liked m' : ' m'}`} />
-                  {postdata ? (postdata.likes ? postdata.likes.length : 0) : 0}
+                  {postdata ? (postdata.likes ? postdata.likes.length : 0) : 0} {/* 좋아요 수 표시 */}
                 </div>
               </div>
-              <Comments postId={postdata.postId} postUid={postdata.postUid} />
+              <Comments postId={postdata?.postId} postUid={postdata?.postUid} /> {/* 댓글 컴포넌트 */}
             </div>
-          ) : null}
+          )}
         </div>
       )}
     </div>
-  );  
-}
+  );
+  
+};
+
 export default PostDetail;

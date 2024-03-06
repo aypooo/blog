@@ -7,7 +7,7 @@ import Editor from '../component/Editor';
 import Button from '../component/Button';
 
 const PostCreateForm: React.FC = () => {
-  const { postid } = useParams();
+  const { postnumber } = useParams();
   const navigate = useNavigate();
   const user = useRecoilValue(userState);
   const [posts, setPosts] = useRecoilState(postsState);
@@ -29,7 +29,7 @@ const PostCreateForm: React.FC = () => {
       const createdAt = new Date();
       let postId: string;
 
-      if (selectedpost && postid) {
+      if (selectedpost && postnumber) {
         postId = selectedpost.postId;
         await updatePost(postId, title, content, imageUrls);
 
@@ -78,7 +78,7 @@ const PostCreateForm: React.FC = () => {
   };
   const handleCancel = () => {
     // 글 수정 중인 경우 수정 취소, 아닌 경우 페이지 뒤로 이동
-    if (selectedpost && postid) {
+    if (selectedpost && postnumber) {
       setSelectedpost(null);
       navigate(-1);
     } else {
@@ -86,22 +86,20 @@ const PostCreateForm: React.FC = () => {
       navigate(-1);
     }
   };
+
   useEffect(() => {
-    console.log(selectedPostState);
-    console.log(postid);
-    if (selectedpost && postid) {
+    if (selectedpost && postnumber) {
       setTitle(selectedpost.title);
       setContent(selectedpost.content);
-    } else if (postid && !selectedpost) {
+    } else if (postnumber && !selectedpost) {
       setSelectedpost(null);
       setTitle('')
       setContent('')
     }
-    console.log(title)
-  }, [postid, selectedpost, setSelectedpost]);
+  }, [postnumber, selectedpost, setSelectedpost]);
 
   return (
-    <form className="post-create-page" onSubmit={handleCreateSubmit}>
+    <form onSubmit={handleCreateSubmit}>
       <div className='layout'>
         <label className="post-create-page__label">
           <input
@@ -117,7 +115,7 @@ const PostCreateForm: React.FC = () => {
         </div>
       </div>
       <div className="post-create-page__buttons-bar">
-        {selectedpost && postid ? (
+        {selectedpost && postnumber ? (
           <>
             <Button label='수정'/>
             <Button label='취소' onClick={handleCancel}/>
