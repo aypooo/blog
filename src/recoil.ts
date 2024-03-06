@@ -14,6 +14,7 @@ export type User = {
 export type Post = {
   postUid: string;
   postId: string;
+  postNumber: number;
   author: string;
   title: string;
   content: string;

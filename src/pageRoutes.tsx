@@ -16,9 +16,9 @@ const PageRoutes = () => {
           <Route path="/signup" element={<SignupPage/>}/>
           <Route path="/profileupdate" element={<ProfileUpdate/>}/>
           <Route path="/write" element={<PostCreatePage/>}/>
-          <Route path="/write/:postid" element={<PostCreatePage/>}/>
+          <Route path="/write/:postnumer" element={<PostCreatePage/>}/>
           <Route path="/:author" element={<UserPage/>}/>
-          <Route path="/:author/:postid" element={<PostDetail/>}/>
+          <Route path="/:author/:postnumer" element={<PostDetail/>}/>
         </Routes>
         </div>
     );

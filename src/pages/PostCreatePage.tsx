@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Post, postsState, selectedPostState, userPostsState, userState } from '../recoil';
-import { updatePost, writeNewPost } from '../firebase/post';
+import { getPostNumber, updatePost, writeNewPost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '../component/Editor';
 import Button from '../component/Button';
@@ -44,7 +44,8 @@ const PostCreateForm: React.FC = () => {
           )
         )
       } else {
-        postId = await writeNewPost(user.uid, user.name!, title, content, imageUrls, createdAt);
+        const postNumber = await getPostNumber()
+        postId = await writeNewPost(user.uid, user.name!, title, content, imageUrls,postNumber, createdAt);
 
         const newPost: Post = {
           author: user.name,
@@ -54,9 +55,10 @@ const PostCreateForm: React.FC = () => {
           likes: [],
           imageUrls,
           postId,
+          postNumber:postNumber,
           title,
           postUid: user.uid,
-          views:0,
+          views:0, 
         };
 
         if (posts) {
@@ -87,16 +89,13 @@ const PostCreateForm: React.FC = () => {
   useEffect(() => {
     console.log(selectedPostState);
     console.log(postid);
-  
     if (selectedpost && postid) {
       setTitle(selectedpost.title);
       setContent(selectedpost.content);
-      console.log('1')
     } else if (postid && !selectedpost) {
       setSelectedpost(null);
       setTitle('')
       setContent('')
-      console.log('2')
     }
     console.log(title)
   }, [postid, selectedpost, setSelectedpost]);

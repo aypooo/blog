@@ -4,7 +4,7 @@ import { db } from "./firebase";
 import { Post } from "../recoil";
 
 
-export async function writeNewPost(uid: string, name: string, title: string, content: string, imageUrls: string[], createdAt: Date ): Promise<string> {
+export async function writeNewPost(uid: string, name: string, title: string, content: string, imageUrls: string[],postNumber: number, createdAt: Date ): Promise<string> {
 
   const newPostRef = push(child(ref(db), 'posts'));
   const newPostKey = newPostRef.key;
@@ -22,6 +22,7 @@ export async function writeNewPost(uid: string, name: string, title: string, con
     imageUrls: imageUrls,
     postId: newPostKey,
     postUid: uid,
+    postNumber:postNumber,
     views: 0,
   };
 
@@ -183,3 +184,20 @@ export async function updatePost(
       }
     });
   }
+
+  export async function getPostNumber(){
+    try {
+      const postNumberRef = ref(db,'/postNumber')
+      const result = await runTransaction(postNumberRef,(currentPostNumber) => {
+          if (currentPostNumber === null || currentPostNumber === undefined) {
+              return 1; // 만약 postNumber가 존재하지 않으면 1부터 시작합니다.
+          } else {
+              return currentPostNumber + 1; // 현재 postNumber에 1을 더한 값을 반환합니다.
+          }
+        });
+        return result.snapshot.val();
+      } catch (error) {
+          console.error('postNumber를 가져오는 중 오류 발생:', error);
+          throw error;
+      }
+    };
