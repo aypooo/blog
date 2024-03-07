@@ -601,7 +601,8 @@
 @media only screen and (max-width: 767px) {
   .layout {
     width: auto;
-    min-width: 320px;
+    min-width: 300px;
+    margin: 0 10px;
   }
 }
 /* 태블릿 */
