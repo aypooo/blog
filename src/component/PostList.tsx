@@ -1,13 +1,15 @@
 import { useSetRecoilState } from 'recoil';
-import { Post, selectedPostState } from '../recoil';
+import { Post, postsState, selectedPostState, userPostsState } from '../recoil';
 import { useNavigate } from 'react-router-dom';
 import UserProfile from './UserProfile';
 import TimeAgoComponent from './TimeAgoComponent ';
+import { updateViews } from '../firebase/post';
 
 const PostList = ({ posts, label }: { posts: Post[], label: string }) => {
   const navigate = useNavigate();
   const setSelectedPost = useSetRecoilState(selectedPostState);
-
+  const setPosts = useSetRecoilState(postsState)
+  const setUserPosts = useSetRecoilState(userPostsState);
   // innerHTML 문자열에서 텍스트 추출하는 함수
   const extractTextFromHTML = (htmlString: string) => {
     const doc = new DOMParser().parseFromString(htmlString, 'text/html');
@@ -16,8 +18,35 @@ const PostList = ({ posts, label }: { posts: Post[], label: string }) => {
 
   // 포스트 클릭 핸들러
   const handlePostClick = (post: Post) => {
-    setSelectedPost(post);
-    navigate(`/${post.author}/${post.postNumber}`);
+    const timeoutId = setTimeout(() => {
+      setSelectedPost(post);
+      handleUpdateViews(post.postId)
+      navigate(`/${post.author}/${post.postNumber}`);
+    }, 1);
+    return () => clearTimeout(timeoutId);
+  }
+  
+  const handleUpdateViews = async (postId:string) => {
+    try {
+        console.log('2');
+        await updateViews(postId);
+        setPosts((prevPosts) =>
+            prevPosts.map((post) =>
+                post.postId === postId ? { ...post, views: post.views + 1 } : post
+            )
+        );
+        setUserPosts((prevPosts) =>
+            prevPosts.map((post) =>
+                post.postId === postId ? { ...post, views: post.views + 1 } : post
+            )
+        );
+        setSelectedPost((prevpost) => ({
+            ...(prevpost as Post),
+            views: (prevpost?.views || 0) + 1,
+        }));
+    } catch (error) {
+        console.log(error);
+    }
   };
 
   return (
