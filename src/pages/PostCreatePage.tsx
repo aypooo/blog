@@ -5,6 +5,7 @@ import { getPostNumber, updatePost, writeNewPost } from '../firebase/post';
 import { useNavigate, useParams } from 'react-router-dom';
 import Editor from '../component/Editor';
 import Button from '../component/Button';
+import { useModal } from '../hook/useModal';
 
 const PostCreateForm: React.FC = () => {
   const { postnumber } = useParams();
@@ -16,14 +17,28 @@ const PostCreateForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-
+  const { openModal, closeModal } = useModal();
+  
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-        if (!user.uid) {
-      return alert('로그인 후 작성 가능합니다.');
+    if (!user.uid) {
+      return openModal({
+        content: '로그인 후 작성 가능합니다.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+          navigate(`/login`);
+        },
+      });
     }
     if (!title.length || !content.length) {
-      return alert('제목과 내용을 작성해주세요');
+      return openModal({
+        content: '제목과 내용을 작성해주세요.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+        },
+      })
     }
     try {
       const createdAt = new Date();
@@ -66,10 +81,15 @@ const PostCreateForm: React.FC = () => {
           setSelectedpost(newPost);
         }
       }
-
       setTitle('');
       setContent('');
-      alert('글이 작성되었습니다.');
+      openModal({
+        content: '글이 작성되었습니다.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+        },
+      })
       console.log(posts);
       navigate(`/${user.name}`);
     } catch (error) {
@@ -111,7 +131,7 @@ const PostCreateForm: React.FC = () => {
           />
         </label>
         <div className="post-create-page__editor-container">
-          <Editor value={content} onChange={setContent} setImageUrls={setImageUrls} />
+          <Editor data-testid="editor" value={content} onChange={setContent} setImageUrls={setImageUrls} />
         </div>
       </div>
       <div className="post-create-page__buttons-bar">

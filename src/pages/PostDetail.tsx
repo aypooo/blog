@@ -110,6 +110,7 @@ const PostDetail: React.FC = () => {
   // 삭제 모달 데이터
   const modalData = {
     content: '글을 삭제 하시겠습니까?',
+    hasCancelButton:true,
     callback: () => {
       handleConfirmDelete();
     },
@@ -118,7 +119,7 @@ const PostDetail: React.FC = () => {
   return (
     <div className='postDetail'>
       {loading ? ( // 데이터 로딩 중일 때 로딩 스피너 표시
-        <LoadingSpinner loading={loading} />
+        <LoadingSpinner data-testid='loading-spinner' loading={loading} />
       ) : (
         <div className='layout'>
           {postdata && ( // 포스트 데이터가 있을 때

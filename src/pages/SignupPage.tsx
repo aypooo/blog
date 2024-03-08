@@ -4,15 +4,24 @@ import SignUpForm from '../component/SignupForm';
 import { auth } from '../firebase/firebase';
 import { writeUserData } from '../firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { useModal } from '../hook/useModal';
 
 const SignupPage = () => {
     const navigate = useNavigate()
+    const { openModal, closeModal } = useModal();
+
     const handleSignup = async ( email: string, password: string, name:string,) => {
         try {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
           const user = userCredential.user;
           writeUserData(user.uid, user.email!, name)
-          alert('회원가입이 완료되었습니다.')
+          openModal({
+            content: '회원가입이 완료되었습니다.',
+            hasCancelButton:false,
+            callback: () => {
+              closeModal()
+            },
+          })
           navigate('/')
           window.location.reload();
         } catch (error: any) {

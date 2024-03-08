@@ -5,31 +5,31 @@ import { modalState } from "../recoil";
 type OpenModalType = {
     title?: string;
     content: JSX.Element | string;
+    hasCancelButton?: boolean;
+    // hasConfirmButton?: boolean;
     callback?: () => any;
-  };
-  
-  export const useModal = () => {
+};
+
+export const useModal = () => {
     const [modalDataState, setModalDataState] = useRecoilState(modalState);
-  
+
     const closeModal = useCallback(
-      () =>
-        setModalDataState((prev) => {
-          return { ...prev, isOpen: false };
-        }),
-      [setModalDataState]
+        () => setModalDataState(prev => ({ ...prev, isOpen: false })),
+        [setModalDataState]
     );
-  
+
     const openModal = useCallback(
-      ({ title, content, callback }: OpenModalType) =>
-        setModalDataState({
-          isOpen: true,
-          title: title || "",
-          content: content,
-          callBack: callback
-        }),
-        
-      [setModalDataState]
+        ({ title, content, hasCancelButton, callback }: OpenModalType) => {
+            setModalDataState({
+                isOpen: true,
+                title: title || "",
+                content: content,
+                hasCancelButton: hasCancelButton,
+                callBack: callback
+            });
+        },
+        [setModalDataState]
     );
-  
+
     return { modalDataState, closeModal, openModal };
-  };
+};

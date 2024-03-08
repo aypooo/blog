@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from './Button';
 import { validateName } from '../hook/validation';
+import { useModal } from '../hook/useModal';
 
 interface ProfileUpdateFormProps {
   email:string;
@@ -14,7 +15,8 @@ interface ProfileUpdateFormProps {
 
 const ProfileUpdateForm: React.FC<ProfileUpdateFormProps> = ({email,currentName, name, setName, description, setDescription,setIsNameValidated }) => {
 const [nameError, setNameError] = useState<string | null>(null);
-
+const { openModal, closeModal } = useModal();
+  
 const validateNameAsync = async () => {
   if(currentName !== name){
     const error = await validateName(name);
@@ -22,7 +24,13 @@ const validateNameAsync = async () => {
     if(error){
       setIsNameValidated(true)
     }else{
-      alert('사용할 수 있는 이름입니다.')
+      openModal({
+        content: '사용 할 수 있는 이름입니다.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+        },
+      })
       setIsNameValidated(false)
     }
 

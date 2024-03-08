@@ -9,6 +9,7 @@ import Button from './Button';
 import Dropdown from './DropDown';
 import { LikeUpdate } from '../firebase/like';
 import { fetchCommentData } from '../hook/fetchData';
+import { useModal } from '../hook/useModal';
 
 interface CommentsProps {
   postId:string, 
@@ -19,21 +20,34 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
   const navigate = useNavigate()
   const user = useRecoilValue(userState)
   const [comment, setComment] = useState<Comment[]>([]);
-  const [newComment, setnewComment] = useState('');
+  const [newComment, setNewComment] = useState('');
   const [updatedCommentId, setUpdatedCommentId] = useState<string | null>(null);
   const [updatedComment, setUpdatedComment] = useState<string>('');
   const [likedComments, setLikedComments] = useState<string[]>([]);
+  const { openModal, closeModal } = useModal();
   
   const handleWriteComment = async () => {
     // 사용자가 로그인하지 않은 경우
     if (!user.uid) {
       navigate('/login');
-      return alert('로그인해주세요');
+      return openModal({
+        content: '로그인 해 주세요.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+        },
+      });
     }
     
     // 댓글이 비어 있는 경우
     if (newComment.length === 0) {
-      return alert('댓글을 입력해주세요');
+      return openModal({
+        content: '댓글을 작성해 주세요.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+        },
+      })
     }
   
     try {
@@ -53,7 +67,7 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
 
     // 기존 댓글 상태에 새로운 댓글 추가
       setComment((prevComments) => [...(prevComments || []), newCommentObj]);
-      setnewComment('');
+      setNewComment('');
     } catch (error) {
       console.error('댓글 작성 실패:', error);
     }
@@ -61,7 +75,13 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
   
   const handleUpdateComment = async (commentId: string, updatedComment:string) => {
     if(updatedComment.length === 0){
-      return alert('댓글을 입력해주세요')
+      return openModal({
+        content: '댓글을 작성해 주세요.',
+        hasCancelButton:false,
+        callback: () => {
+          closeModal()
+        },
+      })
     }
     try {
       await updateComment(postUid, postId, commentId, updatedComment);
@@ -125,7 +145,7 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
             className='comments__input' 
             type="text" 
             value={newComment} 
-            onChange={(e) => setnewComment(e.target.value)} 
+            onChange={(e) => setNewComment(e.target.value)} 
             placeholder="댓글을 입력하세요" 
           />
           <Button size='m' label='등록' onClick={handleWriteComment}/>

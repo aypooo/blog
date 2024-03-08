@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ProfilePictureUpload from '../component/ProfilePictureUpload';
 import ProfileUpdateForm from '../component/ProfileUpdateForm';
 import Button from '../component/Button';
+import { useModal } from '../hook/useModal';
 
 const ProfileUpdate: React.FC = () => {
     const navigate = useNavigate();
@@ -16,11 +17,17 @@ const ProfileUpdate: React.FC = () => {
 
     const [imageUrl, setImageUrl] = useState<string | undefined>(user.profile_picture);
     const [isNameValidated, setIsNameValidated] = useState<boolean>(false);
-
+    const { openModal, closeModal } = useModal();
     const handleUserData = async () => {
         try {
             if(isNameValidated){
-                return alert('이름을 다시 확인해주세요.')
+                return openModal({
+                  content: '이름을 다시 확인 해 주세요.',
+                  hasCancelButton:false,
+                  callback: () => {
+                    closeModal()
+                  },
+                })
             }
             const updatedData = {
                 name: name !== currentName ? name : currentName,
@@ -35,7 +42,13 @@ const ProfileUpdate: React.FC = () => {
                 ...updatedData
             }));
 
-            alert('업데이트 되었습니다.');
+            openModal({
+                content: '업데이트가 완료되었습니다.',
+                hasCancelButton:false,
+                callback: () => {
+                closeModal()
+            },
+            })
             navigate(`/${user.name}`);
         } catch (error) {
             console.log(error);
