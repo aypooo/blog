@@ -19,7 +19,6 @@ const UserPage: React.FC = () => {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [toggleContent, setToggleContent] = useState(false);
   const [loading, setLoading] = useState(false);
-
   // 구독 토글 핸들러
   const handleToggleSubscribe = async () => {
     if (!authorData[0]) {
@@ -90,6 +89,8 @@ const UserPage: React.FC = () => {
       <Suspense fallback={<LoadingSpinner loading={loading}/>}>
         <div className="layout">
           <UserPageProfile authorData={authorData[0]} isOwnProfile={user.name === author} toggleSubscribe={handleToggleSubscribe} isSubscribed={isSubscribed} />
+          {user.name === author ? (
+            <>
           <div className="user-page__tabs">
             <Button
               fullWidth={true}
@@ -107,10 +108,17 @@ const UserPage: React.FC = () => {
             />
           </div>
           {toggleContent ? (
-            <UserPost label='bookmark' userPosts={bookmarkData} />
-          ) : (
+              <UserPost label='bookmark' userPosts={bookmarkData} />
+            ) : (
+              <UserPost label='userpost' userPosts={userPosts} />
+            )}
+            </>
+          ): (
+            <>
             <UserPost label='userpost' userPosts={userPosts} />
+            </>
           )}
+         
         </div>
       </Suspense>
     </div>
