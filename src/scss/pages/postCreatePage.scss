@@ -27,7 +27,12 @@
     bottom: 0;
     background-color: white;
     border: 1px solid #333;
-
+    border-left: none;
+    border-right: none;
+    button{
+      margin-top: -0.5px;
+      margin-left: -1px;
+    }
   }
   
 }

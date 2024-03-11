@@ -3,23 +3,24 @@
 .gnb {
   display: flex;
   justify-content: center;
+
     &__layout{
       display: flex;
       height: 100px;
       width: 700px;
       align-items: center;
       justify-content: space-between;
- 
+      margin: 0 10px;
     &__right{
         display: flex;
         align-items: center;
         justify-items: end;
         a{
           text-decoration: none;
-        }
-        :nth-child(1){
-          margin-right: 10px;
-   
+          :nth-child(1){
+            margin-left: 10px;
+     
+          }
         }
     }
     }

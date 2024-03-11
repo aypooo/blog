@@ -148,27 +148,26 @@
 .drop-down__content {
   position: absolute;
   z-index: 1; /*다른 요소들보다 앞에 배치*/
+  right: 0;
   font-weight: 400;
-  background-color: #f9f9f9;
 }
 .drop-down__content__item {
   display: flex;
   flex-direction: column;
   text-decoration: none;
-  width: 120px;
   color: #333;
   font-size: 14px;
   margin: 0;
+  white-space: nowrap;
   border-radius: 0;
+  padding: 10px;
 }
 .drop-down__content__item a {
   text-decoration: none;
   color: #333;
 }
-.drop-down__content span {
-  border: 1px solid #333;
-  padding: 5px 0;
-  margin-top: -1px;
+.drop-down__content :nth-child(2) {
+  margin-top: -0.5px;
 }
 
 .post-list {
@@ -295,6 +294,7 @@
   width: 700px;
   align-items: center;
   justify-content: space-between;
+  margin: 0 10px;
 }
 .gnb__layout__right {
   display: flex;
@@ -304,8 +304,8 @@
 .gnb__layout__right a {
   text-decoration: none;
 }
-.gnb__layout__right :nth-child(1) {
-  margin-right: 10px;
+.gnb__layout__right a :nth-child(1) {
+  margin-left: 10px;
 }
 .gnb__link {
   margin-right: 15px;
@@ -346,6 +346,7 @@
 .comments__input {
   width: 100%;
   box-sizing: border-box;
+  padding: 5px;
 }
 .comments__comment-list {
   text-align: left;
@@ -356,7 +357,7 @@
 .comments__comment-list__item {
   border: none;
   border-bottom: 1px solid #888;
-  padding: 10px;
+  padding: 10px 5px;
 }
 .comments__comment-list__item__header {
   display: flex;
@@ -651,11 +652,18 @@
   bottom: 0;
   background-color: white;
   border: 1px solid #333;
+  border-left: none;
+  border-right: none;
+}
+.post-create-page__buttons-bar button {
+  margin-top: -0.5px;
+  margin-left: -1px;
 }
 
 .postDetail__info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px 0;
 }
 .postDetail__info__author {
@@ -666,6 +674,7 @@
   font-size: 13px;
   color: #888;
   padding-left: 5px;
+  align-self: center;
 }
 .postDetail__info__edit {
   display: flex;
@@ -675,12 +684,15 @@
   margin-right: 2px;
 }
 .postDetail__title {
-  font-size: 40px;
+  font-size: 30px;
   text-align: left;
 }
 .postDetail__body {
   padding: 10px 0;
   min-height: 200px;
+}
+.postDetail__body div img {
+  width: 100%;
 }
 .postDetail__footer {
   display: flex;
