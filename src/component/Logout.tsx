@@ -3,6 +3,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { userState, isLoggedInState, userBookmarkState } from '../recoil';
 import { auth } from '../firebase/firebase';
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
   const Logout: React.FC = () => {
     const navigate = useNavigate();
@@ -26,7 +27,7 @@ import { useNavigate } from 'react-router-dom';
   
     return (
       <>
-        <span onClick={handleLogout} >로그아웃</span>
+        <Button onClick={handleLogout} label={'로그아웃'} />
       </>
     );
   };

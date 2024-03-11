@@ -31,12 +31,8 @@ const UserPageProfile : React.FC<UserProfileProps> = ({ authorData,isOwnProfile,
       </div>
       {isOwnProfile ? (
         <div className='user-page__profile__edit'>
-          <Dropdown label="⋮">
-            <span>
-              <Link to="/profileupdate">
-                프로필 수정
-              </Link>
-            </span>
+          <Dropdown label="⋮">  
+            <Button onClick={()=>{<Link to="/profileupdate"/>}} label='프로필 수정'/>
             <Logout/>
           </Dropdown>
         </div>
