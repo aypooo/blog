@@ -13,6 +13,12 @@
         min-width: 300px;
         margin: 0 10px;
     }
+    .input-layout{
+        width: auto;
+        min-width: 300px;
+        margin: 0 10px;
+    }
+
 }
 
 /* 태블릿 */
@@ -20,11 +26,17 @@
     .layout{
         width: 700px;
     }
+    .input-layout{
+        width: 450px;
+    }
 }
 
 /* PC */
 @media only screen and (min-width: 1024px) {
     .layout{
         width: 700px;
+    }
+    .input-layout{
+        width: 450px;
     }
 }

@@ -53,35 +53,37 @@ const SignUpForm: React.FC<Props> = ({ onSignup }) => {
   }, [email, name]);
 
   return (
-    <div className="sign-up-form">
-      <h2 className="sign-up-form__title">회원가입</h2>
-      <label>이름</label>
-      <input
-        placeholder="이름"
-        value={name}
-        onChange={(e) => handleInputChange("name", e.target.value)}
-        className="sign-up-form__input"
-      />
-      {nameError && <p className="error">{nameError}</p>}
-      <label>이메일</label>
-      <input
-        type="email"
-        placeholder="이메일"
-        value={email}
-        onChange={(e) => handleInputChange("email", e.target.value)}
-        className="sign-up-form__input"
-      />
-      {emailError && <p className="error">{emailError}</p>}
-      <label>비밀번호</label>
-      <input
-        type="password"
-        placeholder="비밀번호"
-        value={password}
-        onChange={(e) => handleInputChange("password", e.target.value)}
-        className="sign-up-form__input"
-      />
-      {passwordError && <p className="error">{passwordError}</p>}
-      <Button label="등록하기" fullWidth={true} onClick={handleSignupClick}/>
+    <div className='input-layout'>
+      <div className="sign-up-form">
+        <h2 className="sign-up-form__title">회원가입</h2>
+        <label>이름</label>
+        <input
+          placeholder="이름"
+          value={name}
+          onChange={(e) => handleInputChange("name", e.target.value)}
+          className="sign-up-form__input"
+        />
+        {nameError && <p className="error">{nameError}</p>}
+        <label>이메일</label>
+        <input
+          type="email"
+          placeholder="이메일"
+          value={email}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          className="sign-up-form__input"
+        />
+        {emailError && <p className="error">{emailError}</p>}
+        <label>비밀번호</label>
+        <input
+          type="password"
+          placeholder="비밀번호"
+          value={password}
+          onChange={(e) => handleInputChange("password", e.target.value)}
+          className="sign-up-form__input"
+        />
+        {passwordError && <p className="error">{passwordError}</p>}
+        <Button label="등록하기" fullWidth={true} onClick={handleSignupClick}/>
+        </div>
     </div>
   );
 };

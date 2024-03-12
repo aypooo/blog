@@ -1,9 +1,7 @@
 .login {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    height: 100vh;
-
+    justify-content: center;
     &__error {
       color: red;
     }
@@ -13,8 +11,6 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    width: 450px;
-  
     &__title {
       font-size: 24px;
       margin-bottom: 20px;

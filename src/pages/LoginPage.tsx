@@ -4,7 +4,6 @@ import { isLoggedInState, userState } from '../recoil';
 
 import { setPersistence, signInWithEmailAndPassword, browserLocalPersistence } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
-import { readUserData } from '../firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../component/LoginForm';
 
@@ -44,8 +43,7 @@ const Login: React.FC = () => {
   }, [setUser, user.email, user.uid]);
   return (
    <div className='login'>
-      <LoginForm onLogin={handleLogin} loading={loading} />
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <LoginForm onLogin={handleLogin} error={error!} loading={loading} />
     </div>
   );
 };
