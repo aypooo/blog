@@ -69,18 +69,18 @@ const PostList = ({ posts, label }: { posts: Post[], label: string }) => {
 
             {/* 포스트 푸터 */}
             <div className='post-list__footer'>
-              <div className='like-box boder-none'>
-                <span className='like--liked'></span>
+              <span className='like--liked'/>
+              <div className='post-list__footer__items'>
                 {post.likes ? post.likes.length : 0}
               </div>
-              <div className='post-list__footer__comments' data-testid={`post-comments-${index}`}>
+              <div className='post-list__footer__items' data-testid={`post-comments-${index}`}>
                 <span>댓글 </span>
                 {post.comments ? Object.keys(post.comments).length : 0}
               </div>
-              <div className='post-list__footer__views' data-testid={`post-views-${index}`}>
+              <div className='post-list__footer__items' data-testid={`post-views-${index}`}>
                 <span>조회수 {post.views}</span>
               </div>
-              <div className='post-list__footer__date' data-testid={`post-date-${index}`}>
+              <div className='post-list__footer__items' data-testid={`post-date-${index}`}>
                 <TimeAgoComponent timestamp={post.createAt} />
               </div>
             </div>
@@ -88,8 +88,8 @@ const PostList = ({ posts, label }: { posts: Post[], label: string }) => {
 
           {/* 포스트 이미지 */}
           {post.imageUrls && post.imageUrls.length > 0 && (
-            <div className='post-list__image' onClick={() => handlePostClick(post)} data-testid={`post-image-${index}`}>
-              <img src={post.imageUrls[0]} alt={`postImage-${index}`} />
+            <div className='post-list__image' onClick={() => handlePostClick(post)} >
+              <img src={post.imageUrls[0]} data-testid={`post-image`} alt={`postImage-${index}`} />
             </div>
           )}
         </li>

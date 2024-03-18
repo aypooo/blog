@@ -21,10 +21,10 @@ const Pagination: React.FC<PaginationProps> = ({
       totalItemsCount={totalItemsCount}
       pageRangeDisplayed={5}
       onChange={(pageNumber) => onChange(pageNumber)}
-      prevPageText="<"
-      nextPageText=">"
-      firstPageText="<<"
-      lastPageText=">>"
+      prevPageText="이전"
+      nextPageText="다음"
+      firstPageText="처음"
+      lastPageText="끝"
     />
   );
 };

@@ -1,10 +1,10 @@
 .post-list {
   display: flex;
   flex-direction: column;
-    &__title {
-      width: 100%;
-      font-size: 1.5rem;
-      color: #333;
+  margin: 0 auto;
+  padding: 0;
+    :nth-child(1){
+      padding-top: 0;
     }
     &__item {
       display: flex;
@@ -37,14 +37,14 @@
       cursor: pointer;
       text-align: left;
       &:hover {
-        text-decoration: underline;
+        color:#3498db;
       } 
 
       &__title {
         width: 100%;
         font-size: 20px;
         font-weight: normal;
-        color: #333;
+
         line-height: 28px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -58,7 +58,6 @@
         -webkit-box-orient: vertical;
         font-size: 14px;
         font-weight: lighter;
-        color: #666;
         line-height: 22px;
         text-align: left;
         padding-top: 10px;
@@ -66,22 +65,16 @@
         text-overflow:ellipsis; 
         white-space: nowrap;
       }
-      }
+    }
      
     &__footer {
       display: flex;
       align-items: center;
-      
-      &__likes, 
-      &__date,
-      &__comments,
-      &__views{
+ 
+      &__items{
         color: #888;
         font-size: 13px;
         padding: 0 5px;
-      }
-      &__likes{
-        display: flex;
       }
     }
 
