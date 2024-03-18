@@ -3,13 +3,16 @@ import { Comment } from "../recoil";
 import { db } from "./firebase";
 
 // 댓글 쓰기
-export function writeNewComment(postId: string, uid: string, name: string, comment: string) {
-
+export async function writeNewComment(postId: string, uid: string, name: string, comment: string): Promise<string | null> {
   const newCommentKey = push(child(ref(db), 'comments/' + postId)).key;
+  if (newCommentKey === null) {
+    return null;
+  }
+
   const commentData: Comment = {
     author: name,
     comment: comment,
-    commentId:newCommentKey!,
+    commentId: newCommentKey,
     postId: postId,
     createAt: new Date(),
     likes: [],
@@ -18,8 +21,7 @@ export function writeNewComment(postId: string, uid: string, name: string, comme
 
   const updates: { [key: string]: any } = {};
   updates['posts/' + postId + '/' + 'comments/' + newCommentKey] = commentData;
-  // updates["/user-posts/" + postUid + '/' + postId +'/' + 'comments/' + newCommentKey] = commentData;
-  
+
   try {
     update(ref(db), updates);
     return newCommentKey;
@@ -68,7 +70,7 @@ export function writeNewComment(postId: string, uid: string, name: string, comme
 
   //댓글 삭제
 
-  export async function deleteComment(postUid: string, postId: string, commentId: string): Promise<void> {
+  export async function deleteComment( postId: string, commentId: string): Promise<void> {
     const commentRef = ref(db, 'posts/' + postId+ '/' + 'comments/' + commentId);
     // const userPostCommentRef = ref(db, '/user-posts/' + postUid + '/' + postId +'/' + 'comments/' + + commentId);
   

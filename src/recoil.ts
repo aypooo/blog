@@ -39,6 +39,7 @@ type ModalType = {
   title: string;
   content: JSX.Element | string;
   hasCancelButton?: boolean;
+  color?:string;
   callBack?: () => any;
 };
 

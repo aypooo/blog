@@ -83,13 +83,18 @@ const PostCreateForm: React.FC = () => {
       }
       setTitle('');
       setContent('');
-      openModal({
-        content: '글이 작성되었습니다.',
-        hasCancelButton:false,
-        callback: () => {
-          closeModal()
-        },
-      })
+      let text = "글이 작성되었습니다."
+      if (selectedpost && postnumber) {
+        text = "글이 수정되었습니다."
+      }
+        openModal({
+          content: text,
+          hasCancelButton:false,
+          callback: () => {
+            closeModal()
+          },
+        })
+      
       console.log(posts);
       navigate(`/${user.name}`);
     } catch (error) {

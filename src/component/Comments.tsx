@@ -32,9 +32,9 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
       navigate('/login');
       return openModal({
         content: '로그인 해 주세요.',
-        hasCancelButton:false,
+        hasCancelButton: false,
         callback: () => {
-          closeModal()
+          closeModal();
         },
       });
     }
@@ -43,35 +43,39 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
     if (newComment.length === 0) {
       return openModal({
         content: '댓글을 작성해 주세요.',
-        hasCancelButton:false,
+        hasCancelButton: false,
         callback: () => {
-          closeModal()
+          closeModal();
         },
-      })
+      });
     }
   
     try {
       // 새로운 댓글 작성
-      const commentKey = writeNewComment(postId, user.uid, user.name, newComment);
-
-          // 새로운 댓글 객체 생성
-      const newCommentObj: Comment = {
-        commentId: commentKey!,
-        postId: postId,
-        commentUid: user.uid,
-        author: user.name,
-        comment: newComment,
-        createAt: new Date(),
-        likes: []
-      };
-
-    // 기존 댓글 상태에 새로운 댓글 추가
-      setComment((prevComments) => [...(prevComments || []), newCommentObj]);
-      setNewComment('');
+      const commentKey = await writeNewComment(postId, user.uid, user.name, newComment);
+  
+      // commentKey가 null이 아닌 경우에만 처리
+      if (commentKey !== null) {
+        // 새로운 댓글 객체 생성
+        const newCommentObj: Comment = {
+          commentId: commentKey,
+          postId: postId,
+          commentUid: user.uid,
+          author: user.name,
+          comment: newComment,
+          createAt: new Date(),
+          likes: [],
+        };
+  
+        // 기존 댓글 상태에 새로운 댓글 추가
+        setComment((prevComments) => [...(prevComments || []), newCommentObj]);
+        setNewComment('');
+      }
     } catch (error) {
       console.error('댓글 작성 실패:', error);
     }
   };
+  
   
   const handleUpdateComment = async (commentId: string, updatedComment:string) => {
     if(updatedComment.length === 0){
@@ -97,12 +101,21 @@ const Comments: React.FC<CommentsProps> = ({ postId,postUid }) => {
   }
   
   const handleDeleteComment = async (commentId: string) => {
-    try {
-      await deleteComment(postUid, postId, commentId);
-      setComment((prevComments) => prevComments.filter((comment) => comment.commentId !== commentId));
-    } catch (error) {
-      console.error('댓글 삭제 오류:', error);
-    }
+    openModal({
+      content: '댓글을 삭제하시겠습니까?.',
+      hasCancelButton:true,
+      color:'red',
+      callback: async () => {
+        try {
+          await deleteComment( postId, commentId);
+          setComment((prevComments) => prevComments.filter((comment) => comment.commentId !== commentId));
+          closeModal()
+        } catch (error) {
+          console.error('댓글 삭제 오류:', error);
+        }
+      },
+    })
+ 
   };
 
   const handleLikeComment = async (commentId: string) => {

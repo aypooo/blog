@@ -6,6 +6,7 @@ type OpenModalType = {
     title?: string;
     content: JSX.Element | string;
     hasCancelButton?: boolean;
+    color?:string;
     // hasConfirmButton?: boolean;
     callback?: () => any;
 };
@@ -19,12 +20,13 @@ export const useModal = () => {
     );
 
     const openModal = useCallback(
-        ({ title, content, hasCancelButton, callback }: OpenModalType) => {
+        ({ title, content, hasCancelButton,color, callback }: OpenModalType) => {
             setModalDataState({
                 isOpen: true,
                 title: title || "",
                 content: content,
                 hasCancelButton: hasCancelButton,
+                color:color,
                 callBack: callback
             });
         },

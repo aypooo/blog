@@ -91,6 +91,16 @@ const PostDetail: React.FC = () => {
   // 북마크 토글
   const handleBookmarkToggle = async () => {
     try {
+      if (!user.uid) {
+        return openModal({
+          content: '글담기는 로그인 후 가능합니다.',
+          hasCancelButton:false,
+          callback: () => {
+            closeModal()
+            navigate(`/login`);
+          },
+        });
+      }
       if (user.bookmark?.includes(postdata!.postId)) {
         await removeBookmark(user.uid, postdata!.postId);
       } else {
@@ -111,6 +121,7 @@ const PostDetail: React.FC = () => {
   const modalData = {
     content: '글을 삭제 하시겠습니까?',
     hasCancelButton:true,
+    color:'red',
     callback: () => {
       handleConfirmDelete();
     },
@@ -146,7 +157,7 @@ const PostDetail: React.FC = () => {
                 )}
               </div>
               <div className='postDetail__body'>
-                <SanitizedHTML html={postdata ? Object.values(postdata.content).join('') : ('')} /> {/* 포스트 내용 */}
+                <SanitizedHTML html={postdata && postdata.content ? Object.values(postdata.content).join('') : ''} /> {/* 포스트 내용 */}
               </div>
               <div className='postDetail__footer' key={postdata?.postId}>
                 <div onClick={handleLike} className='like-box m'>

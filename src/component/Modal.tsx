@@ -15,7 +15,7 @@ const Modal = () => {
                             {modalDataState.hasCancelButton && (
                                 <Button label='취소' size="s" onClick={closeModal}/>
                             )}
-                            <Button label='확인' size="s" onClick={modalDataState.callBack}/>
+                            <Button color={modalDataState.color} label='확인' size="s" onClick={modalDataState.callBack}/>
                         </div>
                     </div>
                 </div>
