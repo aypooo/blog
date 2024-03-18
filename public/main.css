@@ -173,11 +173,11 @@
 .post-list {
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
+  padding: 0;
 }
-.post-list__title {
-  width: 100%;
-  font-size: 1.5rem;
-  color: #333;
+.post-list :nth-child(1) {
+  padding-top: 0;
 }
 .post-list__item {
   display: flex;
@@ -209,13 +209,12 @@
   text-align: left;
 }
 .post-list__body:hover {
-  text-decoration: underline;
+  color: #3498db;
 }
 .post-list__body__title {
   width: 100%;
   font-size: 20px;
   font-weight: normal;
-  color: #333;
   line-height: 28px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -228,7 +227,6 @@
   -webkit-box-orient: vertical;
   font-size: 14px;
   font-weight: lighter;
-  color: #666;
   line-height: 22px;
   text-align: left;
   padding-top: 10px;
@@ -240,13 +238,10 @@
   display: flex;
   align-items: center;
 }
-.post-list__footer__likes, .post-list__footer__date, .post-list__footer__comments, .post-list__footer__views {
+.post-list__footer__items {
   color: #888;
   font-size: 13px;
   padding: 0 5px;
-}
-.post-list__footer__likes {
-  display: flex;
 }
 .post-list__image {
   display: flex;
@@ -266,7 +261,10 @@
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin: 30px 0;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 200;
 }
 .pagination li {
   border: none;
@@ -280,6 +278,7 @@
   color: #3498db;
 }
 .pagination a {
+  text-decoration: none;
   color: #333;
 }
 .pagination a:hover {
@@ -290,6 +289,8 @@
 .gnb {
   display: flex;
   justify-content: center;
+  margin-bottom: 40px;
+  box-shadow: 0px 8px 20px 5px rgba(218, 218, 218, 0.2);
 }
 .gnb__layout {
   display: flex;
@@ -297,7 +298,22 @@
   width: 700px;
   align-items: center;
   justify-content: space-between;
-  margin: 0 10px;
+  padding: 0 10px;
+}
+.gnb__layout__left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gnb__layout__left__logo {
+  background-image: url("../../../images/logo.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  border-radius: 0;
+  border: none;
+  width: 80px;
+  height: 40px;
 }
 .gnb__layout__right {
   display: flex;
@@ -451,7 +467,11 @@
   margin-bottom: 10px;
   color: #777;
   text-align: right;
+}
+.login-form__sign-up-button :nth-child(1) {
   cursor: pointer;
+  text-decoration: none;
+  color: #777;
 }
 
 .sign-up {
@@ -535,12 +555,11 @@
 }
 .user-data-update__email {
   text-align: left;
-  padding-bottom: 15px;
   font-weight: bold;
 }
 .user-data-update__label {
   text-align: left;
-  margin-bottom: 10px;
+  margin: 15px 0;
   font-size: 12px;
   font-weight: bold;
 }
@@ -556,6 +575,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50px;
+  object-fit: cover;
 }
 .user-data-update__profile-picture__input-file {
   border: 2px solid #d3d3d3;
@@ -737,7 +757,7 @@
 }
 .user-page__profile__thumb {
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   width: 100px;
   height: 100px;
@@ -774,6 +794,7 @@
 .user-page__tabs {
   display: flex;
   height: 50px;
+  margin-bottom: 30px;
 }
 .user-page__tabs button {
   border: none;

@@ -12,7 +12,7 @@
         }
         &__thumb {
             background-repeat: no-repeat;
-            background-size : contain;
+            background-size: cover;
             background-position: center;
             width: 100px;
             height: 100px;
@@ -57,7 +57,7 @@
     &__tabs {
         display: flex;
         height: 50px;
-
+        margin-bottom: 30px;
         button {
             border: none;
             border-bottom: 1px solid #e0e0e0;

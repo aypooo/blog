@@ -12,7 +12,6 @@ const ProfileUpdate: React.FC = () => {
     const navigate = useNavigate();
     const [user, setUser] = useRecoilState(userState);
     const [name, setName] = useState<string>("");
-    const [currentName,setCurrentName] = useState(user.name)
     const [description, setDescription] = useState<string>("");
 
     const [imageUrl, setImageUrl] = useState<string | undefined>(user.profile_picture);
@@ -30,11 +29,11 @@ const ProfileUpdate: React.FC = () => {
                 })
             }
             const updatedData = {
-                name: name !== currentName ? name : currentName,
-                profile_picture: imageUrl !== user.profile_picture && imageUrl !== undefined ? imageUrl : user.profile_picture,
+                name: name !== user.name ? name : user.name,
+                profile_picture: imageUrl !== undefined ? (imageUrl !== user.profile_picture ? (imageUrl) : (user.profile_picture)) : "",
                 description: description !== user.description ? description : user.description
             };
-
+            console.log("Updating with data:", updatedData);
             await updateUserData(user.uid, user.email, updatedData.name!, updatedData.profile_picture, updatedData.description);
 
             setUser(prevUser => ({
@@ -72,7 +71,7 @@ const ProfileUpdate: React.FC = () => {
                 />
                 <ProfileUpdateForm
                     email={user.email}
-                    currentName={currentName}
+                    currentName={user.name}
                     name={name}
                     setName={setName}
                     description={description}

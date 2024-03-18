@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import { User } from '../recoil';
 import Dropdown from './DropDown';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logout from './Logout';
 
 interface UserProfileProps {
@@ -14,6 +14,7 @@ interface UserProfileProps {
 }
 
 const UserPageProfile : React.FC<UserProfileProps> = ({ authorData,isOwnProfile, toggleSubscribe, isSubscribed }) => {
+  const navigate = useNavigate();
   return (
     <div className='user-page__profile'>
       <div className='user-page__profile__content'>
@@ -32,7 +33,7 @@ const UserPageProfile : React.FC<UserProfileProps> = ({ authorData,isOwnProfile,
       {isOwnProfile ? (
         <div className='user-page__profile__edit'>
           <Dropdown label="⋮">  
-            <Button onClick={()=>{<Link to="/profileupdate"/>}} label='프로필 수정'/>
+            <Button onClick={()=>{navigate("/profileupdate")}} label='프로필 수정'/>
             <Logout/>
           </Dropdown>
         </div>
