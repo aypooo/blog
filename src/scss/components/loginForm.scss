@@ -27,7 +27,11 @@
       margin-bottom: 10px;
       color:#777;
       text-align: right;
-      cursor: pointer;
+      :nth-child(1){
+        cursor: pointer;
+        text-decoration: none;
+        color: #777;
+      }
     }
 
   }
