@@ -12,7 +12,9 @@ const Gnb = () => {
     <div className="gnb">
       <div className='gnb__layout'>
         <div className='gnb__layout__left'>
-            <Link to="/" className="gnb__link">홈</Link>
+            <Link to="/" className="gnb__link">
+              <div className="gnb__layout__left__logo"></div>
+            </Link>
         </div>
       {isLoggedIn ? (
         <div className='gnb__layout__right'>
