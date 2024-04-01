@@ -222,7 +222,6 @@
 }
 .post-list__body__content {
   width: 100%;
-  display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   font-size: 14px;
