@@ -1,23 +1,22 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { getAuth } from "firebase/auth"
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+  apiKey: "AIzaSyAbS17-hEd176XyAkhxq8oP1sakUVi79ts",
+  authDomain: "blog-5b35e.firebaseapp.com",
+  databaseURL: "https://blog-5b35e-default-rtdb.firebaseio.com",
+  projectId: "blog-5b35e",
+  storageBucket: "blog-5b35e.appspot.com",
+  messagingSenderId: "978221748264",
+  appId: "1:978221748264:web:906a686846759f12eae51d",
+  measurementId: "G-WLNNP12D9P"
 };
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const storage = getStorage(app)
 const db = getDatabase(app);
+const storage = getStorage(app)
 
-export {app,storage, auth, db}
+export {app,auth,db,storage}
